@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<group android:checkableBehavior="single">
+    <item
+        android:id="@+id/nav_info"
+        android:icon="@drawable/information_unselected"
+        android:title="@string/information"/>
+    <item
+        android:title="@string/river"
+        android:icon="@drawable/river_unselected"
+        android:id="@+id/nav_river"/>
+    <item
+        android:id="@+id/nav_small_data"
+        android:icon="@drawable/small_data_unselected"
+        android:title="@string/smallData"/>
+    <item
+        android:id="@+id/nav_arrange"
+        android:title="@string/arrangement"
+        android:icon="@drawable/arrangement_unselected"/>
+</group>
+</menu>

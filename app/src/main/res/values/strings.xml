@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Curb</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+
+    <string name="information">资讯</string>
+    <string name="river">溪流</string>
+    <string name="smallData">调查</string>
+    <string name="arrangement">安排</string>
+    <string name="noUserName">游客</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
