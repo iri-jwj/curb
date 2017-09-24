@@ -13,7 +13,7 @@ import jxpl.scnu.curb.BaseView;
 
 public interface homePageContract {
     interface View extends BaseView<Presenter>{
-
+        int  getImageIdByType(String type);
     }
     interface Presenter extends BasePresenter{
 
