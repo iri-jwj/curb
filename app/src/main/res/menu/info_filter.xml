@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/info_all"
+        android:title="@string/info_filter_all" />
+    <item
+        android:id="@+id/info_education"
+        android:title="@string/info_filter_education" />
+    <item
+        android:id="@+id/info_scholar"
+        android:title="@string/info_filter_scholar" />
+    <item
+        android:id="@+id/info_work_study"
+        android:title="@string/info_filter_work_study"/>
+    <item
+        android:title="@string/info_filter_practice"
+        android:id="@+id/info_practice"/>
+</menu>

@@ -8,7 +8,7 @@ package jxpl.scnu.curb.immediateInformation;
  * --Winsdon Churchill
  */
 
-enum informationFliter {
+enum informationFilter {
     /**
      * 不筛选
      */
@@ -20,5 +20,13 @@ enum informationFliter {
     /**
      * 筛选出实习招聘信息
      */
-    PRA_INFORMATIONS
+    PRA_INFORMATIONS,
+    /**
+     * 筛选出勤工助学信息
+     */
+    WORK_STUDY_INFORMATIONS,
+    /**
+     * 筛选出学者网信息
+     */
+    SCHOLAR_INFORMATIONS
 }

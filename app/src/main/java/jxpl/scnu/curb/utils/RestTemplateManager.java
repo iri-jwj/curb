@@ -1,5 +1,7 @@
 package jxpl.scnu.curb.utils;
 
+import android.content.SyncRequest;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import org.springframework.http.ContentCodingType;
@@ -21,7 +23,7 @@ import org.springframework.web.client.RestTemplate;
  * --Winsdon Churchill
  */
 
-public class RestTemplateManager {
+public class RestTemplateManager <T> extends AsyncTask<Void,Void,Class<T>> {
     private static final int CONNECT_TIMEOUT = 15000;// 30秒
     private static final int READ_TIMEOUT = 10000;// 15秒
     private static final String TAG = "RestTemplateManager";
@@ -105,6 +107,12 @@ public class RestTemplateManager {
             builder.append("/").append(p);
         }
         return builder.toString();
+    }
+
+
+    @Override
+    public Class<T> doInBackground(Void...Params){
+
     }
 
 }

@@ -1,12 +1,15 @@
-package jxpl.scnu.curb.homePage;
+package jxpl.scnu.curb.immediateInformation;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,21 +18,18 @@ import android.widget.TextView;
 import java.util.List;
 
 import jxpl.scnu.curb.R;
-import jxpl.scnu.curb.immediateInformation.immediateInformation;
+import jxpl.scnu.curb.homePage.homePageContract;
 
 import static android.support.v4.util.Preconditions.checkNotNull;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link informationFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link informationFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class informationFragment extends Fragment implements homePageContract.View {
 
-    private homePageContract.Presenter presenter;
+
+public class informationFragment extends Fragment implements informationContract.View {
+
+    private informationContract.Presenter presenter;
+    private infoAdapter minfoAdapter;
+    private List<immediateInformation> immediateInformations;
+
     public informationFragment() {
         // Required empty public constructor
     }
@@ -40,13 +40,14 @@ public class informationFragment extends Fragment implements homePageContract.Vi
     }
 
     @Override
-    public void setPresenter(@NonNull homePageContract.Presenter mPresenter){
+    public void setPresenter(@NonNull informationContract.Presenter mPresenter){
         presenter=checkNotNull(mPresenter);
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        minfoAdapter=new infoAdapter(immediateInformations);
     }
 
     @Override
@@ -54,7 +55,7 @@ public class informationFragment extends Fragment implements homePageContract.Vi
         int imageId;
         switch (type){
             case "EDU":
-                imageId= R.drawable.item_eduInfo;
+                imageId= R.drawable.item_edu_info;
                 break;
             case "PRA":
                 imageId=R.drawable.pra;
@@ -72,9 +73,20 @@ public class informationFragment extends Fragment implements homePageContract.Vi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View info=inflater.inflate(R.layout.fragment_information, container, false);
-        RecyclerView recyclerView=(RecyclerView) info.findViewById(R.id.info_recycler);
+        RecyclerView recyclerView=info.findViewById(R.id.info_recycler);
         LinearLayoutManager layoutManager=new LinearLayoutManager(info.getContext());//不明代码= =
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(minfoAdapter);
+
+        //SET UP floatingActionBar
+        FloatingActionButton fab = getActivity().findViewById(R.id.info_floatingAb);
+        fab.setImageResource(R.drawable.fliter_arrow);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         return info;
     }
 
@@ -84,11 +96,7 @@ public class informationFragment extends Fragment implements homePageContract.Vi
 
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-    public  class infoAdapter extends RecyclerView.Adapter<infoAdapter.ViewHolder>{
+    class infoAdapter extends RecyclerView.Adapter<infoAdapter.ViewHolder>{
         private List<immediateInformation> immediateInformations;
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -96,7 +104,7 @@ public class informationFragment extends Fragment implements homePageContract.Vi
             TextView infoTitle;
             TextView infoTime;
 
-            public ViewHolder(View itemView) {
+             ViewHolder(View itemView) {
                 super(itemView);
                 infoImage=itemView.findViewById(R.id.info_item_image);
                 infoTitle=itemView.findViewById(R.id.info_item_title);
@@ -104,7 +112,8 @@ public class informationFragment extends Fragment implements homePageContract.Vi
             }
         }
 
-        public infoAdapter() {
+        public infoAdapter(List<immediateInformation> immediateInformations) {
+            this.immediateInformations=immediateInformations;
         }
 
         @Override
@@ -129,5 +138,36 @@ public class informationFragment extends Fragment implements homePageContract.Vi
         }
     }
 
+    @Override
+    public void showFilteringPopUpMenu(){
+        PopupMenu popup = new PopupMenu(getContext(), getActivity().findViewById(R.id.info_floatingAb));
+        popup.getMenuInflater().inflate(R.menu.info_filter, popup.getMenu());
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.info_education:
+                        presenter.setFiltering(informationFilter.EDU_INFORMATIONS);
+                        break;
+                    case R.id.info_scholar:
+                        presenter.setFiltering(informationFilter.SCHOLAR_INFORMATIONS);
+                        break;
+                    case R.id.info_work_study:
+                        presenter.setFiltering(informationFilter.WORK_STUDY_INFORMATIONS);
+                        break;
+                    case R.id.info_practice:
+                        presenter.setFiltering(informationFilter.PRA_INFORMATIONS);
+                        break;
+                    default:
+                        presenter.setFiltering(informationFilter.ALL_INFORMATIONS);
+                        break;
+                }
+               presenter.loadTasks(false);
+                return true;
+            }
+        });
+
+        popup.show();
+    }
 
 }
