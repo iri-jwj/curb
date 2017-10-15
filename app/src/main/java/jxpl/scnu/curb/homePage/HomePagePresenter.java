@@ -8,7 +8,7 @@ package jxpl.scnu.curb.homePage;
  * --Winsdon Churchill
  */
 
-public class homePagePresenter implements homePageContract.Presenter{
+public class HomePagePresenter implements HomePageContract.Presenter{
     @Override
     public void start(){
 

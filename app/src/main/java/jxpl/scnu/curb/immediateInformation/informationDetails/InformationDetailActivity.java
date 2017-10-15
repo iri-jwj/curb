@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import jxpl.scnu.curb.R;
 
-public class informationDetailActivity extends AppCompatActivity {
+public class InformationDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

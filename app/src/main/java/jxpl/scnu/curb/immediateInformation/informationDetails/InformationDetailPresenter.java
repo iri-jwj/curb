@@ -8,5 +8,5 @@ package jxpl.scnu.curb.immediateInformation.informationDetails;
  * --Winsdon Churchill
  */
 
-public class informationDetailPresenter {
+public class InformationDetailPresenter {
 }

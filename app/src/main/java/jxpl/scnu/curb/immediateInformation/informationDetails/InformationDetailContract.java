@@ -10,7 +10,7 @@ package jxpl.scnu.curb.immediateInformation.informationDetails;
 import jxpl.scnu.curb.BasePresenter;
 import jxpl.scnu.curb.BaseView;
 
-public interface informationDetailContract {
+public interface InformationDetailContract {
     interface View extends BaseView<Presenter> {
 
     }

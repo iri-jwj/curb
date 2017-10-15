@@ -16,29 +16,29 @@ import static android.support.v4.util.Preconditions.checkNotNull;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link informationDetailFragment.OnFragmentInteractionListener} interface
+ * {@link InformationDetailFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link informationDetailFragment#newInstance} factory method to
+ * Use the {@link InformationDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class informationDetailFragment extends Fragment implements informationDetailContract.View {
+public class InformationDetailFragment extends Fragment implements InformationDetailContract.View {
 
 
-    private informationDetailContract.Presenter mPresenter;
+    private InformationDetailContract.Presenter mPresenter;
     private OnFragmentInteractionListener mListener;
 
-    public informationDetailFragment() {
+    public InformationDetailFragment() {
         // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
-    public static informationDetailFragment newInstance() {
+    public static InformationDetailFragment newInstance() {
 
-        return  new informationDetailFragment();
+        return  new InformationDetailFragment();
     }
 
     @Override
-    public void setPresenter(@NonNull informationDetailContract.Presenter presenter){
+    public void setPresenter(@NonNull InformationDetailContract.Presenter presenter){
         mPresenter=checkNotNull(presenter);
     }
 

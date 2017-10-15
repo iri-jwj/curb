@@ -1,10 +1,7 @@
 package jxpl.scnu.curb.homePage;
 
-import java.util.List;
-
 import jxpl.scnu.curb.BasePresenter;
 import jxpl.scnu.curb.BaseView;
-import jxpl.scnu.curb.immediateInformation.immediateInformation;
 
 /**
  * Created by irijw on 2017/9/18.
@@ -14,7 +11,7 @@ import jxpl.scnu.curb.immediateInformation.immediateInformation;
  * --Winsdon Churchill
  */
 
-public interface homePageContract {
+public interface HomePageContract {
     interface View extends BaseView<Presenter>{
 
     }
