@@ -2,6 +2,9 @@ package jxpl.scnu.curb.data.repository;
 
 import android.support.annotation.NonNull;
 
+import java.util.List;
+
+import jxpl.scnu.curb.data.local.InformationLocalDataSource;
 import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
 
 /**
@@ -14,12 +17,18 @@ import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
 
 public interface InformationDataSource {
     interface loadInformationCallback{
-
+        void getInformationsLoaded(List<ImmediateInformation> immediateInformations);
+        void onDataNotAvailable();
     }
     interface getInformationCallback{
-
+        void onInformationLoaded(ImmediateInformation immediateInformation);
+        void onDataNotAvailable();
     }
 
-    void getInformation(@NonNull getInformationCallback callback);
+    void getInformation(@NonNull getInformationCallback callback,@NonNull String id);
+    void getInformations(@NonNull loadInformationCallback callback);
+    void saveInfoFromWeb(List<ImmediateInformation> immediateInformations);
+
     void addToArrangement(ImmediateInformation immediateInformation);
+
 }

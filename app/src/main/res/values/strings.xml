@@ -3,10 +3,19 @@
 
     <!-- TODO: Remove or change this placeholder text -->
 
-    <string name="information">资讯</string>
-    <string name="river">溪流</string>
-    <string name="smallData">调查</string>
-    <string name="arrangement">安排</string>
+    <string name="arrangement">个人主页</string>
+    <string name="my_collection">我的收藏</string>
+    <string name="concerned_topic">关注的话题</string>
+    <string name="group_dynamics">小组动态</string>
+
+    <string name="information">拾资讯</string>
+    <string name="river">探镜像</string>
+    <string name="smallData">攒数据</string>
+
+    <string name="remind">提醒</string>
+    <string name="share">分享</string>
+    <string name="setting">设置</string>
+
     <string name="noUserName">游客</string>
 
     <string name="info_filter_all">所有信息</string>

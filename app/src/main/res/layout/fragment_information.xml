@@ -1,20 +1,28 @@
-<jxpl.scnu.curb.utils.ScrollChildSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/refresh_info_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="jxpl.scnu.curb.immediateInformation.InformationFragment">
+    <jxpl.scnu.curb.utils.ScrollChildSwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/refresh_info_layout">
 
-    <!-- TODO: Update blank fragment layout -->
-   <android.support.v7.widget.RecyclerView
-       android:id="@+id/info_recycler"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent">
-   </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+        android:id="@+id/info_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        </android.support.v7.widget.RecyclerView>
 
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/info_floatingAb"/>
-
-</jxpl.scnu.curb.utils.ScrollChildSwipeRefreshLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/floating_action"
+            android:id="@+id/info_floatingAb"
+            app:fabSize="normal"
+            app:layout_anchor="@id/info_recycler"
+            app:layout_anchorGravity="bottom|right|end"/>
+    </jxpl.scnu.curb.utils.ScrollChildSwipeRefreshLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -41,6 +41,7 @@ public class HomePageActivity extends AppCompatActivity {
             actionBar.setHomeAsUpIndicator(R.drawable.home);
         }
 
+        //菜单项目点击事件
         navView.setCheckedItem(R.id.nav_info);
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -60,6 +61,7 @@ public class HomePageActivity extends AppCompatActivity {
         });
     }
 
+    //工具栏点击事件
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

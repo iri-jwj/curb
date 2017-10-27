@@ -26,8 +26,7 @@ import butterknife.Unbinder;
 import jxpl.scnu.curb.R;
 import jxpl.scnu.curb.utils.ScrollChildSwipeRefreshLayout;
 
-import static android.support.v4.util.Preconditions.checkNotNull;
-
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class InformationFragment extends Fragment implements InformationContract.View {
 
@@ -42,7 +41,7 @@ public class InformationFragment extends Fragment implements InformationContract
     Unbinder unbinder;
     private InformationContract.Presenter presenter;
     private infoAdapter minfoAdapter;
-    private List<ImmediateInformation> ImmediateInformations;
+    private List<ImmediateInformation> immediateInformations;
 
     public InformationFragment() {
         // Required empty public constructor
@@ -62,7 +61,7 @@ public class InformationFragment extends Fragment implements InformationContract
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        minfoAdapter = new infoAdapter(ImmediateInformations);
+        minfoAdapter = new infoAdapter(immediateInformations);
     }
 
 
@@ -106,11 +105,6 @@ public class InformationFragment extends Fragment implements InformationContract
         return info;
     }
 
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-
-    }
 
     @Override
     public void onDestroyView() {
@@ -194,6 +188,18 @@ public class InformationFragment extends Fragment implements InformationContract
 
 
     @Override
+    public void setLoadingIndicator(final boolean active) {
+        if(getView()==null)
+            return;
+        refreshInfoLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                refreshInfoLayout.setRefreshing(active);
+            }
+        });
+    }
+
+    @Override
     public int getImageIdByType(String type) {
         int imageId;
         switch (type) {
@@ -210,6 +216,11 @@ public class InformationFragment extends Fragment implements InformationContract
                 imageId = 0;
         }
         return imageId;
+    }
+
+    @Override
+    public boolean isActive() {
+        return isAdded();
     }
 
     @Override

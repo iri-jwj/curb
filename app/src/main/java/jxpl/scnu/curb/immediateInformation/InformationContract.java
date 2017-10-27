@@ -17,13 +17,15 @@ import jxpl.scnu.curb.BaseView;
 
 interface InformationContract {
     interface View extends BaseView<Presenter>{
+        boolean isActive();
         int getImageIdByType(String type);
         void showFilteringPopUpMenu(Context context);
         void showInformationDetailsUi();
         void showLoadingError();
+        void setLoadingIndicator(boolean active);
     }
     interface Presenter extends BasePresenter{
-        List<ImmediateInformation> getInformationFromRepository();
+        List<ImmediateInformation> getInformationFromRepository(boolean forceUpdate);
         void setFiltering(InformationFilter filtering);
         InformationFilter getFiltering();
         void openInformationDetails();
