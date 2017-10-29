@@ -78,7 +78,9 @@ public class InformationPresenter implements InformationContract.Presenter {
 
                     @Override
                     public void onDataNotAvailable() {
-
+                        if (!informationView.isActive())
+                            return;
+                        informationView.showLoadingError();
                     }
                 });
             }
@@ -102,7 +104,6 @@ public class InformationPresenter implements InformationContract.Presenter {
     @Override
     public void loadInformation(boolean forceUpdate){
         loadInformation(forceUpdate||firstLoad,true);
-        //getInformationFromRepository(forceUpdate,);
         firstLoad=false;
     }
 
@@ -111,13 +112,16 @@ public class InformationPresenter implements InformationContract.Presenter {
             informationView.setLoadingIndicator(true);
         }
         if (forceUpdate){
-
+            informationRepository.refreshInformation();
         }
-
+        List<ImmediateInformation> immediateInformations=new ArrayList<>();
+        immediateInformations=getInformationFromRepository(forceUpdate);
+        informationView.showInfo(immediateInformations);
     }
 
+
     @Override
-    public void openInformationDetails(){
+    public void openInformationDetails(ImmediateInformation immediateInformation){
 
     }
 }

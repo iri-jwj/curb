@@ -21,6 +21,7 @@ interface InformationContract {
         int getImageIdByType(String type);
         void showFilteringPopUpMenu(Context context);
         void showInformationDetailsUi();
+        void showInfo(List<ImmediateInformation> immediateInformations);
         void showLoadingError();
         void setLoadingIndicator(boolean active);
     }
@@ -28,7 +29,7 @@ interface InformationContract {
         List<ImmediateInformation> getInformationFromRepository(boolean forceUpdate);
         void setFiltering(InformationFilter filtering);
         InformationFilter getFiltering();
-        void openInformationDetails();
+        void openInformationDetails(ImmediateInformation immediateInformation);
         void loadInformation(boolean forceUpdate);
     }
 }

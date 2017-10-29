@@ -28,7 +28,7 @@ public interface InformationDataSource {
     void getInformation(@NonNull getInformationCallback callback,@NonNull String id);
     void getInformations(@NonNull loadInformationCallback callback);
     void saveInfoFromWeb(List<ImmediateInformation> immediateInformations);
-
+    void refreshInformation();
     void addToArrangement(ImmediateInformation immediateInformation);
 
 }

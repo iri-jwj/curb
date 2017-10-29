@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import jxpl.scnu.curb.R;
 
 public class HomePageActivity extends AppCompatActivity {
@@ -26,11 +27,12 @@ public class HomePageActivity extends AppCompatActivity {
     DrawerLayout homePageDrawer;
     private DrawerLayout drawerLayout;
 
+    private Unbinder unbinder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(homePageDrawer);
-        ButterKnife.bind(this);
+        unbinder=ButterKnife.bind(this);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.home_page_drawer);
 
@@ -59,6 +61,8 @@ public class HomePageActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+
     }
 
     //工具栏点击事件
@@ -76,5 +80,10 @@ public class HomePageActivity extends AppCompatActivity {
 
     private void changeFragment(MenuItem item) {
 
+    }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        unbinder.unbind();
     }
 }
