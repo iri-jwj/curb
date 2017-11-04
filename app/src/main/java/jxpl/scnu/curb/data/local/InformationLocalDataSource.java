@@ -141,4 +141,9 @@ public class InformationLocalDataSource implements InformationDataSource{
         }
         sqLiteDatabase.close();
     }
+
+    @Override
+    public void refreshInformation() {
+
+    }
 }

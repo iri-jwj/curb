@@ -20,7 +20,13 @@ public class InformationRemoteDataSource implements InformationDataSource {
     private static InformationRemoteDataSource INSTANCE;
     private InformationRemoteDataSource() {    }
 
-    public InformationRemoteDataSource getInstance(){
+
+    @Override
+    public void refreshInformation() {
+
+    }
+
+    public static InformationRemoteDataSource getInstance(){
         if (INSTANCE==null)
             INSTANCE=new InformationRemoteDataSource();
         return INSTANCE;

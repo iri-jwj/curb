@@ -51,5 +51,6 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.google.guava:guava:23.2-android'
+    compile 'de.hdodenhof:circleimageview:2.2.0'
 }
 

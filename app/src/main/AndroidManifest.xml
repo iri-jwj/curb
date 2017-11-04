@@ -10,9 +10,13 @@ package="jxpl.scnu.curb">
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
+
     </activity>
     <activity android:name="jxpl.scnu.curb.immediateInformation.informationDetails.InformationDetailActivity">
-
+        <intent-filter>
+            <action android:name="android.intent.action.INFO_DETAIL"/>
+            <category android:name="android.intent.category.INFO_DETAIL"/>
+        </intent-filter>
     </activity>
 
 </application>

@@ -4,6 +4,7 @@
     android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="jxpl.scnu.curb.immediateInformation.InformationFragment">
     <jxpl.scnu.curb.utils.ScrollChildSwipeRefreshLayout
         android:layout_width="match_parent"

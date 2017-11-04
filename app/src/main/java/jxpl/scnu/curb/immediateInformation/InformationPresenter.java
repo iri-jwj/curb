@@ -1,5 +1,6 @@
 package jxpl.scnu.curb.immediateInformation;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -121,7 +122,9 @@ public class InformationPresenter implements InformationContract.Presenter {
 
 
     @Override
-    public void openInformationDetails(ImmediateInformation immediateInformation){
-
+    public void openInformationDetails(@NonNull ImmediateInformation immediateInformation,@NonNull Context context){
+        checkNotNull(immediateInformation);
+        checkNotNull(context);
+        informationView.showInformationDetailsUi(immediateInformation.getId(),context);
     }
 }

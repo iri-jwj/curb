@@ -8,7 +8,7 @@ package jxpl.scnu.curb.immediateInformation;
  * --Winsdon Churchill
  */
 
-enum InformationFilter {
+public enum InformationFilter {
     /**
      * 不筛选
      */

@@ -1,6 +1,7 @@
 package jxpl.scnu.curb.immediateInformation;
 
-import android.app.Fragment;
+import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,6 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import jxpl.scnu.curb.R;
+import jxpl.scnu.curb.immediateInformation.informationDetails.InformationDetailActivity;
 import jxpl.scnu.curb.utils.ScrollChildSwipeRefreshLayout;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -152,7 +154,7 @@ public class InformationFragment extends Fragment implements InformationContract
                 public void onClick(View v) {
                     int position=holder.getAdapterPosition();
                     ImmediateInformation immediateInformation=immediateInformations.get(position);
-                    presenter.openInformationDetails(immediateInformation);
+                    presenter.openInformationDetails(immediateInformation,getActivity());
                 }
             });
             return holder;
@@ -241,8 +243,10 @@ public class InformationFragment extends Fragment implements InformationContract
     }
 
     @Override
-    public void showInformationDetailsUi() {
-
+    public void showInformationDetailsUi(String id,Context context){
+        Intent intent=new Intent(context, InformationDetailActivity.class);
+        intent.putExtra(InformationDetailActivity.INFO_ID,id);
+        startActivity(intent);
     }
 
     @Override

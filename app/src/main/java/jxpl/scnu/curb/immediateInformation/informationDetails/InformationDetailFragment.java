@@ -8,96 +8,108 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import jxpl.scnu.curb.R;
+import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
 
-import static android.support.v4.util.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link InformationDetailFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link InformationDetailFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class InformationDetailFragment extends Fragment implements InformationDetailContract.View {
 
 
+    @BindView(R.id.informationKind)
+    ImageView informationKind;
+    @BindView(R.id.informationTitle)
+    TextView informationTitle;
+    @BindView(R.id.info_detail_type)
+    TextView infoDetailType;
+    @BindView(R.id.info_detail_time)
+    TextView infoDetailTime;
+    @BindView(R.id.info_detail_content)
+    TextView infoDetailContent;
+    @BindView(R.id.info_detail_content_url)
+    TextView infoDetailContentUrl;
+    Unbinder unbinder;
     private InformationDetailContract.Presenter mPresenter;
-    private OnFragmentInteractionListener mListener;
+    private static final String ARGUMUENT_INFO_ID="INFO_ID";
+
 
     public InformationDetailFragment() {
         // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
-    public static InformationDetailFragment newInstance() {
+    public static InformationDetailFragment newInstance(@NonNull String id) {
 
-        return  new InformationDetailFragment();
+        Bundle argument=new Bundle();
+        argument.putString(ARGUMUENT_INFO_ID,id);
+        InformationDetailFragment informationDetailFragment=new InformationDetailFragment();
+        informationDetailFragment.setArguments(argument);
+        return informationDetailFragment;
     }
 
     @Override
-    public void setPresenter(@NonNull InformationDetailContract.Presenter presenter){
-        mPresenter=checkNotNull(presenter);
+    public void setPresenter(@NonNull InformationDetailContract.Presenter presenter) {
+        mPresenter = checkNotNull(presenter);
     }
 
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         mPresenter.start();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_information_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_information_detail, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    @Override
+    public void showMissingInfo() {
+        if(getView()==null)
+            return;
+        else{
+            informationTitle.setText(getString(R.string.missing_info_detail));
+            infoDetailContent.setText(getString(R.string.loading_info_error));
         }
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+    public void setLoadingIndicator(boolean active) {
+        if (getView()==null)
+            return;
+        if (active){
+            informationTitle.setText("");
+            infoDetailContent.setText(getString(R.string.loading_info_detail));
         }
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public boolean isActive() {
+        return isAdded();
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void showInfo(@NonNull ImmediateInformation immediateInformation) {
+        informationTitle.setText(immediateInformation.getTitle());
+        infoDetailTime.setText(immediateInformation.getTime());
+        infoDetailType.setText(immediateInformation.getType());
+        infoDetailContent.setText(immediateInformation.getContent());
+        infoDetailContentUrl.setText(immediateInformation.getContent_url());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

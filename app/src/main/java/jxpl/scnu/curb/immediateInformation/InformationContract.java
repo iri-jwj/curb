@@ -20,7 +20,7 @@ interface InformationContract {
         boolean isActive();
         int getImageIdByType(String type);
         void showFilteringPopUpMenu(Context context);
-        void showInformationDetailsUi();
+        void showInformationDetailsUi(String id,Context context);
         void showInfo(List<ImmediateInformation> immediateInformations);
         void showLoadingError();
         void setLoadingIndicator(boolean active);
@@ -29,7 +29,7 @@ interface InformationContract {
         List<ImmediateInformation> getInformationFromRepository(boolean forceUpdate);
         void setFiltering(InformationFilter filtering);
         InformationFilter getFiltering();
-        void openInformationDetails(ImmediateInformation immediateInformation);
+        void openInformationDetails(ImmediateInformation immediateInformation,Context context);
         void loadInformation(boolean forceUpdate);
     }
 }
