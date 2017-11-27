@@ -1,5 +1,7 @@
 package jxpl.scnu.curb.data.retrofit;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +25,7 @@ public class RetrofitGetData {
     private static List<ImmediateInformation> immediateInformations=new ArrayList<>();
 
     public static List<ImmediateInformation> getDataFromWeb(){
-        retrofit=new Retrofit.Builder().baseUrl("")
+        retrofit=new Retrofit.Builder().baseUrl("http://39.108.105.150:8080")
                 .addConverterFactory(GsonConverterFactory.create()).build();
         GetInformationInterface getInformationInterface=retrofit.create(GetInformationInterface.class);
         Call<List<ImmediateInformation>> immediateInformationCall=getInformationInterface.getCall();
@@ -31,13 +33,19 @@ public class RetrofitGetData {
         immediateInformationCall.enqueue(new Callback<List<ImmediateInformation>>() {
             @Override
             public void onResponse(Call<List<ImmediateInformation>> call, Response<List<ImmediateInformation>> response) {
+                System.out.println("SucceedInResponse!!!!!!!!!");
                 if (response.isSuccessful()){
                     immediateInformations=response.body();
                 }
+                Log.d("RESPONSE","SUCCEED"+immediateInformations.size());
+                Log.d("RESPONSE",immediateInformations.get(1).getTitle());
             }
             @Override
             public void onFailure(Call<List<ImmediateInformation>> call, Throwable t) {
+                System.out.println("FAILInResponse!!!!!!!!!");
                 System.out.println(t.getMessage());
+                Log.d("RESPONSE","FAIL");
+
             }
         });
         return immediateInformations;

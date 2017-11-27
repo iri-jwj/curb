@@ -1,13 +1,19 @@
 package jxpl.scnu.curb.homePage;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -41,8 +47,15 @@ public class HomePageActivity extends AppCompatActivity {
     private Unbinder unbinder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1);
+        }
+
         super.onCreate(savedInstanceState);
-        setContentView(homePageDrawer);
+        setContentView(R.layout.activity_home_page);
         unbinder=ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
@@ -52,26 +65,68 @@ public class HomePageActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        informationFragment=(InformationFragment) getSupportFragmentManager().findFragmentById(R.id.home_page_frame) ;
+        homePageDrawer.setStatusBarBackground(R.color.toolsBar);
 
         //菜单项目点击事件
-        navView.setCheckedItem(R.id.nav_info);
-        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                changeFragment(item);
-                return false;
-            }
-        });
+        setupDrawerContent(navView);
+//        informationFragment=(InformationFragment) getSupportFragmentManager().findFragmentById(R.id.home_page_frame) ;
+//        if (informationFragment == null){
+//            informationFragment = InformationFragment.newInstance();
+//            ActivityUtil.addFragmentToActivity(getSupportFragmentManager(), informationFragment, R.id.home_page_frame);
+//        }
+        ActivityUtil.setContainerView(R.id.home_page_frame);
+        ActivityUtil.setFragmentManager(getSupportFragmentManager());
+        if(informationFragment==null){
+            informationFragment=InformationFragment.newInstance();
+            Log.d("HomePageCreateInfoFrag", "onCreate:infoFrag "+informationFragment.isAdded());
+            ActivityUtil.addFragment(R.id.nav_info,informationFragment);
+        }
+        ActivityUtil.setCurrentFragment(R.id.nav_info);
+        informationPresenter = new InformationPresenter(InformationRepository.getInstance(InformationLocalDataSource.getInstace(HomePageActivity.this),
+                InformationRemoteDataSource.getInstance()), informationFragment);
+
+
 
         if (savedInstanceState != null) {
             InformationFilter currentFiltering =
                     (InformationFilter) savedInstanceState.getSerializable(CURRENT_FILTERING_KEY);
             informationPresenter.setFiltering(currentFiltering);
         }
-
     }
 
+    private void setupDrawerContent(NavigationView navigationView){
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                switch (item.getItemId()) {
+//                    case R.id.nav_info:
+//                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//                        transaction.replace(R.id.home_page_frame,informationFragment);
+//                        transaction.commit();
+//                        break;
+//                    case R.id.nav_river:
+//                        break;
+//                    case R.id.nav_small_data:
+//                        break;
+//                    case R.id.nav_arrange:
+//                        break;
+//                    case R.id.nav_share:
+//                        break;
+//                    case R.id.nav_concerned_topic:
+//                        break;
+//                    case R.id.nav_remind:
+//                        break;
+//                    case R.id.nav_setting:
+//                        break;
+//                }
+                ActivityUtil.setCurrentFragment(item.getItemId());
+                item.setChecked(true);
+                homePageDrawer.closeDrawers();
+                return true;
+            }
+        });
+    }
     //工具栏点击事件
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -85,32 +140,6 @@ public class HomePageActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void changeFragment(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_info:
-                if(informationFragment==null)
-                    informationFragment=InformationFragment.newInstance();
-                ActivityUtil.addFragmentToActivity(getSupportFragmentManager(),informationFragment,R.id.home_page_frame);
-                informationPresenter=new InformationPresenter(InformationRepository.getInstance(InformationLocalDataSource.getInstace(this),
-                        InformationRemoteDataSource.getInstance()),informationFragment);
-                break;
-            case R.id.nav_river:
-                break;
-            case R.id.nav_small_data:
-                break;
-            case R.id.nav_arrange:
-                break;
-            case R.id.nav_share:
-                break;
-            case R.id.nav_concerned_topic:
-                break;
-            case R.id.nav_remind:
-                break;
-            case R.id.nav_setting:
-                break;
-        }
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState){
         outState.putSerializable(CURRENT_FILTERING_KEY,informationPresenter.getFiltering());
@@ -120,5 +149,20 @@ public class HomePageActivity extends AppCompatActivity {
     public void onDestroy(){
         super.onDestroy();
         unbinder.unbind();
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,@NonNull int[] grantResults){
+        switch (requestCode){
+            case 1:
+                if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    System.out.print("got PERMISSION\n");
+                }else{
+                    System.out.print("PERMISSION FAILED\n");
+                }
+                break;
+            default:
+        }
     }
 }

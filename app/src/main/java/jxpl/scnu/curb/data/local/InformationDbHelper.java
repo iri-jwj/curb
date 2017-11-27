@@ -19,20 +19,20 @@ public class InformationDbHelper extends SQLiteOpenHelper {
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
     }
 
-    private static final String TEXT_TYPE="TEXT";
+    private static final String TEXT_TYPE=" TEXT";
 
     private static final String COMMA_SEP = ",";
 
     private static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + PersistenceContract.informationEntry.TABLE_NAME + " (" +
+            "CREATE TABLE " + PersistenceContract.informationEntry.TABLE_NAME + "(" +
                     PersistenceContract.informationEntry.COLUMN_NAME_ID + TEXT_TYPE + " PRIMARY KEY," +
                     PersistenceContract.informationEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.informationEntry.COLUMN_NAME_CONTENT + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.informationEntry.COLUMN_NAME_DATE+TEXT_TYPE+COMMA_SEP+
                     PersistenceContract.informationEntry.COLUMN_NAME_TIME+TEXT_TYPE+COMMA_SEP+
                     PersistenceContract.informationEntry.COLUMN_NAME_TYPE+TEXT_TYPE+COMMA_SEP+
-                    PersistenceContract.informationEntry.COLUMN_NAME_CONTENT_URL+TEXT_TYPE+COMMA_SEP+
-                    " )";
+                    PersistenceContract.informationEntry.COLUMN_NAME_CONTENT_URL+TEXT_TYPE+
+                    ")";
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {

@@ -22,11 +22,12 @@ interface InformationContract {
         void showFilteringPopUpMenu(Context context);
         void showInformationDetailsUi(String id,Context context);
         void showInfo(List<ImmediateInformation> immediateInformations);
+        void showNoInfo();
         void showLoadingError();
         void setLoadingIndicator(boolean active);
     }
     interface Presenter extends BasePresenter{
-        List<ImmediateInformation> getInformationFromRepository(boolean forceUpdate);
+        void getInformationFromRepository(boolean forceUpdate);
         void setFiltering(InformationFilter filtering);
         InformationFilter getFiltering();
         void openInformationDetails(ImmediateInformation immediateInformation,Context context);

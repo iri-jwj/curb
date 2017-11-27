@@ -25,7 +25,7 @@ import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.*;
 public class InformationLocalDataSource implements InformationDataSource{
     private InformationDbHelper informationDbHelper;
 
-    public static InformationLocalDataSource INSTANCE;
+    private static InformationLocalDataSource INSTANCE;
 
     private InformationLocalDataSource (@NonNull Context context){
         checkNotNull(context);

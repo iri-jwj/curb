@@ -15,6 +15,6 @@ import retrofit2.http.GET;
  */
 
 public interface  GetInformationInterface {
-    @GET("/abc")
+    @GET("/showJson")
     Call<List<ImmediateInformation>> getCall();
 }

@@ -1,24 +1,27 @@
 package jxpl.scnu.curb.immediateInformation;
 
-import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -38,18 +41,27 @@ public class InformationFragment extends Fragment implements InformationContract
     FloatingActionButton infoFloatingAb;
     @BindView(R.id.refresh_info_layout)
     ScrollChildSwipeRefreshLayout refreshInfoLayout;
-
+    @BindView(R.id.Label)
+    TextView Label;
+    @BindView(R.id.info_list)
+    LinearLayout infoList;
+    @BindView(R.id.noInfoMain)
+    TextView noInfoMain;
+    @BindView(R.id.noInfo)
+    LinearLayout noInfo;
     Unbinder unbinder;
+
     private InformationContract.Presenter presenter;
     private infoAdapter minfoAdapter;
-    private List<ImmediateInformation> immediateInformations;
+
+
 
     public InformationFragment() {
         // Required empty public constructor
     }
 
     public static InformationFragment newInstance() {
-        return new InformationFragment();
+        return  new InformationFragment();
     }
 
     @Override
@@ -60,23 +72,41 @@ public class InformationFragment extends Fragment implements InformationContract
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        minfoAdapter = new infoAdapter(immediateInformations);
+        minfoAdapter = new infoAdapter(new ArrayList<ImmediateInformation>(0));
+        Log.d("CreateInfoView","CreateAdapter");
     }
 
 
     @Override
     public void showInfo(List<ImmediateInformation> immediateInformations) {
         minfoAdapter.replaceInfo(immediateInformations);
+        Log.d("GetList","SetAdapter");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View info = inflater.inflate(R.layout.fragment_information, container, false);
-        ButterKnife.bind(this,info);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(info.getContext());//不明代码= =
+        ButterKnife.bind(this, info);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         infoRecycler.setLayoutManager(layoutManager);
         infoRecycler.setAdapter(minfoAdapter);
+
+        refreshInfoLayout.setColorSchemeColors(
+                ContextCompat.getColor(getActivity(), R.color.colorPrimary),
+                ContextCompat.getColor(getActivity(), R.color.colorAccent),
+                ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark)
+        );
+        // Set the scrolling view in the custom SwipeRefreshLayout.
+        refreshInfoLayout.setScrollUpChild(infoRecycler);
+        refreshInfoLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    presenter.loadInformation(false);
+                }
+            });
+        setHasOptionsMenu(true);
 
         //SET UP floatingActionBar
         infoFloatingAb.setImageResource(R.drawable.fliter_arrow);
@@ -86,27 +116,21 @@ public class InformationFragment extends Fragment implements InformationContract
                 showFilteringPopUpMenu(getActivity());
             }
         });
-
-        refreshInfoLayout.setColorSchemeColors(
-                ContextCompat.getColor(getActivity(), R.color.colorPrimary),
-                ContextCompat.getColor(getActivity(), R.color.colorAccent),
-                ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark)
-        );
-        // Set the scrolling view in the custom SwipeRefreshLayout.
-        refreshInfoLayout.setScrollUpChild(infoRecycler);
-
-        refreshInfoLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                presenter.loadInformation(false);
-            }
-        });
-        setHasOptionsMenu(true);
-
         unbinder = ButterKnife.bind(this, info);
         return info;
     }
 
+    @Override
+    public void showNoInfo() {
+        infoList.setVisibility(View.GONE);
+        noInfo.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onViewCreated(View view,Bundle bundle){
+        super.onViewCreated(view,bundle);
+        presenter.loadInformation(false);
+    }
 
     @Override
     public void onDestroyView() {
@@ -118,29 +142,35 @@ public class InformationFragment extends Fragment implements InformationContract
     class infoAdapter extends RecyclerView.Adapter<infoAdapter.ViewHolder> {
         private List<ImmediateInformation> immediateInformations;
         Unbinder unBinderAdapter;
+
         class ViewHolder extends RecyclerView.ViewHolder {
-            @BindView(R.id.info_item_image) ImageView infoImage;
-            @BindView(R.id.info_item_title) TextView infoTitle;
-            @BindView(R.id.info_item_time) TextView infoTime;
+            @BindView(R.id.info_item_image)
+            ImageView infoImage;
+            @BindView(R.id.info_item_title)
+            TextView infoTitle;
+            @BindView(R.id.info_item_time)
+            TextView infoTime;
             View infoView;
+
             ViewHolder(View itemView) {
                 super(itemView);
-                infoView=itemView;
-                unBinderAdapter= ButterKnife.bind(this,itemView);
+                infoView = itemView;
+                unBinderAdapter = ButterKnife.bind(this, itemView);
             }
+
         }
 
-        infoAdapter(List<ImmediateInformation> ImmediateInformations) {
-            this.immediateInformations = ImmediateInformations;
+        infoAdapter(List<ImmediateInformation> immediateInformations) {
+            this.immediateInformations=immediateInformations;
         }
 
-        void replaceInfo(List<ImmediateInformation> immediateInformations){
+        void replaceInfo(List<ImmediateInformation> immediateInformations) {
             setImmediateInformations(immediateInformations);
             notifyDataSetChanged();
         }
 
-        private void setImmediateInformations(List<ImmediateInformation> immediateInformations){
-            this.immediateInformations=checkNotNull(immediateInformations);
+        private void setImmediateInformations(List<ImmediateInformation> immediateInformations) {
+            this.immediateInformations = checkNotNull(immediateInformations);
         }
 
         @Override
@@ -148,13 +178,13 @@ public class InformationFragment extends Fragment implements InformationContract
             View view = LayoutInflater.from(viewGroup.getContext())
                     .inflate(R.layout.informations_item, viewGroup, false);
 
-            final ViewHolder holder=new ViewHolder(view);
+            final ViewHolder holder = new ViewHolder(view);
             holder.infoView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position=holder.getAdapterPosition();
-                    ImmediateInformation immediateInformation=immediateInformations.get(position);
-                    presenter.openInformationDetails(immediateInformation,getActivity());
+                    int position = holder.getAdapterPosition();
+                    ImmediateInformation immediateInformation = immediateInformations.get(position);
+                    presenter.openInformationDetails(immediateInformation, getActivity());
                 }
             });
             return holder;
@@ -208,7 +238,7 @@ public class InformationFragment extends Fragment implements InformationContract
 
     @Override
     public void setLoadingIndicator(final boolean active) {
-        if(getView()==null)
+        if (getView() == null)
             return;
         refreshInfoLayout.post(new Runnable() {
             @Override
@@ -243,9 +273,9 @@ public class InformationFragment extends Fragment implements InformationContract
     }
 
     @Override
-    public void showInformationDetailsUi(String id,Context context){
-        Intent intent=new Intent(context, InformationDetailActivity.class);
-        intent.putExtra(InformationDetailActivity.INFO_ID,id);
+    public void showInformationDetailsUi(String id, Context context) {
+        Intent intent = new Intent(context, InformationDetailActivity.class);
+        intent.putExtra(InformationDetailActivity.INFO_ID, id);
         startActivity(intent);
     }
 
@@ -253,8 +283,9 @@ public class InformationFragment extends Fragment implements InformationContract
     public void showLoadingError() {
         showLoadingErrorMessage(getString(R.string.loading_info_error));
     }
-    private void showLoadingErrorMessage(String message){
-        View view=checkNotNull(getView());
-        Snackbar.make(view,message,Snackbar.LENGTH_LONG).show();
+
+    private void showLoadingErrorMessage(String message) {
+        View view = checkNotNull(getView());
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
     }
 }
