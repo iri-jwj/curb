@@ -28,7 +28,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import jxpl.scnu.curb.R;
-import jxpl.scnu.curb.immediateInformation.informationDetails.InformationDetailActivity;
 import jxpl.scnu.curb.utils.ScrollChildSwipeRefreshLayout;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -136,7 +135,6 @@ public class InformationFragment extends Fragment implements InformationContract
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        minfoAdapter.unBinderAdapter.unbind();
     }
 
     class infoAdapter extends RecyclerView.Adapter<infoAdapter.ViewHolder> {
@@ -274,9 +272,7 @@ public class InformationFragment extends Fragment implements InformationContract
 
     @Override
     public void showInformationDetailsUi(String id, Context context) {
-        Intent intent = new Intent(context, InformationDetailActivity.class);
-        intent.putExtra(InformationDetailActivity.INFO_ID, id);
-        startActivity(intent);
+
     }
 
     @Override

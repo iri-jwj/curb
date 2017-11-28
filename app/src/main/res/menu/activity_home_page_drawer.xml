@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
     <group android:checkableBehavior="single" android:id="@+id/nav_item_first">
         <item
             android:id="@+id/nav_arrange"
@@ -20,18 +22,18 @@
     </group>
 
     <group android:checkableBehavior="single" android:id="@+id/nav_item_second">
-    <item
-        android:id="@+id/nav_info"
-        android:icon="@drawable/nav_icon_information"
-        android:title="@string/information"/>
-    <item
-        android:title="@string/river"
-        android:icon="@drawable/nav_icon_river"
-        android:id="@+id/nav_river"/>
-    <item
-        android:id="@+id/nav_small_data"
-        android:icon="@drawable/nav_icon_small_data"
-        android:title="@string/smallData"/>
+        <item
+            android:id="@+id/nav_info"
+            android:icon="@drawable/nav_icon_information"
+            android:title="@string/information"/>
+        <item
+            android:title="@string/river"
+            android:icon="@drawable/nav_icon_river"
+            android:id="@+id/nav_river"/>
+        <item
+            android:id="@+id/nav_small_data"
+            android:icon="@drawable/nav_icon_small_data"
+            android:title="@string/smallData"/>
 
     </group>
     <group android:checkableBehavior="single" android:id="@+id/nav_item_third">
@@ -48,4 +50,5 @@
             android:title="@string/setting"
             android:icon="@drawable/nav_icon_setting"/>
     </group>
+
 </menu>

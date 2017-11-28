@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import jxpl.scnu.curb.data.local.InformationLocalDataSource;
 import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
 
 /**
@@ -25,7 +24,7 @@ public interface InformationDataSource {
         void onDataNotAvailable();
     }
 
-    void getInformation(@NonNull getInformationCallback callback,@NonNull String id);
+    void getInformation(@NonNull getInformationCallback callback, @NonNull String id);
     void getInformations(@NonNull loadInformationCallback callback);
     void saveInfoFromWeb(List<ImmediateInformation> immediateInformations);
     void refreshInformation();

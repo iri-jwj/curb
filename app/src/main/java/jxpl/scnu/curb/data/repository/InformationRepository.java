@@ -35,7 +35,7 @@ public class InformationRepository implements InformationDataSource{
     }
 
     public static InformationRepository getInstance(InformationLocalDataSource informationLocalDataSource,
-                                                     InformationRemoteDataSource informationRemoteDataSource){
+                                                    InformationRemoteDataSource informationRemoteDataSource){
         if(INSTANCE==null)
             INSTANCE=new InformationRepository(informationLocalDataSource,informationRemoteDataSource);
         return INSTANCE;

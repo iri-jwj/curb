@@ -36,14 +36,7 @@
         </LinearLayout>
 
 
-        <android.support.design.widget.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/floating_action"
-            android:id="@+id/info_floatingAb"
-            app:fabSize="normal"
-            app:layout_anchor="@id/info_recycler"
-            app:layout_anchorGravity="bottom|right|end"/>
+
     </jxpl.scnu.curb.utils.ScrollChildSwipeRefreshLayout>
 
     <LinearLayout
@@ -61,4 +54,12 @@
             android:text="@string/no_info_main"
             android:layout_marginBottom="@dimen/list_item_padding" />
     </LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/floating_action"
+        android:id="@+id/info_floatingAb"
+        app:fabSize="normal"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_gravity="bottom|end"/>
 </android.support.design.widget.CoordinatorLayout>

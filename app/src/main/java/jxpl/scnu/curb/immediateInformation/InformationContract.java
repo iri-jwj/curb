@@ -16,21 +16,21 @@ import jxpl.scnu.curb.BaseView;
  */
 
 interface InformationContract {
-    interface View extends BaseView<Presenter>{
+    interface View extends BaseView<Presenter> {
         boolean isActive();
         int getImageIdByType(String type);
         void showFilteringPopUpMenu(Context context);
-        void showInformationDetailsUi(String id,Context context);
+        void showInformationDetailsUi(String id, Context context);
         void showInfo(List<ImmediateInformation> immediateInformations);
         void showNoInfo();
         void showLoadingError();
         void setLoadingIndicator(boolean active);
     }
-    interface Presenter extends BasePresenter{
+    interface Presenter extends BasePresenter {
         void getInformationFromRepository(boolean forceUpdate);
         void setFiltering(InformationFilter filtering);
         InformationFilter getFiltering();
-        void openInformationDetails(ImmediateInformation immediateInformation,Context context);
+        void openInformationDetails(ImmediateInformation immediateInformation, Context context);
         void loadInformation(boolean forceUpdate);
     }
 }

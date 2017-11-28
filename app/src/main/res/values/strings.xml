@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">Curb</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 
     <string name="arrangement">个人主页</string>
     <string name="my_collection">我的收藏</string>

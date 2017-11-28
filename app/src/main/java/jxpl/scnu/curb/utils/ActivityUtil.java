@@ -1,7 +1,7 @@
 package jxpl.scnu.curb.utils;
 
-import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -20,14 +20,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class ActivityUtil {
 
     private static final SparseArray<Fragment> fragments = new SparseArray<>();
+    private static final SparseArray<Fragment> fragmentsNotUse = new SparseArray<>();
     private static FragmentManager fragmentManager;
     private static int currentKey=-1;
     private static int containerView;
 
 
     public static void addFragment(@NonNull Integer id , @NonNull Fragment fragment){
-        fragments.put(id,fragment);
-        fragmentManager.beginTransaction().add(containerView,fragment).commitAllowingStateLoss();
+        fragmentsNotUse.put(id,fragment);
         Log.d("addFrag", "addFragment: "+fragment.isAdded());
     }
     public static void setFragmentManager(FragmentManager ifragmentManager){
@@ -44,18 +44,29 @@ public class ActivityUtil {
                 Fragment fragment = fragments.get(currentKey);
                 fragmentManager.beginTransaction()
                         .hide(fragment)
-                        .commitNowAllowingStateLoss();
+                        .commit();
                 fragment.setUserVisibleHint(false);
             }
             currentKey=id;
             if (id >= 0) {
-                if(fragments.get(id)==null)
+                if(fragmentsNotUse.get(id)==null){
+                    Log.d("ActivityUntil", "setCurrentFragment:Must Init fragmentNotUse before use ");
                     return;
-                Fragment fragment = fragments.get(id);
-                fragmentManager.beginTransaction()
-                        .show(fragment)
-                        .commitNowAllowingStateLoss();
-                fragment.setUserVisibleHint(true);
+                }
+                if (fragments.get(id)==null){
+                    Fragment fragment=fragmentsNotUse.get(id);
+                    fragments.put(id,fragment);
+                    fragmentManager.beginTransaction()
+                            .add(containerView,fragment)
+                            .commit();
+                    fragment.setUserVisibleHint(true);
+                }else {
+                    Fragment fragment = fragments.get(id);
+                    fragmentManager.beginTransaction()
+                            .show(fragment)
+                            .commit();
+                    fragment.setUserVisibleHint(true);
+                }
             }
         }
     }

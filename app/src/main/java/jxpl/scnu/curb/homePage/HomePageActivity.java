@@ -1,13 +1,10 @@
 package jxpl.scnu.curb.homePage;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -15,154 +12,90 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
+import android.view.View;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import jxpl.scnu.curb.R;
 import jxpl.scnu.curb.data.local.InformationLocalDataSource;
 import jxpl.scnu.curb.data.remote.InformationRemoteDataSource;
 import jxpl.scnu.curb.data.repository.InformationRepository;
-import jxpl.scnu.curb.immediateInformation.InformationFilter;
 import jxpl.scnu.curb.immediateInformation.InformationFragment;
 import jxpl.scnu.curb.immediateInformation.InformationPresenter;
+import jxpl.scnu.curb.river.RiverFragment;
+import jxpl.scnu.curb.smallData.SmallDataFragment;
+import jxpl.scnu.curb.taskArrangement.ArrangeFragment;
 import jxpl.scnu.curb.utils.ActivityUtil;
 
-public class HomePageActivity extends AppCompatActivity {
+public class HomePageActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.home_page_frame)
-    FrameLayout homePageFrame;
     @BindView(R.id.nav_view)
     NavigationView navView;
-    @BindView(R.id.home_page_drawer)
-    DrawerLayout homePageDrawer;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.toolbar_title)
+    TextView toolbarTitle;
 
-    private static final String CURRENT_FILTERING_KEY = "CURRENT_FILTERING_KEY";
-
-    private InformationFragment informationFragment;
-    private InformationPresenter informationPresenter;
-
-    private Unbinder unbinder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    1);
-        }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
-        unbinder=ButterKnife.bind(this);
-
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setHomeAsUpIndicator(R.drawable.home);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        ActionBar ab = getSupportActionBar();
+        ab.setTitle("");
+        ab.setHomeAsUpIndicator(R.drawable.home);
+        ab.setDisplayHomeAsUpEnabled(true);
 
-        homePageDrawer.setStatusBarBackground(R.color.toolsBar);
 
-        //菜单项目点击事件
-        setupDrawerContent(navView);
-//        informationFragment=(InformationFragment) getSupportFragmentManager().findFragmentById(R.id.home_page_frame) ;
-//        if (informationFragment == null){
-//            informationFragment = InformationFragment.newInstance();
-//            ActivityUtil.addFragmentToActivity(getSupportFragmentManager(), informationFragment, R.id.home_page_frame);
-//        }
-        ActivityUtil.setContainerView(R.id.home_page_frame);
+
+        ActivityUtil.setContainerView(R.id.content_frame);
         ActivityUtil.setFragmentManager(getSupportFragmentManager());
-        if(informationFragment==null){
-            informationFragment=InformationFragment.newInstance();
-            Log.d("HomePageCreateInfoFrag", "onCreate:infoFrag "+informationFragment.isAdded());
-            ActivityUtil.addFragment(R.id.nav_info,informationFragment);
-        }
+        ActivityUtil.addFragment(R.id.nav_river, new RiverFragment());
+        ActivityUtil.addFragment(R.id.nav_arrange, new ArrangeFragment());
+        ActivityUtil.addFragment(R.id.nav_small_data, new SmallDataFragment());
+
+        InformationFragment informationFragment = InformationFragment.newInstance();
+        Log.d("HomePageCreateInfoFrag", "onCreate:infoFrag " + informationFragment.isAdded());
+        ActivityUtil.addFragment(R.id.nav_info, informationFragment);
         ActivityUtil.setCurrentFragment(R.id.nav_info);
-        informationPresenter = new InformationPresenter(InformationRepository.getInstance(InformationLocalDataSource.getInstace(HomePageActivity.this),
+        InformationPresenter informationPresenter = new InformationPresenter(InformationRepository.getInstance(InformationLocalDataSource.getInstace(HomePageActivity.this),
                 InformationRemoteDataSource.getInstance()), informationFragment);
+        navView.setCheckedItem(R.id.nav_info);
+        toolbarTitle.setText(R.string.information);
+        navView.setNavigationItemSelectedListener(this);
+    }
 
-
-
-        if (savedInstanceState != null) {
-            InformationFilter currentFiltering =
-                    (InformationFilter) savedInstanceState.getSerializable(CURRENT_FILTERING_KEY);
-            informationPresenter.setFiltering(currentFiltering);
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
     }
 
-    private void setupDrawerContent(NavigationView navigationView){
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                switch (item.getItemId()) {
-//                    case R.id.nav_info:
-//                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//                        transaction.replace(R.id.home_page_frame,informationFragment);
-//                        transaction.commit();
-//                        break;
-//                    case R.id.nav_river:
-//                        break;
-//                    case R.id.nav_small_data:
-//                        break;
-//                    case R.id.nav_arrange:
-//                        break;
-//                    case R.id.nav_share:
-//                        break;
-//                    case R.id.nav_concerned_topic:
-//                        break;
-//                    case R.id.nav_remind:
-//                        break;
-//                    case R.id.nav_setting:
-//                        break;
-//                }
-                ActivityUtil.setCurrentFragment(item.getItemId());
-                item.setChecked(true);
-                homePageDrawer.closeDrawers();
-                return true;
-            }
-        });
-    }
-    //工具栏点击事件
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                homePageDrawer.openDrawer(GravityCompat.START);
-                break;
-            default:
-                break;
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            drawerLayout.openDrawer(GravityCompat.START);
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public void onSaveInstanceState(Bundle outState){
-        outState.putSerializable(CURRENT_FILTERING_KEY,informationPresenter.getFiltering());
-        super.onSaveInstanceState(outState);
-    }
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-        unbinder.unbind();
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,@NonNull int[] grantResults){
-        switch (requestCode){
-            case 1:
-                if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                    System.out.print("got PERMISSION\n");
-                }else{
-                    System.out.print("PERMISSION FAILED\n");
-                }
-                break;
-            default:
-        }
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view item clicks here.
+        ActivityUtil.setCurrentFragment(item.getItemId());
+        toolbarTitle.setText(item.getTitle());
+        item.setChecked(true);
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

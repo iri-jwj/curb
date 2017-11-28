@@ -1,6 +1,5 @@
 package jxpl.scnu.curb.immediateInformation.informationDetails;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -8,7 +7,6 @@ import android.widget.FrameLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import jxpl.scnu.curb.R;
 import jxpl.scnu.curb.data.local.InformationLocalDataSource;
@@ -37,8 +35,8 @@ public class InformationDetailActivity extends AppCompatActivity {
                 getSupportFragmentManager().findFragmentById(R.id.detail_info_frame);
 
         if (informationDetailFragment==null){
-            informationDetailFragment=InformationDetailFragment.newInstance(infoId);
-            ActivityUtil.addFragmentToActivity(getSupportFragmentManager(),informationDetailFragment,R.id.detail_info_frame);
+            informationDetailFragment= InformationDetailFragment.newInstance(infoId);
+            ActivityUtil.addFragmentToActivity(getSupportFragmentManager(),informationDetailFragment, R.id.detail_info_frame);
         }
         InformationDetailPresenter informationDetailPresenter=new InformationDetailPresenter(infoId,
                 InformationRepository.getInstance(InformationLocalDataSource.getInstace(this), InformationRemoteDataSource.getInstance())

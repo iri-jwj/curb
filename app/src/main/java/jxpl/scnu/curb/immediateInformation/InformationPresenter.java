@@ -27,7 +27,7 @@ public class InformationPresenter implements InformationContract.Presenter {
     private final InformationRepository informationRepository;
     private final InformationContract.View informationView;
     private boolean firstLoad=true;
-    public InformationPresenter(@NonNull InformationRepository informationRepository,InformationContract.View informationView){
+    public InformationPresenter(@NonNull InformationRepository informationRepository, InformationContract.View informationView){
         this.informationRepository=checkNotNull(informationRepository);
         this.informationView=checkNotNull(informationView);
         informationView.setPresenter(this);

@@ -13,7 +13,15 @@ import jxpl.scnu.curb.data.repository.InformationDataSource;
 import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.*;
+import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_CONTENT;
+import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_CONTENT_URL;
+import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_DATE;
+import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_ID;
+import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_TIME;
+import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_TITLE;
+import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_TYPE;
+import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.TABLE_NAME;
+
 /**
  * Created by irijw on 2017/10/15.
  * all great things are simple,
