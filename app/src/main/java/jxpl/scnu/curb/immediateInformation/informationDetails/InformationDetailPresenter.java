@@ -23,7 +23,7 @@ public class InformationDetailPresenter implements InformationDetailContract.Pre
 
     private final InformationRepository informationRepository;
     private final InformationDetailContract.View infoDetailView;
-
+    private String infoTitle = "";
      InformationDetailPresenter(String infoId, @NonNull InformationRepository informationRepository,
                                @NonNull InformationDetailContract.View infoDetailView){
         this.infoId=infoId;
@@ -42,24 +42,24 @@ public class InformationDetailPresenter implements InformationDetailContract.Pre
              infoDetailView.showMissingInfo();
              return;
          }
-
          infoDetailView.setLoadingIndicator(true);
          informationRepository.getInformation(new InformationDataSource.getInformationCallback() {
              @Override
              public void onInformationLoaded(ImmediateInformation immediateInformation) {
-                 if (infoDetailView.isActive())
+                 if (!infoDetailView.isActive())
                      return;
-
                  infoDetailView.setLoadingIndicator(false);
                  if (immediateInformation==null)
                      infoDetailView.showMissingInfo();
-                 else
+                 else {
                      showInfo(immediateInformation);
+                     infoTitle = immediateInformation.getTitle();
+                 }
              }
 
              @Override
              public void onDataNotAvailable() {
-                 if (infoDetailView.isActive())
+                 if (!infoDetailView.isActive())
                      return;
                  infoDetailView.setLoadingIndicator(false);
                  infoDetailView.showMissingInfo();
@@ -67,8 +67,12 @@ public class InformationDetailPresenter implements InformationDetailContract.Pre
          },infoId);
     }
 
-    private void showInfo(ImmediateInformation immediateInformation){
 
+    public String getInfoTitle() {
+        return infoTitle;
+    }
+
+    private void showInfo(ImmediateInformation immediateInformation){
          infoDetailView.showInfo(checkNotNull(immediateInformation));
     }
 }

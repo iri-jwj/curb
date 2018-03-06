@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/info_all"
-        android:title="@string/info_filter_all" />
-    <item
         android:id="@+id/info_education"
+        android:icon="@drawable/ic_filter_practice"
         android:title="@string/info_filter_education" />
     <item
+        android:id="@+id/info_work_study"
+        android:layout_height="match_parent"
+        android:icon="@drawable/ic_filter_practice"
+        android:title="@string/info_filter_work_study" />
+    <item
         android:id="@+id/info_scholar"
+        android:icon="@drawable/ic_filter_scholar"
         android:title="@string/info_filter_scholar" />
     <item
-        android:id="@+id/info_work_study"
-        android:title="@string/info_filter_work_study"/>
+        android:id="@+id/info_practice"
+        android:icon="@drawable/ic_filter_practice"
+        android:title="@string/info_filter_practice" />
     <item
-        android:title="@string/info_filter_practice"
-        android:id="@+id/info_practice"/>
+        android:id="@+id/info_all"
+        android:icon="@drawable/ic_fliter_arrow"
+        android:title="@string/info_filter_all" />
 </menu>

@@ -8,4 +8,6 @@
 
     <dimen name="list_item_padding">8dp</dimen>
 
+    <dimen name="question_button_margin">10dp</dimen>
+    <dimen name="question_answer_margin">3dp</dimen>
 </resources>

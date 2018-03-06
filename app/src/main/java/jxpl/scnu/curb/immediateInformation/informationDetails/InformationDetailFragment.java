@@ -3,6 +3,7 @@ package jxpl.scnu.curb.immediateInformation.informationDetails;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,7 @@ public class InformationDetailFragment extends Fragment implements InformationDe
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
+
     public static InformationDetailFragment newInstance(@NonNull String id) {
 
         Bundle argument=new Bundle();
@@ -73,8 +74,9 @@ public class InformationDetailFragment extends Fragment implements InformationDe
 
     @Override
     public void showMissingInfo() {
-        if(getView()==null)
-            return;
+        if (getView() == null) {
+            Log.d("InfoDetailView", "showMissingInfo: MissingView");
+        }
         else{
             informationTitle.setText(getString(R.string.missing_info_detail));
             infoDetailContent.setText(getString(R.string.loading_info_error));
@@ -98,8 +100,8 @@ public class InformationDetailFragment extends Fragment implements InformationDe
 
     @Override
     public void showInfo(@NonNull ImmediateInformation immediateInformation) {
+
         informationTitle.setText(immediateInformation.getTitle());
-        infoDetailTime.setText(immediateInformation.getTime());
         infoDetailType.setText(immediateInformation.getType());
         infoDetailContent.setText(immediateInformation.getContent());
         infoDetailContentUrl.setText(immediateInformation.getContent_url());
@@ -107,7 +109,7 @@ public class InformationDetailFragment extends Fragment implements InformationDe
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         unbinder.unbind();
+        super.onDestroyView();
     }
 }

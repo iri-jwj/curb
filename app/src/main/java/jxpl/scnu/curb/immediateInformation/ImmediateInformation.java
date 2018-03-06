@@ -20,19 +20,16 @@ public final class ImmediateInformation {
     @NonNull
     private final String date;//日期
     @NonNull
-    private final String time;//时间点
-    @NonNull
     private final String content;//正文内容
     @NonNull
     private final String type;//类型 用于区分教务信息、学者网信息、招聘信息、兼职信息等
     @Nullable
     private String content_url;//原文url
 
-    public ImmediateInformation(@NonNull String  id, @NonNull String title, @NonNull String date, @NonNull String time, @NonNull String content, @NonNull String type, String content_url) {
+    public ImmediateInformation(@NonNull String id, @NonNull String title, @NonNull String date, @NonNull String content, @NonNull String type, String content_url) {
         this.id = id;
         this.title = title;
         this.date = date;
-        this.time = time;
         this.content = content;
         this.type = type;
         this.content_url = content_url;
@@ -70,10 +67,5 @@ public final class ImmediateInformation {
     @NonNull
     public String getDate() {
         return date;
-    }
-
-    @NonNull
-    public String getTime() {
-        return time;
     }
 }

@@ -39,7 +39,7 @@ public class InformationPresenter implements InformationContract.Presenter {
     }
 
     @Override
-    public void getInformationFromRepository(boolean forceUpdate){
+    public void getInformationFromRepository() {
         final List<ImmediateInformation> informationToShow=new ArrayList<>();
 
         informationRepository.getInformations(new InformationDataSource.loadInformationCallback() {
@@ -76,7 +76,7 @@ public class InformationPresenter implements InformationContract.Presenter {
                             break;
                     }
                 }
-                processInfo(informationToShow);
+                CheckIfInfoEmpty(informationToShow);
             }
 
             @Override
@@ -91,35 +91,33 @@ public class InformationPresenter implements InformationContract.Presenter {
     }
 
     @Override
-    public void setFiltering(InformationFilter filtering){
-        currentFilter=filtering;
+    public void setFiltering(String filtering) {
+        currentFilter = InformationFilter.valueOf(filtering);
+        
     }
 
     @Override
-    public InformationFilter getFiltering(){
-        return currentFilter;
+    public String getFiltering() {
+        return currentFilter.toString();
     }
 
     @Override
     public void loadInformation(boolean forceUpdate){
-        loadInformation(forceUpdate||firstLoad,true);
+        loadInformations(forceUpdate || firstLoad);
         firstLoad=false;
     }
 
-    private void loadInformation(boolean forceUpdate,final boolean showLoadingIndicator){
-        if(showLoadingIndicator){
-            informationView.setLoadingIndicator(true);
-        }
+    private void loadInformations(boolean forceUpdate) {
+        informationView.setLoadingIndicator(true);
         if (forceUpdate){
             informationRepository.refreshInformation();
         }
-
-        getInformationFromRepository(forceUpdate);
-
+        getInformationFromRepository();
         informationView.setLoadingIndicator(false);
     }
 
-    private void processInfo(List<ImmediateInformation> immediateInformations){
+    private void CheckIfInfoEmpty(List<ImmediateInformation> immediateInformations) {
+        Log.d("informationPresenter", "CheckIfInfoEmpty: " + immediateInformations.isEmpty());
         if (immediateInformations.isEmpty()){
             informationView.showNoInfo();
         }else{

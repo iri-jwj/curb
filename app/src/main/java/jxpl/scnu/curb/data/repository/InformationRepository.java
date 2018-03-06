@@ -1,6 +1,7 @@
 package jxpl.scnu.curb.data.repository;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -26,8 +27,8 @@ public class InformationRepository implements InformationDataSource{
     private InformationLocalDataSource informationLocalDataSource;
     private InformationRemoteDataSource informationRemoteDataSource;
 
-    private Map<String ,ImmediateInformation> cachedInfo;
-    private boolean cachedIsDirty=false;
+    private Map<String, ImmediateInformation> cachedInfo = new LinkedHashMap<>();
+    private boolean cachedIsDirty = true;
     private InformationRepository(@NonNull InformationLocalDataSource informationLocalDataSource,
                                   @NonNull InformationRemoteDataSource informationRemoteDataSource) {
         this.informationLocalDataSource = checkNotNull(informationLocalDataSource);
@@ -41,7 +42,7 @@ public class InformationRepository implements InformationDataSource{
         return INSTANCE;
     }
 
-    public static void destoryInstance(){INSTANCE=null;}
+//    public static void destoryInstance(){INSTANCE=null;}
 
     @Override
     public void getInformation(@NonNull final getInformationCallback callback,@NonNull String id) {
@@ -68,13 +69,20 @@ public class InformationRepository implements InformationDataSource{
     public void getInformations(@NonNull final loadInformationCallback callback) {
         checkNotNull(callback);
 
-        if (cachedInfo!=null&&!cachedIsDirty){
+        if (!cachedInfo.isEmpty() && !cachedIsDirty) {
             callback.getInformationsLoaded(new ArrayList<>(cachedInfo.values()));
             return;
         }
+        final Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getInformationFromRemote(callback);
+            }
+        });
 
-        if (cachedIsDirty)
-            getInformationFromRemote(callback);
+        if (cachedIsDirty) {
+            thread.start();
+        }
         else{
             informationLocalDataSource.getInformations(new loadInformationCallback(){
                 @Override
@@ -85,7 +93,7 @@ public class InformationRepository implements InformationDataSource{
 
                 @Override
                 public void onDataNotAvailable() {
-                    getInformationFromRemote(callback);
+                    thread.start();
                 }
             });
         }
@@ -95,26 +103,27 @@ public class InformationRepository implements InformationDataSource{
         informationRemoteDataSource.getInformations(new loadInformationCallback() {
             @Override
             public void getInformationsLoaded(List<ImmediateInformation> immediateInformations) {
+                Log.d("InformationRepository", "getInformationFromRemote: Loaded" + immediateInformations.get(1).getTitle());
                 refreshCached(immediateInformations);
                 saveInfoFromWeb(immediateInformations);
                 callback.getInformationsLoaded(immediateInformations);
             }
-
             @Override
             public void onDataNotAvailable() {
+                Log.d("InformationRepository", "onDataNotAvailable: ");
                 callback.onDataNotAvailable();
             }
         });
     }
+
     private void refreshCached( List<ImmediateInformation> immediateInformations){
         checkNotNull(immediateInformations);
-        if (cachedInfo!=null)
+        if (!cachedInfo.isEmpty())
             cachedInfo.clear();
-        else
-            cachedInfo=new LinkedHashMap<>();
         for (ImmediateInformation i:
                 immediateInformations) {
             cachedInfo.put(i.getId(),i);
+            Log.d("InformationRepository", "refreshCached: " + i.getTitle());
         }
         cachedIsDirty=false;
     }

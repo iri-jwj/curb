@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import jxpl.scnu.curb.R;
+import jxpl.scnu.curb.immediateInformation.informationDetails.InformationDetailActivity;
 import jxpl.scnu.curb.utils.ScrollChildSwipeRefreshLayout;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -44,10 +46,6 @@ public class InformationFragment extends Fragment implements InformationContract
     TextView Label;
     @BindView(R.id.info_list)
     LinearLayout infoList;
-    @BindView(R.id.noInfoMain)
-    TextView noInfoMain;
-    @BindView(R.id.noInfo)
-    LinearLayout noInfo;
     Unbinder unbinder;
 
     private InformationContract.Presenter presenter;
@@ -78,6 +76,7 @@ public class InformationFragment extends Fragment implements InformationContract
 
     @Override
     public void showInfo(List<ImmediateInformation> immediateInformations) {
+        Log.d("informationFragment", "showInfo: " + immediateInformations.isEmpty());
         minfoAdapter.replaceInfo(immediateInformations);
         Log.d("GetList","SetAdapter");
     }
@@ -92,11 +91,15 @@ public class InformationFragment extends Fragment implements InformationContract
         infoRecycler.setLayoutManager(layoutManager);
         infoRecycler.setAdapter(minfoAdapter);
 
+        infoRecycler.addItemDecoration(new DividerItemDecoration(
+                getActivity(), DividerItemDecoration.HORIZONTAL));
+
         refreshInfoLayout.setColorSchemeColors(
                 ContextCompat.getColor(getActivity(), R.color.colorPrimary),
                 ContextCompat.getColor(getActivity(), R.color.colorAccent),
                 ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark)
         );
+
         // Set the scrolling view in the custom SwipeRefreshLayout.
         refreshInfoLayout.setScrollUpChild(infoRecycler);
         refreshInfoLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -108,7 +111,6 @@ public class InformationFragment extends Fragment implements InformationContract
         setHasOptionsMenu(true);
 
         //SET UP floatingActionBar
-        infoFloatingAb.setImageResource(R.drawable.fliter_arrow);
         infoFloatingAb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,14 +123,15 @@ public class InformationFragment extends Fragment implements InformationContract
 
     @Override
     public void showNoInfo() {
+        Log.d("informationFragment", "showNoInfo: ");
         infoList.setVisibility(View.GONE);
-        noInfo.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onViewCreated(View view,Bundle bundle){
+        presenter.loadInformation(true);
+        Log.d("InfoFrag", "onViewCreated: ");
         super.onViewCreated(view,bundle);
-        presenter.loadInformation(false);
     }
 
     @Override
@@ -163,8 +166,22 @@ public class InformationFragment extends Fragment implements InformationContract
         }
 
         void replaceInfo(List<ImmediateInformation> immediateInformations) {
-            setImmediateInformations(immediateInformations);
-            notifyDataSetChanged();
+            for (ImmediateInformation i :
+                    immediateInformations) {
+                if (this.immediateInformations.contains(i))
+                    immediateInformations.remove(i);
+            }
+            if (!immediateInformations.isEmpty()) {
+                immediateInformations.addAll(this.immediateInformations);
+                setImmediateInformations(immediateInformations);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        notifyDataSetChanged();
+                    }
+                });
+            } else
+                Snackbar.make(checkNotNull(getView()), "没有新的信息", Snackbar.LENGTH_LONG).show();
         }
 
         private void setImmediateInformations(List<ImmediateInformation> immediateInformations) {
@@ -174,7 +191,7 @@ public class InformationFragment extends Fragment implements InformationContract
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
             View view = LayoutInflater.from(viewGroup.getContext())
-                    .inflate(R.layout.informations_item, viewGroup, false);
+                    .inflate(R.layout.item_information, viewGroup, false);
 
             final ViewHolder holder = new ViewHolder(view);
             holder.infoView.setOnClickListener(new View.OnClickListener() {
@@ -191,9 +208,9 @@ public class InformationFragment extends Fragment implements InformationContract
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             ImmediateInformation ImmediateInformation = immediateInformations.get(position);
-            holder.infoImage.setImageResource(getImageIdByType(ImmediateInformation.getType()));
+            //holder.infoImage.setImageResource(getImageIdByType(ImmediateInformation.getType()));
+            holder.infoImage.setImageResource(R.drawable.ic_item_edu_info);
             holder.infoTitle.setText(ImmediateInformation.getTitle());
-            holder.infoTime.setText(ImmediateInformation.getTime());
         }
 
         @Override
@@ -211,22 +228,21 @@ public class InformationFragment extends Fragment implements InformationContract
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.info_education:
-                        presenter.setFiltering(InformationFilter.EDU_INFORMATIONS);
+                        presenter.setFiltering(InformationFilter.EDU_INFORMATIONS.toString());
                         break;
                     case R.id.info_scholar:
-                        presenter.setFiltering(InformationFilter.SCHOLAR_INFORMATIONS);
+                        presenter.setFiltering(InformationFilter.SCHOLAR_INFORMATIONS.toString());
                         break;
                     case R.id.info_work_study:
-                        presenter.setFiltering(InformationFilter.WORK_STUDY_INFORMATIONS);
+                        presenter.setFiltering(InformationFilter.WORK_STUDY_INFORMATIONS.toString());
                         break;
                     case R.id.info_practice:
-                        presenter.setFiltering(InformationFilter.PRA_INFORMATIONS);
+                        presenter.setFiltering(InformationFilter.PRA_INFORMATIONS.toString());
                         break;
                     default:
-                        presenter.setFiltering(InformationFilter.ALL_INFORMATIONS);
+                        presenter.setFiltering(InformationFilter.ALL_INFORMATIONS.toString());
                         break;
                 }
-                presenter.loadInformation(false);
                 return true;
             }
         });
@@ -251,13 +267,13 @@ public class InformationFragment extends Fragment implements InformationContract
         int imageId;
         switch (type) {
             case "EDU":
-                imageId = R.drawable.item_edu_info;
+                imageId = R.drawable.ic_item_edu_info;
                 break;
             case "PRA":
-                imageId = R.drawable.pra;
+                imageId = R.drawable.ic_filter_practice;
                 break;
             case "SCHOLAR":
-                imageId = R.drawable.scholar;
+                imageId = R.drawable.ic_filter_scholar;
                 break;
             default:
                 imageId = 0;
@@ -272,7 +288,9 @@ public class InformationFragment extends Fragment implements InformationContract
 
     @Override
     public void showInformationDetailsUi(String id, Context context) {
-
+        Intent intent = new Intent(context, InformationDetailActivity.class);
+        intent.putExtra(InformationDetailActivity.INFO_ID, id);
+        startActivity(intent);
     }
 
     @Override

@@ -5,7 +5,7 @@
     android:orientation="vertical"
     tools:context="jxpl.scnu.curb.immediateInformation.informationDetails.InformationDetailFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

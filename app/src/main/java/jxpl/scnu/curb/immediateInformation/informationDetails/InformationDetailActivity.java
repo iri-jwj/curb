@@ -3,7 +3,7 @@ package jxpl.scnu.curb.immediateInformation.informationDetails;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,37 +16,44 @@ import jxpl.scnu.curb.utils.ActivityUtil;
 
 public class InformationDetailActivity extends AppCompatActivity {
 
-    public static String INFO_ID="info_id";
+    public static String INFO_ID = "info_id";
 
     @BindView(R.id.detail_info_toolbar)
     Toolbar detailInfoToolbar;
-    @BindView(R.id.detail_info_frame)
-    FrameLayout detailInfoFrame;
     Unbinder unbinder;
+    @BindView(R.id.info_detail_title)
+    TextView infoDetailTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_information_detail);
-        unbinder=ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
 
-        String infoId= getIntent().getStringExtra(INFO_ID);
+        String infoId = getIntent().getStringExtra(INFO_ID);
+        ActivityUtil.setFragmentManagerNotHome(getSupportFragmentManager());
+        ActivityUtil.setContainerViewNotHome(R.id.detail_info_frame);
 
-        InformationDetailFragment informationDetailFragment=(InformationDetailFragment)
-                getSupportFragmentManager().findFragmentById(R.id.detail_info_frame);
+        InformationDetailFragment informationDetailFragment =
+                InformationDetailFragment.newInstance(infoId);
+        ActivityUtil.addFragmentNotInHomePage(informationDetailFragment);
 
-        if (informationDetailFragment==null){
-            informationDetailFragment= InformationDetailFragment.newInstance(infoId);
-            ActivityUtil.addFragmentToActivity(getSupportFragmentManager(),informationDetailFragment, R.id.detail_info_frame);
-        }
         InformationDetailPresenter informationDetailPresenter=new InformationDetailPresenter(infoId,
-                InformationRepository.getInstance(InformationLocalDataSource.getInstace(this), InformationRemoteDataSource.getInstance())
-                ,informationDetailFragment);
+                InformationRepository.getInstance(InformationLocalDataSource.getInstace(this),
+                        InformationRemoteDataSource.getInstance())
+                , informationDetailFragment);
+        ActivityUtil.setCurrentFragmentNotInHome();
+        if (informationDetailPresenter.getInfoTitle().isEmpty()) {
+            infoDetailTitle.setText("");
+        } else
+            infoDetailTitle.setText(informationDetailPresenter.getInfoTitle());
     }
 
     @Override
-    protected void onDestroy(){
-        super.onDestroy();
+    protected void onDestroy() {
+        ActivityUtil.removeFragmentNotHome();
         unbinder.unbind();
+        super.onDestroy();
     }
-    
+
 }

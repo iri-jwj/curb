@@ -2,6 +2,8 @@ package jxpl.scnu.curb.smallData;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,58 +11,70 @@ import android.view.ViewGroup;
 
 import jxpl.scnu.curb.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SmallDataFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class SmallDataFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import static com.google.common.base.Preconditions.checkNotNull;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class SmallDataFragment extends Fragment implements SmallDataInterface.View {
 
-
+    private SmallDataInterface.Presenter presenter;
     public SmallDataFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SmallDataFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SmallDataFragment newInstance(String param1, String param2) {
-        SmallDataFragment fragment = new SmallDataFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @NonNull
+    public static SmallDataFragment newInstance() {
+        return new SmallDataFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_small_data, container, false);
     }
 
+    @Override
+    public void setPresenter(SmallDataInterface.Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    /**
+     * 当用户点击了一个问卷，将当前显示的内容替换为问卷的详细内容
+     */
+    @Override
+    public void changeToQuestionnaire() {
+
+    }
+
+    /**
+     * 当用户点击了提交或返回键时，将当前的内容替换回问卷列表
+     */
+    @Override
+    public void changeBack() {
+
+    }
+
+    /**
+     * 将已填写的问卷更换一个颜色
+     */
+    @Override
+    public void markAnswered() {
+
+    }
+
+    /**
+     * 当出现了某些错误，如问卷未完成时调用这个方法
+     *
+     * @param error 错误信息
+     */
+    @Override
+    public void showError(String error) {
+        View view = checkNotNull(getView());
+        Snackbar.make(view, error, Snackbar.LENGTH_LONG).show();
+    }
 }

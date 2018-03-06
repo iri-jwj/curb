@@ -1,6 +1,7 @@
 package jxpl.scnu.curb.data.remote;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.List;
 
@@ -45,8 +46,9 @@ public class InformationRemoteDataSource implements InformationDataSource {
     @Override
     public void getInformations(@NonNull loadInformationCallback callback) {
         List<ImmediateInformation> immediateInformations=RetrofitGetData.getDataFromWeb();
-
-        if(immediateInformations!=null)
+        Log.d("RemoteDateSource", "getInformations: " +
+                immediateInformations.isEmpty());
+        if (!immediateInformations.isEmpty())
             callback.getInformationsLoaded(immediateInformations);
         else
             callback.onDataNotAvailable();

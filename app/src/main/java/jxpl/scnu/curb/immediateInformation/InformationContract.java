@@ -27,9 +27,11 @@ interface InformationContract {
         void setLoadingIndicator(boolean active);
     }
     interface Presenter extends BasePresenter {
-        void getInformationFromRepository(boolean forceUpdate);
-        void setFiltering(InformationFilter filtering);
-        InformationFilter getFiltering();
+        void getInformationFromRepository();
+
+        void setFiltering(String filtering);
+
+        String getFiltering();
         void openInformationDetails(ImmediateInformation immediateInformation, Context context);
         void loadInformation(boolean forceUpdate);
     }

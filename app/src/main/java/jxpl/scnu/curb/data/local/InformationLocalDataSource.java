@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,6 @@ import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COL
 import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_CONTENT_URL;
 import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_DATE;
 import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_ID;
-import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_TIME;
 import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_TITLE;
 import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_TYPE;
 import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.TABLE_NAME;
@@ -31,13 +31,13 @@ import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.TAB
  */
 
 public class InformationLocalDataSource implements InformationDataSource{
-    private InformationDbHelper informationDbHelper;
+    private CurbDbHelper curbDbHelper;
 
     private static InformationLocalDataSource INSTANCE;
 
     private InformationLocalDataSource (@NonNull Context context){
         checkNotNull(context);
-        informationDbHelper=new InformationDbHelper(context);
+        curbDbHelper = new CurbDbHelper(context);
     }
 
     public static InformationLocalDataSource getInstace(@NonNull Context context){
@@ -49,17 +49,16 @@ public class InformationLocalDataSource implements InformationDataSource{
 
     @Override
     public void getInformation(@NonNull getInformationCallback callback,@NonNull String id) {
-        SQLiteDatabase sqLiteDatabase=informationDbHelper.getWritableDatabase();
+        SQLiteDatabase sqLiteDatabase = curbDbHelper.getReadableDatabase();
         String[] projection={
                 PersistenceContract.informationEntry.COLUMN_NAME_ID,
                 PersistenceContract.informationEntry.COLUMN_NAME_TITLE,
-                PersistenceContract.informationEntry.COLUMN_NAME_TIME,
+                PersistenceContract.informationEntry.COLUMN_NAME_DATE,
                 PersistenceContract.informationEntry.COLUMN_NAME_CONTENT,
                 PersistenceContract.informationEntry.COLUMN_NAME_CONTENT_URL,
-                PersistenceContract.informationEntry.COLUMN_NAME_DATE,
                 PersistenceContract.informationEntry.COLUMN_NAME_TYPE
         };
-        String selection=PersistenceContract.informationEntry.COLUMN_NAME_ID+"like ?";
+        String selection = PersistenceContract.informationEntry.COLUMN_NAME_ID + " like ?";
         String[] selectionArgs={id};
         Cursor cursor=sqLiteDatabase.query(PersistenceContract.informationEntry.TABLE_NAME,projection,
                 selection,selectionArgs,null,null,null);
@@ -68,31 +67,30 @@ public class InformationLocalDataSource implements InformationDataSource{
         if (cursor!=null&&cursor.getCount()>0){
            cursor.moveToFirst();
            String title=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_TITLE));
-           String time=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_TIME));
            String content=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_CONTENT));
            String content_url=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_CONTENT_URL));
            String type=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_TYPE));
            String date=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_DATE));
-           immediateInformation=new ImmediateInformation(id,title,date,time,content,type,content_url);
+            immediateInformation = new ImmediateInformation(id, title, date, content, type, content_url);
         }
         if (cursor!=null){
             cursor.close();
         }
         sqLiteDatabase.close();
 
-        if (immediateInformation!=null)
+        if (immediateInformation != null) {
+            Log.d("localDataSource", "getInformation: " + immediateInformation.getTitle());
             callback.onInformationLoaded(immediateInformation);
-        else
+        } else
             callback.onDataNotAvailable();
     }
 
     @Override
     public void getInformations(@NonNull loadInformationCallback callback) {
-        SQLiteDatabase sqLiteDatabase=informationDbHelper.getWritableDatabase();
+        SQLiteDatabase sqLiteDatabase = curbDbHelper.getWritableDatabase();
         String[] projection={
                 PersistenceContract.informationEntry.COLUMN_NAME_ID,
                 PersistenceContract.informationEntry.COLUMN_NAME_TITLE,
-                PersistenceContract.informationEntry.COLUMN_NAME_TIME,
                 PersistenceContract.informationEntry.COLUMN_NAME_CONTENT,
                 PersistenceContract.informationEntry.COLUMN_NAME_CONTENT_URL,
                 PersistenceContract.informationEntry.COLUMN_NAME_DATE,
@@ -101,18 +99,17 @@ public class InformationLocalDataSource implements InformationDataSource{
         Cursor cursor=sqLiteDatabase.query(PersistenceContract.informationEntry.TABLE_NAME,projection,
                 null,null,null,null,null);
 
-        ImmediateInformation immediateInformation=null;
+        ImmediateInformation immediateInformation;
         List<ImmediateInformation> immediateInformations=new ArrayList<>();
         if (cursor!=null&&cursor.getCount()>0){
             while (cursor.moveToNext()){
                 String id=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_ID));
                 String title=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_TITLE));
-                String time=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_TIME));
                 String content=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_CONTENT));
                 String content_url=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_CONTENT_URL));
                 String type=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_TYPE));
                 String date=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_DATE));
-                immediateInformation=new ImmediateInformation(id,title,date,time,content,type,content_url);
+                immediateInformation = new ImmediateInformation(id, title, date, content, type, content_url);
                 immediateInformations.add(immediateInformation);
             }
         }
@@ -121,7 +118,7 @@ public class InformationLocalDataSource implements InformationDataSource{
         }
         sqLiteDatabase.close();
 
-        if (immediateInformation!=null)
+        if (!immediateInformations.isEmpty())
             callback.getInformationsLoaded(immediateInformations);
         else
             callback.onDataNotAvailable();
@@ -133,14 +130,13 @@ public class InformationLocalDataSource implements InformationDataSource{
 
     @Override
     public void saveInfoFromWeb(List<ImmediateInformation> immediateInformations){
-        SQLiteDatabase sqLiteDatabase= informationDbHelper.getWritableDatabase();
+        SQLiteDatabase sqLiteDatabase = curbDbHelper.getWritableDatabase();
         for (ImmediateInformation i:
              immediateInformations) {
             ContentValues contentValues=new ContentValues();
             contentValues.put(COLUMN_NAME_CONTENT_URL,i.getContent_url());
             contentValues.put(COLUMN_NAME_CONTENT,i.getContent());
             contentValues.put(COLUMN_NAME_DATE,i.getDate());
-            contentValues.put(COLUMN_NAME_TIME,i.getTime());
             contentValues.put(COLUMN_NAME_TYPE,i.getType());
             contentValues.put(COLUMN_NAME_TITLE,i.getTitle());
             contentValues.put(COLUMN_NAME_ID,i.getId());

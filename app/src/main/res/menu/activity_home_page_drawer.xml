@@ -6,33 +6,33 @@
         <item
             android:id="@+id/nav_arrange"
             android:title="@string/arrangement"
-            android:icon="@drawable/nav_icon_arrange"/>
+            android:icon="@drawable/ic_nav_icon_arrange" />
         <item
             android:id="@+id/nav_my_collection"
             android:title="@string/my_collection"
-            android:icon="@drawable/nav_icon_collection"/>
+            android:icon="@drawable/ic_nav_icon_collection" />
         <item
             android:id="@+id/nav_concerned_topic"
             android:title="@string/concerned_topic"
-            android:icon="@drawable/nav_icon_topic"/>
+            android:icon="@drawable/ic_nav_icon_topic" />
         <item
             android:id="@+id/group_dynamic"
             android:title="@string/group_dynamics"
-            android:icon="@drawable/nav_icon_group_dynamics"/>
+            android:icon="@drawable/ic_nav_icon_group_dynamics" />
     </group>
 
     <group android:checkableBehavior="single" android:id="@+id/nav_item_second">
         <item
             android:id="@+id/nav_info"
-            android:icon="@drawable/nav_icon_information"
+            android:icon="@drawable/ic_nav_icon_information"
             android:title="@string/information"/>
         <item
             android:title="@string/river"
-            android:icon="@drawable/nav_icon_river"
+            android:icon="@drawable/ic_nav_icon_river"
             android:id="@+id/nav_river"/>
         <item
             android:id="@+id/nav_small_data"
-            android:icon="@drawable/nav_icon_small_data"
+            android:icon="@drawable/ic_nav_icon_small_data"
             android:title="@string/smallData"/>
 
     </group>
@@ -40,15 +40,15 @@
         <item
             android:id="@+id/nav_remind"
             android:title="@string/remind"
-            android:icon="@drawable/nav_icon_remind"/>
+            android:icon="@drawable/ic_nav_icon_remind" />
         <item
             android:id="@+id/nav_share"
             android:title="@string/share"
-            android:icon="@drawable/nav_icon_share"/>
+            android:icon="@drawable/ic_nav_icon_share" />
         <item
             android:id="@+id/nav_setting"
             android:title="@string/setting"
-            android:icon="@drawable/nav_icon_setting"/>
+            android:icon="@drawable/ic_nav_icon_setting" />
     </group>
 
 </menu>
