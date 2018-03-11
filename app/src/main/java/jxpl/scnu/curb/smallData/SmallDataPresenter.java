@@ -19,6 +19,7 @@ public class SmallDataPresenter implements SmallDataInterface.Presenter {
 
     }
 
+
     /**
      * 用于提交用户填写的问卷
      * 通过 checkHaveFinished() 判断用户是否已经完成问卷
@@ -54,24 +55,49 @@ public class SmallDataPresenter implements SmallDataInterface.Presenter {
     }
 
 
-    /**
-     * 这里要先运行，目的是让生成的json中的title userName项位于前面
-     *
-     * @param title 当前问卷标题
-     */
-    @Override
+
+/*    @Override
     public void saveAnswerTitle(String title) {
         answer.put("title", title);
-        /*TODO 这里要添加用户名*/
         answer.put("userName", "");
-    }
+    }*/
 
     /**
      * 这里获取测试的最终结果
      */
     @Override
-    public void getFinalResult() {
+    public void loadResult() {
         /*TODO 添加逻辑代码*/
+    }
+
+    @Override
+    public void loadSummaries(boolean forceUpdate) {
+
+    }
+
+    @Override
+    public void loadDetails(String summaryId) {
+
+    }
+
+    @Override
+    public void loadCreatedSummaries() {
+
+    }
+
+    @Override
+    public void loadCreatedDetails() {
+
+    }
+
+    @Override
+    public void saveCreatedSummary(SDSummaryCreate para_sdSummaryCreate) {
+
+    }
+
+    @Override
+    public void saveCreatedDetail(SDDetail para_sdDetail) {
+
     }
 
     private boolean checkHaveFinished() {

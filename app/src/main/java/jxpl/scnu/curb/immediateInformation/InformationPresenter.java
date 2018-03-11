@@ -23,48 +23,49 @@ import static jxpl.scnu.curb.immediateInformation.InformationFilter.ALL_INFORMAT
 
 public class InformationPresenter implements InformationContract.Presenter {
 
-    private InformationFilter currentFilter=ALL_INFORMATIONS;
     private final InformationRepository informationRepository;
     private final InformationContract.View informationView;
-    private boolean firstLoad=true;
-    public InformationPresenter(@NonNull InformationRepository informationRepository, InformationContract.View informationView){
-        this.informationRepository=checkNotNull(informationRepository);
-        this.informationView=checkNotNull(informationView);
+    private InformationFilter currentFilter = ALL_INFORMATIONS;
+    private boolean firstLoad = true;
+
+    public InformationPresenter(@NonNull InformationRepository informationRepository, InformationContract.View informationView) {
+        this.informationRepository = checkNotNull(informationRepository);
+        this.informationView = checkNotNull(informationView);
         informationView.setPresenter(this);
     }
 
     @Override
-    public void start(){
+    public void start() {
         loadInformation(false);
     }
 
     @Override
     public void getInformationFromRepository() {
-        final List<ImmediateInformation> informationToShow=new ArrayList<>();
+        final List<ImmediateInformation> informationToShow = new ArrayList<>();
 
         informationRepository.getInformations(new InformationDataSource.loadInformationCallback() {
             @Override
             public void getInformationsLoaded(List<ImmediateInformation> immediateInformationsFromCB) {
-                for (ImmediateInformation i:
+                for (ImmediateInformation i :
                         immediateInformationsFromCB) {
-                    Log.d("getInfoFromR",i.getTitle());
-                    switch (currentFilter){
+                    Log.d("getInfoFromR", i.getTitle());
+                    switch (currentFilter) {
                         case ALL_INFORMATIONS:
                             informationToShow.add(i);
-                            Log.d("getInfoIsSucceed?","YES");
+                            Log.d("getInfoIsSucceed?", "YES");
                             break;
                         case EDU_INFORMATIONS:
-                            if(i.getType().equals("EDU_INFORMATIONS")){
+                            if (i.getType().equals("EDU_INFORMATIONS")) {
                                 informationToShow.add(i);
                             }
                             break;
                         case PRA_INFORMATIONS:
-                            if(i.getType().equals("PRA_INFORMATIONS")){
+                            if (i.getType().equals("PRA_INFORMATIONS")) {
                                 informationToShow.add(i);
                             }
                             break;
                         case SCHOLAR_INFORMATIONS:
-                            if(i.getType().equals("SCHOLAR_INFORMATIONS")){
+                            if (i.getType().equals("SCHOLAR_INFORMATIONS")) {
                                 informationToShow.add(i);
                             }
                             break;
@@ -72,7 +73,8 @@ public class InformationPresenter implements InformationContract.Presenter {
                             if (i.getType().equals("WORK_STUDY_INFORMATIONS"))
                                 informationToShow.add(i);
                             break;
-                        default:informationToShow.add(i);
+                        default:
+                            informationToShow.add(i);
                             break;
                     }
                 }
@@ -84,16 +86,10 @@ public class InformationPresenter implements InformationContract.Presenter {
                 if (!informationView.isActive())
                     return;
                 informationView.showLoadingError();
-                Log.d("getInfoFromR","failed");
+                Log.d("getInfoFromR", "failed");
             }
         });
 
-    }
-
-    @Override
-    public void setFiltering(String filtering) {
-        currentFilter = InformationFilter.valueOf(filtering);
-        
     }
 
     @Override
@@ -102,14 +98,20 @@ public class InformationPresenter implements InformationContract.Presenter {
     }
 
     @Override
-    public void loadInformation(boolean forceUpdate){
+    public void setFiltering(String filtering) {
+        currentFilter = InformationFilter.valueOf(filtering);
+
+    }
+
+    @Override
+    public void loadInformation(boolean forceUpdate) {
         loadInformations(forceUpdate || firstLoad);
-        firstLoad=false;
+        firstLoad = false;
     }
 
     private void loadInformations(boolean forceUpdate) {
         informationView.setLoadingIndicator(true);
-        if (forceUpdate){
+        if (forceUpdate) {
             informationRepository.refreshInformation();
         }
         getInformationFromRepository();
@@ -118,18 +120,18 @@ public class InformationPresenter implements InformationContract.Presenter {
 
     private void CheckIfInfoEmpty(List<ImmediateInformation> immediateInformations) {
         Log.d("informationPresenter", "CheckIfInfoEmpty: " + immediateInformations.isEmpty());
-        if (immediateInformations.isEmpty()){
+        if (immediateInformations.isEmpty()) {
             informationView.showNoInfo();
-        }else{
+        } else {
             informationView.showInfo(immediateInformations);
         }
     }
 
     @Override
-    public void openInformationDetails(@NonNull ImmediateInformation immediateInformation,@NonNull Context context){
+    public void openInformationDetails(@NonNull ImmediateInformation immediateInformation, @NonNull Context context) {
         checkNotNull(immediateInformation);
         checkNotNull(context);
-        informationView.showInformationDetailsUi(immediateInformation.getId(),context);
+        informationView.showInformationDetailsUi(immediateInformation.getId(), context);
     }
 
 }

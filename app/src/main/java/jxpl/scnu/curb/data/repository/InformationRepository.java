@@ -22,13 +22,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * --Winsdon Churchill
  */
 
-public class InformationRepository implements InformationDataSource{
+public class InformationRepository implements InformationDataSource {
     private static InformationRepository INSTANCE = null;
     private InformationLocalDataSource informationLocalDataSource;
     private InformationRemoteDataSource informationRemoteDataSource;
 
     private Map<String, ImmediateInformation> cachedInfo = new LinkedHashMap<>();
     private boolean cachedIsDirty = true;
+
     private InformationRepository(@NonNull InformationLocalDataSource informationLocalDataSource,
                                   @NonNull InformationRemoteDataSource informationRemoteDataSource) {
         this.informationLocalDataSource = checkNotNull(informationLocalDataSource);
@@ -36,19 +37,19 @@ public class InformationRepository implements InformationDataSource{
     }
 
     public static InformationRepository getInstance(InformationLocalDataSource informationLocalDataSource,
-                                                    InformationRemoteDataSource informationRemoteDataSource){
-        if(INSTANCE==null)
-            INSTANCE=new InformationRepository(informationLocalDataSource,informationRemoteDataSource);
+                                                    InformationRemoteDataSource informationRemoteDataSource) {
+        if (INSTANCE == null)
+            INSTANCE = new InformationRepository(informationLocalDataSource, informationRemoteDataSource);
         return INSTANCE;
     }
 
 //    public static void destoryInstance(){INSTANCE=null;}
 
     @Override
-    public void getInformation(@NonNull final getInformationCallback callback,@NonNull String id) {
+    public void getInformation(@NonNull final getInformationCallback callback, @NonNull String id) {
         checkNotNull(callback);
         //首先在缓存中查找是否存在，若不存在，再去数据库中查询
-        if (cachedInfo.containsKey(id)){
+        if (cachedInfo.containsKey(id)) {
             callback.onInformationLoaded(cachedInfo.get(id));
             return;
         }
@@ -62,7 +63,7 @@ public class InformationRepository implements InformationDataSource{
             public void onDataNotAvailable() {
                 callback.onDataNotAvailable();
             }
-        },id);
+        }, id);
     }
 
     @Override
@@ -82,9 +83,8 @@ public class InformationRepository implements InformationDataSource{
 
         if (cachedIsDirty) {
             thread.start();
-        }
-        else{
-            informationLocalDataSource.getInformations(new loadInformationCallback(){
+        } else {
+            informationLocalDataSource.getInformations(new loadInformationCallback() {
                 @Override
                 public void getInformationsLoaded(List<ImmediateInformation> immediateInformations) {
                     refreshCached(immediateInformations);
@@ -99,7 +99,7 @@ public class InformationRepository implements InformationDataSource{
         }
     }
 
-    private void getInformationFromRemote(@NonNull final loadInformationCallback callback){
+    private void getInformationFromRemote(@NonNull final loadInformationCallback callback) {
         informationRemoteDataSource.getInformations(new loadInformationCallback() {
             @Override
             public void getInformationsLoaded(List<ImmediateInformation> immediateInformations) {
@@ -108,6 +108,7 @@ public class InformationRepository implements InformationDataSource{
                 saveInfoFromWeb(immediateInformations);
                 callback.getInformationsLoaded(immediateInformations);
             }
+
             @Override
             public void onDataNotAvailable() {
                 Log.d("InformationRepository", "onDataNotAvailable: ");
@@ -116,21 +117,21 @@ public class InformationRepository implements InformationDataSource{
         });
     }
 
-    private void refreshCached( List<ImmediateInformation> immediateInformations){
+    private void refreshCached(List<ImmediateInformation> immediateInformations) {
         checkNotNull(immediateInformations);
         if (!cachedInfo.isEmpty())
             cachedInfo.clear();
-        for (ImmediateInformation i:
+        for (ImmediateInformation i :
                 immediateInformations) {
-            cachedInfo.put(i.getId(),i);
+            cachedInfo.put(i.getId(), i);
             Log.d("InformationRepository", "refreshCached: " + i.getTitle());
         }
-        cachedIsDirty=false;
+        cachedIsDirty = false;
     }
 
     @Override
     public void refreshInformation() {
-        cachedIsDirty=true;
+        cachedIsDirty = true;
     }
 
     @Override

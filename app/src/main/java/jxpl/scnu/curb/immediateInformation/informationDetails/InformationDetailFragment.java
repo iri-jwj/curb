@@ -22,6 +22,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class InformationDetailFragment extends Fragment implements InformationDetailContract.View {
 
 
+    private static final String ARGUMUENT_INFO_ID = "INFO_ID";
     @BindView(R.id.informationKind)
     ImageView informationKind;
     @BindView(R.id.informationTitle)
@@ -36,7 +37,6 @@ public class InformationDetailFragment extends Fragment implements InformationDe
     TextView infoDetailContentUrl;
     Unbinder unbinder;
     private InformationDetailContract.Presenter mPresenter;
-    private static final String ARGUMUENT_INFO_ID="INFO_ID";
 
 
     public InformationDetailFragment() {
@@ -46,9 +46,9 @@ public class InformationDetailFragment extends Fragment implements InformationDe
 
     public static InformationDetailFragment newInstance(@NonNull String id) {
 
-        Bundle argument=new Bundle();
-        argument.putString(ARGUMUENT_INFO_ID,id);
-        InformationDetailFragment informationDetailFragment=new InformationDetailFragment();
+        Bundle argument = new Bundle();
+        argument.putString(ARGUMUENT_INFO_ID, id);
+        InformationDetailFragment informationDetailFragment = new InformationDetailFragment();
         informationDetailFragment.setArguments(argument);
         return informationDetailFragment;
     }
@@ -76,8 +76,7 @@ public class InformationDetailFragment extends Fragment implements InformationDe
     public void showMissingInfo() {
         if (getView() == null) {
             Log.d("InfoDetailView", "showMissingInfo: MissingView");
-        }
-        else{
+        } else {
             informationTitle.setText(getString(R.string.missing_info_detail));
             infoDetailContent.setText(getString(R.string.loading_info_error));
         }
@@ -85,9 +84,9 @@ public class InformationDetailFragment extends Fragment implements InformationDe
 
     @Override
     public void setLoadingIndicator(boolean active) {
-        if (getView()==null)
+        if (getView() == null)
             return;
-        if (active){
+        if (active) {
             informationTitle.setText("");
             infoDetailContent.setText(getString(R.string.loading_info_detail));
         }

@@ -17,6 +17,6 @@ public interface AccountContract {
     }
 
     interface Presenter extends BasePresenter {
-        public String getAccountLevel();
+        String getAccountLevel();
     }
 }

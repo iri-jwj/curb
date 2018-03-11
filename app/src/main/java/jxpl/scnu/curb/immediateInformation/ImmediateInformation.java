@@ -14,7 +14,7 @@ import android.support.annotation.Nullable;
 public final class ImmediateInformation {
 
     @NonNull
-    private final String  id;
+    private final String id;
     @NonNull
     private final String title;//标题
     @NonNull
@@ -36,7 +36,7 @@ public final class ImmediateInformation {
     }
 
     @NonNull
-    public String  getId() {
+    public String getId() {
         return id;
     }
 

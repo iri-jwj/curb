@@ -38,7 +38,7 @@ public class InformationDetailActivity extends AppCompatActivity {
                 InformationDetailFragment.newInstance(infoId);
         ActivityUtil.addFragmentNotInHomePage(informationDetailFragment);
 
-        InformationDetailPresenter informationDetailPresenter=new InformationDetailPresenter(infoId,
+        InformationDetailPresenter informationDetailPresenter = new InformationDetailPresenter(infoId,
                 InformationRepository.getInstance(InformationLocalDataSource.getInstace(this),
                         InformationRemoteDataSource.getInstance())
                 , informationDetailFragment);

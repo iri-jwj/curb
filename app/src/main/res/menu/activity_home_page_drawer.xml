@@ -2,53 +2,59 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
-    <group android:checkableBehavior="single" android:id="@+id/nav_item_first">
+    <group
+        android:id="@+id/nav_item_first"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_arrange"
-            android:title="@string/arrangement"
-            android:icon="@drawable/ic_nav_icon_arrange" />
+            android:icon="@drawable/ic_nav_icon_arrange"
+            android:title="@string/arrangement" />
         <item
             android:id="@+id/nav_my_collection"
-            android:title="@string/my_collection"
-            android:icon="@drawable/ic_nav_icon_collection" />
+            android:icon="@drawable/ic_nav_icon_collection"
+            android:title="@string/my_collection" />
         <item
             android:id="@+id/nav_concerned_topic"
-            android:title="@string/concerned_topic"
-            android:icon="@drawable/ic_nav_icon_topic" />
+            android:icon="@drawable/ic_nav_icon_topic"
+            android:title="@string/concerned_topic" />
         <item
             android:id="@+id/group_dynamic"
-            android:title="@string/group_dynamics"
-            android:icon="@drawable/ic_nav_icon_group_dynamics" />
+            android:icon="@drawable/ic_nav_icon_group_dynamics"
+            android:title="@string/group_dynamics" />
     </group>
 
-    <group android:checkableBehavior="single" android:id="@+id/nav_item_second">
+    <group
+        android:id="@+id/nav_item_second"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_info"
             android:icon="@drawable/ic_nav_icon_information"
-            android:title="@string/information"/>
+            android:title="@string/information" />
         <item
-            android:title="@string/river"
+            android:id="@+id/nav_river"
             android:icon="@drawable/ic_nav_icon_river"
-            android:id="@+id/nav_river"/>
+            android:title="@string/river" />
         <item
             android:id="@+id/nav_small_data"
             android:icon="@drawable/ic_nav_icon_small_data"
-            android:title="@string/smallData"/>
+            android:title="@string/smallData" />
 
     </group>
-    <group android:checkableBehavior="single" android:id="@+id/nav_item_third">
+    <group
+        android:id="@+id/nav_item_third"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_remind"
-            android:title="@string/remind"
-            android:icon="@drawable/ic_nav_icon_remind" />
+            android:icon="@drawable/ic_nav_icon_remind"
+            android:title="@string/remind" />
         <item
             android:id="@+id/nav_share"
-            android:title="@string/share"
-            android:icon="@drawable/ic_nav_icon_share" />
+            android:icon="@drawable/ic_nav_icon_share"
+            android:title="@string/share" />
         <item
             android:id="@+id/nav_setting"
-            android:title="@string/setting"
-            android:icon="@drawable/ic_nav_icon_setting" />
+            android:icon="@drawable/ic_nav_icon_setting"
+            android:title="@string/setting" />
     </group>
 
 </menu>

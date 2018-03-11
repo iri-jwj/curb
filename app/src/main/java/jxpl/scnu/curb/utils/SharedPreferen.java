@@ -13,11 +13,11 @@ import android.preference.PreferenceManager;
  */
 
 public class SharedPreferen {
-    private static PreferenceManager preferenceManager;
-    private Context context;
     public static final String IsFirstOpen = "ISFIRSTOPEN";
     public static final String UserName = "USERNAME";
     public static final String Password = "PASSWORD";
+    private static PreferenceManager preferenceManager;
+    private Context context;
 
     public static void setPreferenceManager(PreferenceManager preferenceManager) {
         SharedPreferen.preferenceManager = preferenceManager;

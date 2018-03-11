@@ -5,13 +5,6 @@ import android.support.annotation.NonNull;
 
 import jxpl.scnu.curb.data.repository.AccountDataManage;
 
-/**
- * Created by irijw on 2017/12/9.
- * all great things are simple,
- * and many can be expressed in single words:
- * freedom, justice, honor, duty, mercy, hope.
- * --Winsdon Churchill
- */
 
 public class AccountDbManage implements AccountDataManage {
     private CurbDbHelper curbDbHelper;

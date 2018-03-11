@@ -11,6 +11,34 @@ import jxpl.scnu.curb.smallData.SDSummary;
 import jxpl.scnu.curb.smallData.SDSummaryCreate;
 
 public interface SmallDataDataSource {
+    void getSummary(@NonNull getSummaryCallback callback, String id);
+
+    void loadSummaries(@NonNull loadSummaryCallback callback, String time, int direction);
+
+    void loadDetails(@NonNull loadDetailCallback callback, String summaryId);
+
+    void loadAnswers(@NonNull loadAnswersCallback para_loadAnswersCallback, String summaryId);
+
+    void getCreatedSummary(@NonNull getCreatedSummaryCallback para_getCreatedSummaryCallback, String id);
+
+    void loadCreatedSummaries(@NonNull loadCreatedSummariesCallback para_loadCreatedSummariesCallback);
+
+    void loadCreatedDetails(@NonNull loadCreatedDetailsCallback para_loadCreatedDetailsCallback,
+                            String para_summaryId);
+
+    void refreshSummaries();
+
+    void refreshCreatedSummaries();
+
+    void saveSummariesToLocal(List<SDSummary> sdSummaries);
+
+    void saveDetailsToLocal(List<SDDetail> para_sdDetails);
+
+    void saveCreatedSDToLocal(SDSummaryCreate para_sdSummaryCreate,
+                              List<SDDetail> para_sdDetails) throws Exception;
+
+    void saveAnswersToLocal(List<SDAnswer> para_sdAnswers);
+
     interface getSummaryCallback {
         void onSummaryGot(SDSummary para_sdSummary);
 
@@ -52,32 +80,4 @@ public interface SmallDataDataSource {
 
         void onDataNotAvailable();
     }
-
-    void getSummary(@NonNull getSummaryCallback callback, String id);
-
-    void loadSummaries(@NonNull loadSummaryCallback callback, String time, int direction);
-
-    void loadDetails(@NonNull loadDetailCallback callback, String summaryId);
-
-    void loadAnswers(@NonNull loadAnswersCallback para_loadAnswersCallback, String summaryId);
-
-    void getCreatedSummary(@NonNull getCreatedSummaryCallback para_getCreatedSummaryCallback, String id);
-
-    void loadCreatedSummaries(@NonNull loadCreatedSummariesCallback para_loadCreatedSummariesCallback);
-
-    void loadCreatedDetails(@NonNull loadCreatedDetailsCallback para_loadCreatedDetailsCallback,
-                            String para_summaryId);
-
-    void refreshSummaries();
-
-    void refreshCreatedSummaries();
-
-    void saveSummariesToLocal(List<SDSummary> sdSummaries);
-
-    void saveDetailsToLocal(List<SDDetail> para_sdDetails);
-
-    void saveCreatedSDToLocal(SDSummaryCreate para_sdSummaryCreate,
-                              List<SDDetail> para_sdDetails) throws Exception;
-
-    void saveAnswersToLocal(List<SDAnswer> para_sdAnswers);
 }

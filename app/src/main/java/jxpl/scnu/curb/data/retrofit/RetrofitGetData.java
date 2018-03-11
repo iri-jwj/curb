@@ -22,7 +22,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * 建立网络连接、发送接收数据
- * 尽量不执行数据的处理操作*/
+ * 尽量不执行数据的处理操作
+ */
 public class RetrofitGetData {
     private static Retrofit retrofit = new Retrofit.Builder().baseUrl("http://39.108.105.150:8080")
             .addConverterFactory(GsonConverterFactory.create()).build();
@@ -36,10 +37,10 @@ public class RetrofitGetData {
             response = immediateInformationCall.execute();
             if (response.isSuccessful()) {
                 immediateInformations = response.body();
-                Log.d("RESPONSE","SUCCEED"+immediateInformations.size());
-                Log.d("RESPONSE",immediateInformations.get(1).getTitle());
+                Log.d("RESPONSE", "SUCCEED" + immediateInformations.size());
+                Log.d("RESPONSE", immediateInformations.get(1).getTitle());
             } else {
-                Log.d("RESPONSE","FAIL");
+                Log.d("RESPONSE", "FAIL");
             }
         } catch (IOException E) {
             E.printStackTrace();

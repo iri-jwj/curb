@@ -19,33 +19,34 @@ import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
 
 public class InformationRemoteDataSource implements InformationDataSource {
     private static InformationRemoteDataSource INSTANCE;
-    private InformationRemoteDataSource() {    }
 
+    private InformationRemoteDataSource() {
+    }
+
+    public static InformationRemoteDataSource getInstance() {
+        if (INSTANCE == null)
+            INSTANCE = new InformationRemoteDataSource();
+        return INSTANCE;
+    }
 
     @Override
     public void refreshInformation() {
 
     }
 
-    public static InformationRemoteDataSource getInstance(){
-        if (INSTANCE==null)
-            INSTANCE=new InformationRemoteDataSource();
-        return INSTANCE;
-    }
-
     @Override
-    public void saveInfoFromWeb(List<ImmediateInformation> immediateInformations)  {
+    public void saveInfoFromWeb(List<ImmediateInformation> immediateInformations) {
 
     }
 
     @Override
-    public void getInformation(@NonNull getInformationCallback callback,@NonNull String id) {
+    public void getInformation(@NonNull getInformationCallback callback, @NonNull String id) {
 
     }
 
     @Override
     public void getInformations(@NonNull loadInformationCallback callback) {
-        List<ImmediateInformation> immediateInformations=RetrofitGetData.getDataFromWeb();
+        List<ImmediateInformation> immediateInformations = RetrofitGetData.getDataFromWeb();
         Log.d("RemoteDateSource", "getInformations: " +
                 immediateInformations.isEmpty());
         if (!immediateInformations.isEmpty())

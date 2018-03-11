@@ -20,8 +20,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 
 public class SmallDataLocalDataSource implements SmallDataDataSource {
-    private CurbDbHelper m_curbDbHelper;
     private static SmallDataLocalDataSource stc_smallDataLocalDataSource;
+    private CurbDbHelper m_curbDbHelper;
 
     private SmallDataLocalDataSource(@NonNull Context para_context) {
         checkNotNull(para_context);

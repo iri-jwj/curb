@@ -7,28 +7,20 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class CurbDbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME="Information.db";
-
-    CurbDbHelper(Context context) {
-        super(context,DATABASE_NAME,null,DATABASE_VERSION);
-    }
-
-    private static final String TEXT_TYPE=" TEXT";
+    private static final String DATABASE_NAME = "Information.db";
+    private static final String TEXT_TYPE = " TEXT";
     private static final String INT_TYPE = " INTEGER";
     private static final String TIMESTAMP_TYPE = " TIMESTAMP";
-
     private static final String COMMA_SEP = ",";
-
     private static final String SQL_CREATE_INFORMATION_ENTRIES =
             "CREATE TABLE " + PersistenceContract.informationEntry.TABLE_NAME + "(" +
                     PersistenceContract.informationEntry.COLUMN_NAME_ID + INT_TYPE + " PRIMARY KEY," +
                     PersistenceContract.informationEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.informationEntry.COLUMN_NAME_CONTENT + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.informationEntry.COLUMN_NAME_DATE + TIMESTAMP_TYPE + COMMA_SEP +
-                    PersistenceContract.informationEntry.COLUMN_NAME_TYPE+TEXT_TYPE+COMMA_SEP+
-                    PersistenceContract.informationEntry.COLUMN_NAME_CONTENT_URL+TEXT_TYPE+
+                    PersistenceContract.informationEntry.COLUMN_NAME_TYPE + TEXT_TYPE + COMMA_SEP +
+                    PersistenceContract.informationEntry.COLUMN_NAME_CONTENT_URL + TEXT_TYPE +
                     ")";
-
     private static final String SQL_CREATE_ACCOUNT_ENTRIES =
             "CREATE TABLE " + PersistenceContract.AccountEntry.TABLE_NAME + "(" +
                     PersistenceContract.AccountEntry.COLUMN_NAME_ID + INT_TYPE + " PRIMARY KEY," +
@@ -77,6 +69,11 @@ public class CurbDbHelper extends SQLiteOpenHelper {
                     PersistenceContract.SDDetailCreate.COLUMN_NAME_OPTION1 + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.SDDetailCreate.COLUMN_NAME_OPTION2 + TEXT_TYPE +
                     ")";
+
+    CurbDbHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(SQL_CREATE_INFORMATION_ENTRIES);
@@ -89,7 +86,9 @@ public class CurbDbHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {    }
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    }
+
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {       // Not required as at version 1
     }
 }

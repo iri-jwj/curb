@@ -2,7 +2,6 @@ package jxpl.scnu.curb.data.remote;
 
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import jxpl.scnu.curb.data.repository.SmallDataDataSource;

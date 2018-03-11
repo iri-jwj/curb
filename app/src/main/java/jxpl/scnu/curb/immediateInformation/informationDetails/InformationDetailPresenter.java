@@ -19,18 +19,19 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 
 public class InformationDetailPresenter implements InformationDetailContract.Presenter {
-    private String infoId;
-
     private final InformationRepository informationRepository;
     private final InformationDetailContract.View infoDetailView;
+    private String infoId;
     private String infoTitle = "";
-     InformationDetailPresenter(String infoId, @NonNull InformationRepository informationRepository,
-                               @NonNull InformationDetailContract.View infoDetailView){
-        this.infoId=infoId;
-        this.informationRepository=checkNotNull(informationRepository);
-        this.infoDetailView=checkNotNull(infoDetailView);
+
+    InformationDetailPresenter(String infoId, @NonNull InformationRepository informationRepository,
+                               @NonNull InformationDetailContract.View infoDetailView) {
+        this.infoId = infoId;
+        this.informationRepository = checkNotNull(informationRepository);
+        this.infoDetailView = checkNotNull(infoDetailView);
         infoDetailView.setPresenter(this);
     }
+
     @Override
     public void start() {
         openInfo();
@@ -38,33 +39,33 @@ public class InformationDetailPresenter implements InformationDetailContract.Pre
 
     @Override
     public void openInfo() {
-         if (Strings.isNullOrEmpty(infoId)){
-             infoDetailView.showMissingInfo();
-             return;
-         }
-         infoDetailView.setLoadingIndicator(true);
-         informationRepository.getInformation(new InformationDataSource.getInformationCallback() {
-             @Override
-             public void onInformationLoaded(ImmediateInformation immediateInformation) {
-                 if (!infoDetailView.isActive())
-                     return;
-                 infoDetailView.setLoadingIndicator(false);
-                 if (immediateInformation==null)
-                     infoDetailView.showMissingInfo();
-                 else {
-                     showInfo(immediateInformation);
-                     infoTitle = immediateInformation.getTitle();
-                 }
-             }
+        if (Strings.isNullOrEmpty(infoId)) {
+            infoDetailView.showMissingInfo();
+            return;
+        }
+        infoDetailView.setLoadingIndicator(true);
+        informationRepository.getInformation(new InformationDataSource.getInformationCallback() {
+            @Override
+            public void onInformationLoaded(ImmediateInformation immediateInformation) {
+                if (!infoDetailView.isActive())
+                    return;
+                infoDetailView.setLoadingIndicator(false);
+                if (immediateInformation == null)
+                    infoDetailView.showMissingInfo();
+                else {
+                    showInfo(immediateInformation);
+                    infoTitle = immediateInformation.getTitle();
+                }
+            }
 
-             @Override
-             public void onDataNotAvailable() {
-                 if (!infoDetailView.isActive())
-                     return;
-                 infoDetailView.setLoadingIndicator(false);
-                 infoDetailView.showMissingInfo();
-             }
-         },infoId);
+            @Override
+            public void onDataNotAvailable() {
+                if (!infoDetailView.isActive())
+                    return;
+                infoDetailView.setLoadingIndicator(false);
+                infoDetailView.showMissingInfo();
+            }
+        }, infoId);
     }
 
 
@@ -72,7 +73,7 @@ public class InformationDetailPresenter implements InformationDetailContract.Pre
         return infoTitle;
     }
 
-    private void showInfo(ImmediateInformation immediateInformation){
-         infoDetailView.showInfo(checkNotNull(immediateInformation));
+    private void showInfo(ImmediateInformation immediateInformation) {
+        infoDetailView.showInfo(checkNotNull(immediateInformation));
     }
 }

@@ -1,9 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_linear"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:id="@+id/login_linear"
     android:orientation="vertical"
     tools:context="jxpl.scnu.curb.login.LoginActivity">
 
@@ -21,9 +21,9 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title"
                 android:gravity="center_horizontal"
-                android:text="@string/login_title" />
+                android:text="@string/login_title"
+                android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title" />
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
     <!-- Login progress -->

@@ -15,19 +15,26 @@ import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
  */
 
 public interface InformationDataSource {
-    interface loadInformationCallback{
+    void getInformation(@NonNull getInformationCallback callback, @NonNull String id);
+
+    void getInformations(@NonNull loadInformationCallback callback);
+
+    void saveInfoFromWeb(List<ImmediateInformation> immediateInformations);
+
+    void refreshInformation();
+
+    void addToArrangement(ImmediateInformation immediateInformation);
+
+    interface loadInformationCallback {
         void getInformationsLoaded(List<ImmediateInformation> immediateInformations);
-        void onDataNotAvailable();
-    }
-    interface getInformationCallback{
-        void onInformationLoaded(ImmediateInformation immediateInformation);
+
         void onDataNotAvailable();
     }
 
-    void getInformation(@NonNull getInformationCallback callback, @NonNull String id);
-    void getInformations(@NonNull loadInformationCallback callback);
-    void saveInfoFromWeb(List<ImmediateInformation> immediateInformations);
-    void refreshInformation();
-    void addToArrangement(ImmediateInformation immediateInformation);
+    interface getInformationCallback {
+        void onInformationLoaded(ImmediateInformation immediateInformation);
+
+        void onDataNotAvailable();
+    }
 
 }

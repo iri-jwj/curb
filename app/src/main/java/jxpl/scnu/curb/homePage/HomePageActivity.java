@@ -2,7 +2,6 @@ package jxpl.scnu.curb.homePage;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,7 +16,6 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jxpl.scnu.curb.R;
-import jxpl.scnu.curb.accountManage.AccountContract;
 import jxpl.scnu.curb.data.local.InformationLocalDataSource;
 import jxpl.scnu.curb.data.remote.InformationRemoteDataSource;
 import jxpl.scnu.curb.data.repository.InformationRepository;
@@ -31,6 +29,8 @@ import jxpl.scnu.curb.utils.ActivityUtil;
 public class HomePageActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private final String bundleKey = "lastItem";
+    private final String infoFilterKey = "currentFilter";
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.nav_view)
@@ -39,11 +39,8 @@ public class HomePageActivity extends AppCompatActivity
     DrawerLayout drawerLayout;
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
-
-    private final String bundleKey = "lastItem";
-    private final String infoFilterKey = "currentFilter";
-
     private InformationPresenter informationPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +64,8 @@ public class HomePageActivity extends AppCompatActivity
         Log.d("HomePageCreateInfoFrag", "onCreate:infoFrag " + informationFragment.isAdded());
         ActivityUtil.addFragmentInHomePage(R.id.nav_info, informationFragment);
         ActivityUtil.setCurrentFragment(R.id.nav_info);
-        informationPresenter = new InformationPresenter(InformationRepository.getInstance(InformationLocalDataSource.getInstace(HomePageActivity.this),
+        informationPresenter = new InformationPresenter(InformationRepository.
+                getInstance(InformationLocalDataSource.getInstace(HomePageActivity.this),
                 InformationRemoteDataSource.getInstance()), informationFragment);
         navView.setCheckedItem(R.id.nav_info);
         toolbarTitle.setText(R.string.information);

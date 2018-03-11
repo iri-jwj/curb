@@ -47,14 +47,10 @@
         completions."
     </string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <string name="title_activity_fullscreen">FullscreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-
     <string name="login_title">login</string>
-
     <string name="string_info_add">发布新信息</string>
+
+    <string name="sd_commit_button">Finish</string>
+    <string name="sd_loading_new_SD">loading latest small data</string>
+    <string name="sd_loading_old_SD">loading older small data</string>
 </resources>

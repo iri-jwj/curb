@@ -30,27 +30,26 @@ import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.TAB
  * --Winsdon Churchill
  */
 
-public class InformationLocalDataSource implements InformationDataSource{
+public class InformationLocalDataSource implements InformationDataSource {
+    private static InformationLocalDataSource INSTANCE;
     private CurbDbHelper curbDbHelper;
 
-    private static InformationLocalDataSource INSTANCE;
-
-    private InformationLocalDataSource (@NonNull Context context){
+    private InformationLocalDataSource(@NonNull Context context) {
         checkNotNull(context);
         curbDbHelper = new CurbDbHelper(context);
     }
 
-    public static InformationLocalDataSource getInstace(@NonNull Context context){
-        if (INSTANCE==null){
-            INSTANCE=new InformationLocalDataSource(context);
+    public static InformationLocalDataSource getInstace(@NonNull Context context) {
+        if (INSTANCE == null) {
+            INSTANCE = new InformationLocalDataSource(context);
         }
         return INSTANCE;
     }
 
     @Override
-    public void getInformation(@NonNull getInformationCallback callback,@NonNull String id) {
+    public void getInformation(@NonNull getInformationCallback callback, @NonNull String id) {
         SQLiteDatabase sqLiteDatabase = curbDbHelper.getReadableDatabase();
-        String[] projection={
+        String[] projection = {
                 PersistenceContract.informationEntry.COLUMN_NAME_ID,
                 PersistenceContract.informationEntry.COLUMN_NAME_TITLE,
                 PersistenceContract.informationEntry.COLUMN_NAME_DATE,
@@ -59,21 +58,21 @@ public class InformationLocalDataSource implements InformationDataSource{
                 PersistenceContract.informationEntry.COLUMN_NAME_TYPE
         };
         String selection = PersistenceContract.informationEntry.COLUMN_NAME_ID + " like ?";
-        String[] selectionArgs={id};
-        Cursor cursor=sqLiteDatabase.query(PersistenceContract.informationEntry.TABLE_NAME,projection,
-                selection,selectionArgs,null,null,null);
+        String[] selectionArgs = {id};
+        Cursor cursor = sqLiteDatabase.query(PersistenceContract.informationEntry.TABLE_NAME, projection,
+                selection, selectionArgs, null, null, null);
 
-        ImmediateInformation immediateInformation=null;
-        if (cursor!=null&&cursor.getCount()>0){
-           cursor.moveToFirst();
-           String title=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_TITLE));
-           String content=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_CONTENT));
-           String content_url=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_CONTENT_URL));
-           String type=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_TYPE));
-           String date=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_DATE));
+        ImmediateInformation immediateInformation = null;
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            String title = cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_TITLE));
+            String content = cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_CONTENT));
+            String content_url = cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_CONTENT_URL));
+            String type = cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_TYPE));
+            String date = cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_DATE));
             immediateInformation = new ImmediateInformation(id, title, date, content, type, content_url);
         }
-        if (cursor!=null){
+        if (cursor != null) {
             cursor.close();
         }
         sqLiteDatabase.close();
@@ -88,7 +87,7 @@ public class InformationLocalDataSource implements InformationDataSource{
     @Override
     public void getInformations(@NonNull loadInformationCallback callback) {
         SQLiteDatabase sqLiteDatabase = curbDbHelper.getWritableDatabase();
-        String[] projection={
+        String[] projection = {
                 PersistenceContract.informationEntry.COLUMN_NAME_ID,
                 PersistenceContract.informationEntry.COLUMN_NAME_TITLE,
                 PersistenceContract.informationEntry.COLUMN_NAME_CONTENT,
@@ -96,24 +95,24 @@ public class InformationLocalDataSource implements InformationDataSource{
                 PersistenceContract.informationEntry.COLUMN_NAME_DATE,
                 PersistenceContract.informationEntry.COLUMN_NAME_TYPE
         };
-        Cursor cursor=sqLiteDatabase.query(PersistenceContract.informationEntry.TABLE_NAME,projection,
-                null,null,null,null,null);
+        Cursor cursor = sqLiteDatabase.query(PersistenceContract.informationEntry.TABLE_NAME, projection,
+                null, null, null, null, null);
 
         ImmediateInformation immediateInformation;
-        List<ImmediateInformation> immediateInformations=new ArrayList<>();
-        if (cursor!=null&&cursor.getCount()>0){
-            while (cursor.moveToNext()){
-                String id=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_ID));
-                String title=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_TITLE));
-                String content=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_CONTENT));
-                String content_url=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_CONTENT_URL));
-                String type=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_TYPE));
-                String date=cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_DATE));
+        List<ImmediateInformation> immediateInformations = new ArrayList<>();
+        if (cursor != null && cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                String id = cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_ID));
+                String title = cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_TITLE));
+                String content = cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_CONTENT));
+                String content_url = cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_CONTENT_URL));
+                String type = cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_TYPE));
+                String date = cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_DATE));
                 immediateInformation = new ImmediateInformation(id, title, date, content, type, content_url);
                 immediateInformations.add(immediateInformation);
             }
         }
-        if (cursor!=null){
+        if (cursor != null) {
             cursor.close();
         }
         sqLiteDatabase.close();
@@ -129,18 +128,18 @@ public class InformationLocalDataSource implements InformationDataSource{
     }
 
     @Override
-    public void saveInfoFromWeb(List<ImmediateInformation> immediateInformations){
+    public void saveInfoFromWeb(List<ImmediateInformation> immediateInformations) {
         SQLiteDatabase sqLiteDatabase = curbDbHelper.getWritableDatabase();
-        for (ImmediateInformation i:
-             immediateInformations) {
-            ContentValues contentValues=new ContentValues();
-            contentValues.put(COLUMN_NAME_CONTENT_URL,i.getContent_url());
-            contentValues.put(COLUMN_NAME_CONTENT,i.getContent());
-            contentValues.put(COLUMN_NAME_DATE,i.getDate());
-            contentValues.put(COLUMN_NAME_TYPE,i.getType());
-            contentValues.put(COLUMN_NAME_TITLE,i.getTitle());
-            contentValues.put(COLUMN_NAME_ID,i.getId());
-            sqLiteDatabase.insert(TABLE_NAME,null,contentValues);
+        for (ImmediateInformation i :
+                immediateInformations) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(COLUMN_NAME_CONTENT_URL, i.getContent_url());
+            contentValues.put(COLUMN_NAME_CONTENT, i.getContent());
+            contentValues.put(COLUMN_NAME_DATE, i.getDate());
+            contentValues.put(COLUMN_NAME_TYPE, i.getType());
+            contentValues.put(COLUMN_NAME_TITLE, i.getTitle());
+            contentValues.put(COLUMN_NAME_ID, i.getId());
+            sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
             contentValues.clear();
         }
         sqLiteDatabase.close();
