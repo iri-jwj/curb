@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -13,6 +14,7 @@ import java.util.UUID;
 import jxpl.scnu.curb.data.repository.SmallDataDataSource;
 import jxpl.scnu.curb.smallData.SDAnswer;
 import jxpl.scnu.curb.smallData.SDDetail;
+import jxpl.scnu.curb.smallData.SDResult;
 import jxpl.scnu.curb.smallData.SDSummary;
 import jxpl.scnu.curb.smallData.SDSummaryCreate;
 
@@ -97,7 +99,7 @@ public class SmallDataLocalDataSource implements SmallDataDataSource {
             lc_sdDetails = new ArrayList<>();
             while (lc_cursor.moveToNext()) {
                 lc_sdDetails.add(new SDDetail(UUID.fromString(summaryId),
-                        lc_cursor.getString(lc_cursor.getColumnIndexOrThrow(PersistenceContract.SDDetail.COLUMN_NAME_NUM)),
+                        lc_cursor.getInt(lc_cursor.getColumnIndexOrThrow(PersistenceContract.SDDetail.COLUMN_NAME_NUM)),
                         lc_cursor.getString(lc_cursor.getColumnIndexOrThrow(PersistenceContract.SDDetail.COLUMN_NAME_QUESTION)),
                         lc_cursor.getString(lc_cursor.getColumnIndexOrThrow(PersistenceContract.SDDetail.COLUMN_NAME_OPTION1)),
                         lc_cursor.getString(lc_cursor.getColumnIndexOrThrow(PersistenceContract.SDDetail.COLUMN_NAME_OPTION2))
@@ -306,7 +308,7 @@ public class SmallDataLocalDataSource implements SmallDataDataSource {
             lc_sdDetails = new ArrayList<>();
             while (lc_cursor.moveToNext()) {
                 lc_sdDetails.add(new SDDetail(UUID.fromString(para_summaryId),
-                        lc_cursor.getString(lc_cursor.getColumnIndexOrThrow(
+                        lc_cursor.getInt(lc_cursor.getColumnIndexOrThrow(
                                 PersistenceContract.SDDetail.COLUMN_NAME_NUM)),
                         lc_cursor.getString(lc_cursor.getColumnIndexOrThrow(
                                 PersistenceContract.SDDetail.COLUMN_NAME_QUESTION)),
@@ -442,6 +444,17 @@ public class SmallDataLocalDataSource implements SmallDataDataSource {
     }
 
     @Override
+    public void markAnswered(String summaryId) {
+        SQLiteDatabase lc_sqLiteDatabase = m_curbDbHelper.getWritableDatabase();
+        ContentValues lc_contentValues = new ContentValues();
+        lc_contentValues.put(PersistenceContract.SDSummary.COLUMN_NAME_HAVEFINISHED, true);
+        String whereClause = PersistenceContract.SDSummary.COLUMN_NAME_ID + "=" + summaryId;
+        lc_sqLiteDatabase.update(PersistenceContract.SDSummary.TABLE_NAME, lc_contentValues
+                , whereClause
+                , null);
+    }
+
+    @Override
     public void saveCreatedSDToLocal(SDSummaryCreate para_sdSummaryCreate,
                                      List<SDDetail> para_sdDetails) throws Exception {
         if (para_sdSummaryCreate.getId().equals(para_sdDetails.get(1).getSd_id())) {
@@ -482,5 +495,20 @@ public class SmallDataLocalDataSource implements SmallDataDataSource {
         } else {
             throw new Exception("summary中的id与detail中的id不同");
         }
+    }
+
+    @Override
+    public void saveCreatedSDToRemote(String para_s, File image) {
+
+    }
+
+    @Override
+    public void commitAnswer(String strEntity) {
+
+    }
+
+    @Override
+    public void loadResult(loadResultCallback para_loadResultCallback, String summaryId) {
+
     }
 }

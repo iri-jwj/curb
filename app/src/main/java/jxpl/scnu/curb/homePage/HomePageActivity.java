@@ -9,20 +9,25 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.github.ikidou.fragmentBackHandler.BackHandlerHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jxpl.scnu.curb.R;
 import jxpl.scnu.curb.data.local.InformationLocalDataSource;
+import jxpl.scnu.curb.data.local.SmallDataLocalDataSource;
 import jxpl.scnu.curb.data.remote.InformationRemoteDataSource;
+import jxpl.scnu.curb.data.remote.SDRemoteDataSource;
 import jxpl.scnu.curb.data.repository.InformationRepository;
+import jxpl.scnu.curb.data.repository.SmallDataRepository;
 import jxpl.scnu.curb.immediateInformation.InformationFragment;
 import jxpl.scnu.curb.immediateInformation.InformationPresenter;
 import jxpl.scnu.curb.river.RiverFragment;
 import jxpl.scnu.curb.smallData.SmallDataFragment;
+import jxpl.scnu.curb.smallData.SmallDataPresenter;
 import jxpl.scnu.curb.taskArrangement.ArrangeFragment;
 import jxpl.scnu.curb.utils.ActivityUtil;
 
@@ -56,28 +61,40 @@ public class HomePageActivity extends AppCompatActivity
 
         ActivityUtil.setContainerView(R.id.content_frame);
         ActivityUtil.setFragmentManagerInHome(getSupportFragmentManager());
-        ActivityUtil.addFragmentInHomePage(R.id.nav_river, new RiverFragment());
-        ActivityUtil.addFragmentInHomePage(R.id.nav_arrange, new ArrangeFragment());
-        ActivityUtil.addFragmentInHomePage(R.id.nav_small_data, new SmallDataFragment());
 
         InformationFragment informationFragment = InformationFragment.newInstance();
         Log.d("HomePageCreateInfoFrag", "onCreate:infoFrag " + informationFragment.isAdded());
         ActivityUtil.addFragmentInHomePage(R.id.nav_info, informationFragment);
-        ActivityUtil.setCurrentFragment(R.id.nav_info);
         informationPresenter = new InformationPresenter(InformationRepository.
-                getInstance(InformationLocalDataSource.getInstace(HomePageActivity.this),
-                InformationRemoteDataSource.getInstance()), informationFragment);
+                getInstance(InformationLocalDataSource.getInstance(HomePageActivity.this),
+                        InformationRemoteDataSource.getInstance()), informationFragment);
         navView.setCheckedItem(R.id.nav_info);
         toolbarTitle.setText(R.string.information);
+        ActivityUtil.setCurrentFragment(R.id.nav_info);
         navView.setNavigationItemSelectedListener(this);
+
+        initFragment();//初始化其它fragments
+    }
+
+    private void initFragment() {
+        SmallDataFragment lc_smallDataFragment = SmallDataFragment.newInstance();
+        ActivityUtil.addFragmentInHomePage(R.id.nav_river, new RiverFragment());
+        ActivityUtil.addFragmentInHomePage(R.id.nav_arrange, new ArrangeFragment());
+        ActivityUtil.addFragmentInHomePage(R.id.nav_small_data, lc_smallDataFragment);
+
+        SmallDataPresenter lc_smallDataPresenter = new SmallDataPresenter(lc_smallDataFragment
+                , SmallDataRepository.getInstance(SDRemoteDataSource.getInstance()
+                , SmallDataLocalDataSource.getInstance(this)), this);
     }
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+        if (!BackHandlerHelper.handleBackPress(this)) {
+            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 
@@ -112,6 +129,7 @@ public class HomePageActivity extends AppCompatActivity
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         ActivityUtil.setCurrentFragment(savedInstanceState.getInt(bundleKey));
         informationPresenter.setFiltering(savedInstanceState.getString(infoFilterKey));
+        informationPresenter.start();
         super.onRestoreInstanceState(savedInstanceState);
     }
 
@@ -120,11 +138,5 @@ public class HomePageActivity extends AppCompatActivity
         Log.d("inHomePage", "onDestroy: ");
         ActivityUtil.removeFragment();
         super.onDestroy();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.fragement_info_add, menu);
-        return true;
     }
 }

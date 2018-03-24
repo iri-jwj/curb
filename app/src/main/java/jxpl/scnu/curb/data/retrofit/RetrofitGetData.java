@@ -2,6 +2,7 @@ package jxpl.scnu.curb.data.retrofit;
 
 import android.util.Log;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import jxpl.scnu.curb.smallData.SDDetail;
 import jxpl.scnu.curb.smallData.SDResult;
 import jxpl.scnu.curb.smallData.SDSummary;
 import jxpl.scnu.curb.smallData.SDSummaryCreate;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -30,7 +32,8 @@ public class RetrofitGetData {
     private static ServerInterface serverInterface = retrofit.create(ServerInterface.class);
 
     public static List<ImmediateInformation> getDataFromWeb() {
-        Call<List<ImmediateInformation>> immediateInformationCall = serverInterface.getInfoFromServer();
+        Call<List<ImmediateInformation>> immediateInformationCall =
+                serverInterface.getInfoFromServer(2);
         Response<List<ImmediateInformation>> response;
         List<ImmediateInformation> immediateInformations = new ArrayList<>();
         try {
@@ -50,7 +53,7 @@ public class RetrofitGetData {
 
     public static boolean postLogin(String account, String password) {
         boolean isLoginSucceed = false;
-        Call<String> loginCall = serverInterface.postLogin(5, account, password);
+        Call<String> loginCall = serverInterface.postLogin(2, account, password);
         Response<String> response;
         try {
             response = loginCall.execute();
@@ -86,7 +89,7 @@ public class RetrofitGetData {
         return SDDetailList;
     }
 
-    @android.support.annotation.Nullable
+
     public static List<SDSummary> getSmallDataSummary(String time, int direction) {
         Call<List<SDSummary>> sdSummaryCall = serverInterface.getSmallDataSummary(time, direction);
         List<SDSummary> sdSummaryList = new ArrayList<>();
@@ -136,10 +139,17 @@ public class RetrofitGetData {
         return lc_sdAnswers;
     }
 
-    public static String postCreatedSD(String para_s) {
+    public static String postCreatedSD(String para_s, final File para_file) {
         RequestBody description =
-                RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), para_s);
-        Call<String> lc_stringCall = serverInterface.postCreatedSD(description);
+                RequestBody.create(okhttp3.MediaType
+                        .parse("application/json;charset=UTF-8"), para_s);
+
+        RequestBody lc_requestFile =
+                RequestBody.create(okhttp3.MediaType.parse("multipart/form-data"), para_file);
+        MultipartBody.Part lc_part = MultipartBody.Part
+                .createFormData("image", para_file.getName(), lc_requestFile);
+
+        Call<String> lc_stringCall = serverInterface.postCreatedSD(description, lc_part);
         Response<String> lc_stringResponse;
         String postResult = null;
         try {
@@ -158,7 +168,7 @@ public class RetrofitGetData {
         Response<List<SDSummaryCreate>> lc_listResponse;
         try {
             lc_listResponse = lc_listCall.execute();
-            if (lc_listResponse.isSuccessful() && !lc_listResponse.body().isEmpty()) {
+            if (lc_listResponse.isSuccessful() && lc_listResponse.body() != null) {
                 lc_sdSummaryCreates = new ArrayList<>(lc_listResponse.body());
             }
         } catch (IOException e) {

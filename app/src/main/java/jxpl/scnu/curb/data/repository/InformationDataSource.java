@@ -15,7 +15,7 @@ import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
  */
 
 public interface InformationDataSource {
-    void getInformation(@NonNull getInformationCallback callback, @NonNull String id);
+    void getInformation(@NonNull getInformationCallback callback, int id);
 
     void getInformations(@NonNull loadInformationCallback callback);
 

@@ -12,42 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/info_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/Label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:layout_marginLeft="@dimen/list_item_padding"
-                android:layout_marginRight="@dimen/list_item_padding"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:gravity="center_vertical"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
-            <android.support.v7.widget.RecyclerView
+        <android.support.v7.widget.RecyclerView
                 android:id="@+id/info_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/recycler_item_touch"></android.support.v7.widget.RecyclerView>
-        </LinearLayout>
-
-
+            android:layout_height="match_parent" />
     </jxpl.scnu.curb.utils.ScrollChildSwipeRefreshLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/info_floatingAb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_floating_action"
-        app:backgroundTint="@color/fab_white"
-        app:borderWidth="0dp"
-        app:elevation="1dp"
-        app:fabSize="normal" />
 </android.support.design.widget.CoordinatorLayout>

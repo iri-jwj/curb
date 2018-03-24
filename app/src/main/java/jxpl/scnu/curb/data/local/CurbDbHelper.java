@@ -14,7 +14,7 @@ public class CurbDbHelper extends SQLiteOpenHelper {
     private static final String COMMA_SEP = ",";
     private static final String SQL_CREATE_INFORMATION_ENTRIES =
             "CREATE TABLE " + PersistenceContract.informationEntry.TABLE_NAME + "(" +
-                    PersistenceContract.informationEntry.COLUMN_NAME_ID + INT_TYPE + " PRIMARY KEY," +
+                    PersistenceContract.informationEntry.COLUMN_NAME_ID + INT_TYPE + " PRIMARY KEY, " +
                     PersistenceContract.informationEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.informationEntry.COLUMN_NAME_CONTENT + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.informationEntry.COLUMN_NAME_DATE + TIMESTAMP_TYPE + COMMA_SEP +
@@ -24,7 +24,6 @@ public class CurbDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_ACCOUNT_ENTRIES =
             "CREATE TABLE " + PersistenceContract.AccountEntry.TABLE_NAME + "(" +
                     PersistenceContract.AccountEntry.COLUMN_NAME_ID + INT_TYPE + " PRIMARY KEY," +
-                    PersistenceContract.AccountEntry.COLUMN_NAME_ID + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.AccountEntry.COLUMN_NAME_ACCOUNT + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.AccountEntry.COLUMN_NAME_PASSWORD + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.AccountEntry.COLUMN_NAME_LEVEL + TEXT_TYPE +

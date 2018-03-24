@@ -11,8 +11,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
-        android:fullBackupContent="true"
         android:allowBackup="true"
+        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -22,7 +22,6 @@
             android:name=".homePage.HomePageActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
-
             <intent-filter>
                 <action android:name="android.intent.action.HomePage" />
 
@@ -41,12 +40,8 @@
         <activity
             android:name=".login.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-        <activity android:name=".accountManage.AccountManageActivity">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".accountManage.AccountManageActivity" />
         <activity
             android:name=".loading.LoadingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -57,6 +52,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".smallData.createSmallData.SmallDataCreateActivity" />
+        <activity android:name=".smallData.result.ResultActivity"></activity>
     </application>
 
 </manifest>

@@ -7,7 +7,6 @@ import android.util.Log;
 import android.util.SparseArray;
 
 
-
 public class ActivityUtil {
 
     private static final SparseArray<Fragment> fragments = new SparseArray<>();

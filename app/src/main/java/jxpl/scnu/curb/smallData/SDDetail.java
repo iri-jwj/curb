@@ -5,12 +5,12 @@ import java.util.UUID;
 
 public class SDDetail {
     private UUID sd_id;
-    private String question_num; //题号
+    private int question_num; //题号
     private String question;     //题目
     private String optionOne;    //选项1
     private String optionTwo;    //选项2
 
-    public SDDetail(UUID sd_id, String question_num, String question, String optionOne, String optionTwo) {
+    public SDDetail(UUID sd_id, int question_num, String question, String optionOne, String optionTwo) {
         this.sd_id = sd_id;
         this.question_num = question_num;
         this.question = question;
@@ -26,11 +26,11 @@ public class SDDetail {
         this.sd_id = sd_id;
     }
 
-    public String getQuestion_num() {
+    public int getQuestion_num() {
         return question_num;
     }
 
-    public void setQuestion_num(String question_num) {
+    public void setQuestion_num(int question_num) {
         this.question_num = question_num;
     }
 

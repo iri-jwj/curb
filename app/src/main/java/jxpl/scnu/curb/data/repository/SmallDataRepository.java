@@ -2,8 +2,10 @@ package jxpl.scnu.curb.data.repository;
 
 import android.support.annotation.NonNull;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -12,6 +14,7 @@ import jxpl.scnu.curb.data.local.SmallDataLocalDataSource;
 import jxpl.scnu.curb.data.remote.SDRemoteDataSource;
 import jxpl.scnu.curb.smallData.SDAnswer;
 import jxpl.scnu.curb.smallData.SDDetail;
+import jxpl.scnu.curb.smallData.SDResult;
 import jxpl.scnu.curb.smallData.SDSummary;
 import jxpl.scnu.curb.smallData.SDSummaryCreate;
 
@@ -256,10 +259,7 @@ public class SmallDataRepository implements SmallDataDataSource {
                 }
             });
         }
-
-
     }
-
 
     @Override
     public void loadCreatedDetails(@NonNull final loadCreatedDetailsCallback para_loadCreatedDetailsCallback,
@@ -338,6 +338,15 @@ public class SmallDataRepository implements SmallDataDataSource {
     }
 
     @Override
+    public void markAnswered(String summaryId) {
+        m_smallDataLocalDataSource.markAnswered(summaryId);
+        UUID lc_uuid = UUID.fromString(summaryId);
+        SDSummary lc_sdSummary = m_summaryMap.get(lc_uuid);
+        lc_sdSummary.setHasFinish(true);
+        m_summaryMap.put(lc_uuid, lc_sdSummary);
+    }
+
+    @Override
     public void saveSummariesToLocal(final List<SDSummary> sdSummaries) {
         final Thread lc_thread = new Thread(new Runnable() {
             @Override
@@ -370,6 +379,41 @@ public class SmallDataRepository implements SmallDataDataSource {
                 } catch (Exception para_e) {
                     para_e.printStackTrace();
                 }
+            }
+        });
+        lc_thread.start();
+    }
+
+    @Override
+    public void saveCreatedSDToRemote(final String para_s, final File image) {
+        final Thread lc_thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                m_sdRemoteDataSource.saveCreatedSDToRemote(para_s, image);
+            }
+        });
+        lc_thread.start();
+
+    }
+
+    @Override
+    public void commitAnswer(final String strEntity) {
+        final Thread lc_thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                m_sdRemoteDataSource.commitAnswer(strEntity);
+            }
+        });
+        lc_thread.start();
+    }
+
+    @Override
+    public void loadResult(final loadResultCallback para_loadResultCallback,
+                           final String summaryId) {
+        final Thread lc_thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                m_sdRemoteDataSource.loadResult(para_loadResultCallback, summaryId);
             }
         });
         lc_thread.start();

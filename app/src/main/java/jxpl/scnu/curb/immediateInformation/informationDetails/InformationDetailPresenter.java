@@ -1,8 +1,7 @@
 package jxpl.scnu.curb.immediateInformation.informationDetails;
 
 import android.support.annotation.NonNull;
-
-import com.google.common.base.Strings;
+import android.util.Log;
 
 import jxpl.scnu.curb.data.repository.InformationDataSource;
 import jxpl.scnu.curb.data.repository.InformationRepository;
@@ -21,10 +20,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class InformationDetailPresenter implements InformationDetailContract.Presenter {
     private final InformationRepository informationRepository;
     private final InformationDetailContract.View infoDetailView;
-    private String infoId;
+    private int infoId;
     private String infoTitle = "";
 
-    InformationDetailPresenter(String infoId, @NonNull InformationRepository informationRepository,
+    InformationDetailPresenter(int infoId, @NonNull InformationRepository informationRepository,
                                @NonNull InformationDetailContract.View infoDetailView) {
         this.infoId = infoId;
         this.informationRepository = checkNotNull(informationRepository);
@@ -39,8 +38,9 @@ public class InformationDetailPresenter implements InformationDetailContract.Pre
 
     @Override
     public void openInfo() {
-        if (Strings.isNullOrEmpty(infoId)) {
+        if (infoId == 0) {
             infoDetailView.showMissingInfo();
+            Log.d("detailPresenter", "openInfo: checkInfoIdIfNull" + infoId);
             return;
         }
         infoDetailView.setLoadingIndicator(true);
@@ -50,8 +50,10 @@ public class InformationDetailPresenter implements InformationDetailContract.Pre
                 if (!infoDetailView.isActive())
                     return;
                 infoDetailView.setLoadingIndicator(false);
-                if (immediateInformation == null)
+                if (immediateInformation == null) {
                     infoDetailView.showMissingInfo();
+                    Log.d("detailPresenter", "onInformationLoaded: null");
+                }
                 else {
                     showInfo(immediateInformation);
                     infoTitle = immediateInformation.getTitle();
@@ -64,12 +66,13 @@ public class InformationDetailPresenter implements InformationDetailContract.Pre
                     return;
                 infoDetailView.setLoadingIndicator(false);
                 infoDetailView.showMissingInfo();
+                Log.d("detailPresenter", "onDataNotAvailable: getInfoFail");
             }
         }, infoId);
     }
 
 
-    public String getInfoTitle() {
+    String getInfoTitle() {
         return infoTitle;
     }
 

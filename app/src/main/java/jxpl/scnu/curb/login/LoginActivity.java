@@ -4,9 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -29,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +39,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jxpl.scnu.curb.R;
+import jxpl.scnu.curb.data.retrofit.RetrofitGetData;
 import jxpl.scnu.curb.homePage.HomePageActivity;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -62,9 +66,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @BindView(R.id.login_linear)
     LinearLayout loginLinear;
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
+    public static int userid;
 
     // UI references.
     @Override
@@ -183,7 +185,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private void login(final String account, final String password) {
-        /*final Thread thread = new Thread(new Runnable() {
+        final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 LoginActivity.this.runOnUiThread(new Runnable() {
@@ -214,17 +216,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     LoginActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getBaseContext(),"111",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getBaseContext(), "111", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
             }
         });
-        thread.start();*/
-        Intent intent = new Intent(LoginActivity.this,
-                HomePageActivity.class);
-        startActivity(intent);
-        LoginActivity.this.finish();
+        thread.start();
     }
 
     private boolean isEmailValid(String email) {

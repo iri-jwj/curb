@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/sd_create"
+        android:title="@string/sd_create_small_data" />
+    <item android:title="@string/sd_check_created_small_data" />
+</menu>

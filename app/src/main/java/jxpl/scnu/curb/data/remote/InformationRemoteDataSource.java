@@ -40,7 +40,7 @@ public class InformationRemoteDataSource implements InformationDataSource {
     }
 
     @Override
-    public void getInformation(@NonNull getInformationCallback callback, @NonNull String id) {
+    public void getInformation(@NonNull getInformationCallback callback, int id) {
 
     }
 

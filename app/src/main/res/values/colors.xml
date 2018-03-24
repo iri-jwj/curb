@@ -7,11 +7,19 @@
     <color name="item_unselected">#646464</color>
     <color name="toolsBar">#FAD689</color>
 
+    <color name="home_page_background_dark">#4f4f48</color>
+    <color name="home_page_background_white">#ffffd0</color>
     <color name="black_overlay">#66000000</color>
 
     <color name="fab_white">#00ffffff</color>
-    <color name="home_page_ab">#515151</color>
+    <color name="app_bar_title">#515151</color>
 
     <color name="recycler_item_gray">#666666</color>
     <color name="recycler_item_white">#ffffff</color>
+
+    <color name="card_small_data_finished">#a8ffd34e</color>
+    <color name="card_small_data_unfinished">#ffffff</color>
+
+    <color name="small_data_result1">#fc9f4d</color>
+    <color name="small_data_result2">#fcfaf2</color>
 </resources>

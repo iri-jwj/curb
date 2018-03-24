@@ -14,17 +14,21 @@ interface InformationContract {
 
         int getImageIdByType(String type);
 
-        void showFilteringPopUpMenu(Context context);
-
-        void showInformationDetailsUi(String id, Context context);
+        void showInformationDetailsUi(int id, Context context);
 
         void showInfo(List<ImmediateInformation> immediateInformations);
 
         void showNoInfo();
 
+        void showNoNewInfo();
+
         void showLoadingError();
 
         void setLoadingIndicator(boolean active);
+
+        List<ImmediateInformation> getCurrentList();
+
+        boolean isListShowing();
     }
 
     interface Presenter extends BasePresenter {

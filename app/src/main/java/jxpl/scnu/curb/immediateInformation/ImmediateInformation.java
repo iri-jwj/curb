@@ -4,20 +4,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
- * Created by irijw on 2017/9/5.
- * all great things are simple,
- * and many can be expressed in single words:
- * freedom, justice, honor, duty, mercy, hope.
- * --Winsdon Churchill
+ * @author iri-jwj
+ * @version 1
  */
 
 public final class ImmediateInformation {
 
-    @NonNull
-    private final String id;
+
+    private final int homeworkId;
     @NonNull
     private final String title;//标题
-    @NonNull
+    @Nullable
     private final String date;//日期
     @NonNull
     private final String content;//正文内容
@@ -26,8 +23,8 @@ public final class ImmediateInformation {
     @Nullable
     private String content_url;//原文url
 
-    public ImmediateInformation(@NonNull String id, @NonNull String title, @NonNull String date, @NonNull String content, @NonNull String type, String content_url) {
-        this.id = id;
+    public ImmediateInformation(int homeworkId, @NonNull String title, @Nullable String date, @NonNull String content, @NonNull String type, String content_url) {
+        this.homeworkId = homeworkId;
         this.title = title;
         this.date = date;
         this.content = content;
@@ -35,9 +32,8 @@ public final class ImmediateInformation {
         this.content_url = content_url;
     }
 
-    @NonNull
-    public String getId() {
-        return id;
+    public int getHomeworkId() {
+        return homeworkId;
     }
 
     @NonNull
@@ -64,8 +60,20 @@ public final class ImmediateInformation {
         return title;
     }
 
-    @NonNull
+    @Nullable
     public String getDate() {
         return date;
+    }
+
+    @Override
+    public String toString() {
+        return "ImmediateInformation{" +
+                "homeworkId='" + homeworkId + '\'' +
+                ", title='" + title + '\'' +
+                ", date='" + date + '\'' +
+                ", content='" + content + '\'' +
+                ", type='" + type + '\'' +
+                ", content_url='" + content_url + '\'' +
+                '}';
     }
 }

@@ -2,12 +2,14 @@ package jxpl.scnu.curb.data.remote;
 
 import android.support.annotation.NonNull;
 
+import java.io.File;
 import java.util.List;
 
 import jxpl.scnu.curb.data.repository.SmallDataDataSource;
 import jxpl.scnu.curb.data.retrofit.RetrofitGetData;
 import jxpl.scnu.curb.smallData.SDAnswer;
 import jxpl.scnu.curb.smallData.SDDetail;
+import jxpl.scnu.curb.smallData.SDResult;
 import jxpl.scnu.curb.smallData.SDSummary;
 import jxpl.scnu.curb.smallData.SDSummaryCreate;
 
@@ -86,6 +88,31 @@ public class SDRemoteDataSource implements SmallDataDataSource {
             para_loadAnswersCallback.onAnswerLoaded(lc_sdAnswers);
         else
             para_loadAnswersCallback.onDataNotAvailable();
+    }
+
+    @Override
+    public void saveCreatedSDToRemote(String para_s, File image) {
+        String result = RetrofitGetData.postCreatedSD(para_s, image);
+    }
+
+    @Override
+    public void loadResult(loadResultCallback para_loadResultCallback,
+                           String summaryId) {
+        List<SDResult> lc_resultList = RetrofitGetData.getSDResult(summaryId);
+        if (lc_resultList == null || lc_resultList.isEmpty())
+            para_loadResultCallback.onDataNotAvailable();
+        else
+            para_loadResultCallback.onResultsLoaded(lc_resultList);
+    }
+
+    @Override
+    public void commitAnswer(String strEntity) {
+        RetrofitGetData.postAnswer(strEntity);
+    }
+
+    @Override
+    public void markAnswered(String summaryId) {
+
     }
 
     @Override

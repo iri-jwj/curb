@@ -23,11 +23,9 @@ import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COL
 import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.TABLE_NAME;
 
 /**
- * Created by irijw on 2017/10/15.
- * all great things are simple,
- * and many can be expressed in single words:
- * freedom, justice, honor, duty, mercy, hope.
- * --Winsdon Churchill
+ * @author iri-jwj
+ * @version 2
+ * 2018 3 23
  */
 
 public class InformationLocalDataSource implements InformationDataSource {
@@ -39,7 +37,7 @@ public class InformationLocalDataSource implements InformationDataSource {
         curbDbHelper = new CurbDbHelper(context);
     }
 
-    public static InformationLocalDataSource getInstace(@NonNull Context context) {
+    public static InformationLocalDataSource getInstance(@NonNull Context context) {
         if (INSTANCE == null) {
             INSTANCE = new InformationLocalDataSource(context);
         }
@@ -47,7 +45,7 @@ public class InformationLocalDataSource implements InformationDataSource {
     }
 
     @Override
-    public void getInformation(@NonNull getInformationCallback callback, @NonNull String id) {
+    public void getInformation(@NonNull getInformationCallback callback, int id) {
         SQLiteDatabase sqLiteDatabase = curbDbHelper.getReadableDatabase();
         String[] projection = {
                 PersistenceContract.informationEntry.COLUMN_NAME_ID,
@@ -58,7 +56,7 @@ public class InformationLocalDataSource implements InformationDataSource {
                 PersistenceContract.informationEntry.COLUMN_NAME_TYPE
         };
         String selection = PersistenceContract.informationEntry.COLUMN_NAME_ID + " like ?";
-        String[] selectionArgs = {id};
+        String[] selectionArgs = {id + ""};
         Cursor cursor = sqLiteDatabase.query(PersistenceContract.informationEntry.TABLE_NAME, projection,
                 selection, selectionArgs, null, null, null);
 
@@ -102,7 +100,7 @@ public class InformationLocalDataSource implements InformationDataSource {
         List<ImmediateInformation> immediateInformations = new ArrayList<>();
         if (cursor != null && cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
-                String id = cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_ID));
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_ID));
                 String title = cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_TITLE));
                 String content = cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_CONTENT));
                 String content_url = cursor.getString(cursor.getColumnIndexOrThrow(PersistenceContract.informationEntry.COLUMN_NAME_CONTENT_URL));
@@ -132,13 +130,14 @@ public class InformationLocalDataSource implements InformationDataSource {
         SQLiteDatabase sqLiteDatabase = curbDbHelper.getWritableDatabase();
         for (ImmediateInformation i :
                 immediateInformations) {
+            Log.d("localDataSource", "saveInfoFromWeb:" + i.toString());
             ContentValues contentValues = new ContentValues();
-            contentValues.put(COLUMN_NAME_CONTENT_URL, i.getContent_url());
+            contentValues.put(COLUMN_NAME_ID, i.getHomeworkId());
+            contentValues.put(COLUMN_NAME_TITLE, i.getTitle());
             contentValues.put(COLUMN_NAME_CONTENT, i.getContent());
             contentValues.put(COLUMN_NAME_DATE, i.getDate());
             contentValues.put(COLUMN_NAME_TYPE, i.getType());
-            contentValues.put(COLUMN_NAME_TITLE, i.getTitle());
-            contentValues.put(COLUMN_NAME_ID, i.getId());
+            contentValues.put(COLUMN_NAME_CONTENT_URL, i.getContent_url());
             sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
             contentValues.clear();
         }

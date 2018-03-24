@@ -21,18 +21,19 @@
 
     <string name="noUserName">游客</string>
 
+
     <string name="info_filter_all">所有信息</string>
     <string name="info_filter_education">教务管理</string>
     <string name="info_filter_scholar">学者网</string>
     <string name="info_filter_work_study">勤工助学</string>
     <string name="info_filter_practice">实习招聘</string>
+    <string name="info_nothing">no information</string>
+    <string name="info_loading_error">Error while loading information</string>
+    <string name="info_detail_loading">LOADING</string>
+    <string name="info_detail_missed">Message Lost</string>
+    <string name="info_image_description">information type</string>
+    <string name="info_no_new_info_error">have not new information</string>
 
-    <string name="no_info_main">信息不存在</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="loading_info_error">Error while loading information</string>
-    <string name="loading_info_detail">LOADING</string>
-    <string name="missing_info_detail">Message Lost</string>
-    <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">ID</string>
@@ -46,6 +47,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="title_activity_login">Sign in</string>
 
     <string name="login_title">login</string>
     <string name="string_info_add">发布新信息</string>
@@ -53,4 +55,14 @@
     <string name="sd_commit_button">Finish</string>
     <string name="sd_loading_new_SD">loading latest small data</string>
     <string name="sd_loading_old_SD">loading older small data</string>
+    <string name="sd_loading_created_details_error">loading created details failed</string>
+    <string name="sd_loading_created_summaries_error">loading created summaries failed</string>
+    <string name="sd_loading_details_error">loading details failed</string>
+    <string name="sd_loading_summaries_error">loading summaries failed</string>
+    <string name="sd_loading_results_error">loading results failed</string>
+    <string name="sd_create_small_data">创建问卷</string>
+    <string name="sd_check_created_small_data">创建的问卷</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

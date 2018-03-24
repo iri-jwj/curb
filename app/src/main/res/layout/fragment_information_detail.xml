@@ -1,52 +1,79 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/info_detail_constraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:layout_height="match_parent"
     tools:context="jxpl.scnu.curb.immediateInformation.informationDetails.InformationDetailFragment">
 
 
     <ImageView
         android:id="@+id/informationKind"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:contentDescription="@string/arrangement" />
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/info_image_description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/informationTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/informationKind"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <TextView
+        android:id="@+id/info_detail_type"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="@dimen/text_body2"
+        android:textAppearance="@style/TextAppearance.Design.Hint"
+        app:layout_constraintStart_toEndOf="@+id/informationKind"
+        app:layout_constraintTop_toBottomOf="@+id/informationTitle" />
 
-        <TextView
-            android:id="@+id/info_detail_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:textAppearance="@style/TextAppearance.Design.Hint" />
+    <TextView
+        android:id="@+id/info_detail_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="@dimen/text_body2"
+        android:textAppearance="@style/TextAppearance.Design.Hint"
+        app:layout_constraintStart_toEndOf="@+id/info_detail_type"
+        app:layout_constraintTop_toBottomOf="@+id/informationTitle" />
 
-        <TextView
-            android:id="@+id/info_detail_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:textAppearance="@style/TextAppearance.Design.Hint" />
-    </LinearLayout>
 
     <TextView
         android:id="@+id/info_detail_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="@dimen/text_body"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/informationKind" />
 
     <TextView
         android:id="@+id/info_detail_content_url"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="@dimen/text_body2"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/info_detail_content" />
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

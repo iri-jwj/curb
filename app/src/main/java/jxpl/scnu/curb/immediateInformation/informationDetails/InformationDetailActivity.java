@@ -30,7 +30,7 @@ public class InformationDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_information_detail);
         unbinder = ButterKnife.bind(this);
 
-        String infoId = getIntent().getStringExtra(INFO_ID);
+        int infoId = getIntent().getIntExtra(INFO_ID, 0);
         ActivityUtil.setFragmentManagerNotHome(getSupportFragmentManager());
         ActivityUtil.setContainerViewNotHome(R.id.detail_info_frame);
 
@@ -39,7 +39,7 @@ public class InformationDetailActivity extends AppCompatActivity {
         ActivityUtil.addFragmentNotInHomePage(informationDetailFragment);
 
         InformationDetailPresenter informationDetailPresenter = new InformationDetailPresenter(infoId,
-                InformationRepository.getInstance(InformationLocalDataSource.getInstace(this),
+                InformationRepository.getInstance(InformationLocalDataSource.getInstance(this),
                         InformationRemoteDataSource.getInstance())
                 , informationDetailFragment);
         ActivityUtil.setCurrentFragmentNotInHome();

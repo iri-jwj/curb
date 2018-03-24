@@ -3,6 +3,7 @@ package jxpl.scnu.curb.smallData;
 
 import android.content.Context;
 
+import java.io.File;
 import java.util.List;
 
 import jxpl.scnu.curb.BasePresenter;
@@ -16,7 +17,6 @@ public interface SmallDataInterface {
 
         void changeBack();*/
 
-        void markAnswered();
 
         void showError(String error);
 
@@ -32,22 +32,18 @@ public interface SmallDataInterface {
     }
 
     interface Presenter extends BasePresenter {
-        void saveAnswerToMap(String key, String value);
+        void saveAnswerToMap(int questionNum, int chosen);
+
+        void setSummary(SDSummary para_summary);
 
         void commitAnswer();
 
-        void loadResult();
+        void markAnswered(String summary_id);
 
-        void loadSummaries(boolean forceUpdate);//获取
+        Context getContextInPresenter();
+
+        void loadSummaries(boolean forceUpdate, int direction);//获取
 
         void loadDetails(String summaryId);
-
-        void loadCreatedSummaries();
-
-        void loadCreatedDetails();
-
-        void saveCreatedSummary(SDSummaryCreate para_sdSummaryCreate);
-
-        void saveCreatedDetail(SDDetail para_sdDetail);//前台保存时为单个单个保存
     }
 }

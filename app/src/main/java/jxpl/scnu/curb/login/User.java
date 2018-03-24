@@ -10,5 +10,27 @@ package jxpl.scnu.curb.login;
  */
 
 public class User {
+    private int userId;
+    private String name;
 
+    public User(int para_userId, String para_name) {
+        userId = para_userId;
+        name = para_name;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int para_userId) {
+        userId = para_userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String para_name) {
+        name = para_name;
+    }
 }

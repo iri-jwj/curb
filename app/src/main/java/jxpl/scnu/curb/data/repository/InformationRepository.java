@@ -27,7 +27,7 @@ public class InformationRepository implements InformationDataSource {
     private InformationLocalDataSource informationLocalDataSource;
     private InformationRemoteDataSource informationRemoteDataSource;
 
-    private Map<String, ImmediateInformation> cachedInfo = new LinkedHashMap<>();
+    private Map<Integer, ImmediateInformation> cachedInfo = new LinkedHashMap<>();
     private boolean cachedIsDirty = true;
 
     private InformationRepository(@NonNull InformationLocalDataSource informationLocalDataSource,
@@ -46,7 +46,7 @@ public class InformationRepository implements InformationDataSource {
 //    public static void destoryInstance(){INSTANCE=null;}
 
     @Override
-    public void getInformation(@NonNull final getInformationCallback callback, @NonNull String id) {
+    public void getInformation(@NonNull final getInformationCallback callback, int id) {
         checkNotNull(callback);
         //首先在缓存中查找是否存在，若不存在，再去数据库中查询
         if (cachedInfo.containsKey(id)) {
@@ -103,7 +103,6 @@ public class InformationRepository implements InformationDataSource {
         informationRemoteDataSource.getInformations(new loadInformationCallback() {
             @Override
             public void getInformationsLoaded(List<ImmediateInformation> immediateInformations) {
-                Log.d("InformationRepository", "getInformationFromRemote: Loaded" + immediateInformations.get(1).getTitle());
                 refreshCached(immediateInformations);
                 saveInfoFromWeb(immediateInformations);
                 callback.getInformationsLoaded(immediateInformations);
@@ -123,7 +122,7 @@ public class InformationRepository implements InformationDataSource {
             cachedInfo.clear();
         for (ImmediateInformation i :
                 immediateInformations) {
-            cachedInfo.put(i.getId(), i);
+            cachedInfo.put(i.getHomeworkId(), i);
             Log.d("InformationRepository", "refreshCached: " + i.getTitle());
         }
         cachedIsDirty = false;
