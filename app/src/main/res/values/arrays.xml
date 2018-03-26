@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="information_belong">
+        <item>勤工助学信息</item>
+        <item>社团活动信息</item>
+        <item>团学社青信息</item>
+        <item>班级活动信息</item>
+    </string-array>
+    <string-array name="information_unit">
+        <item>勤工助学管理中心</item>
+        <item>社团</item>
+        <item>团学社青</item>
+        <item>班级</item>
+    </string-array>
+</resources>

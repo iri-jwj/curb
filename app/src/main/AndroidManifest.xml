@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".immediateInformation.informationDetails.InformationDetailActivity"
+            android:name=".immediateInformation.informationCreate.InformationCreateActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.INFO_DETAIL" />

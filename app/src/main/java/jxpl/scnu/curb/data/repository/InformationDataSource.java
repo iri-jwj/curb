@@ -3,38 +3,88 @@ package jxpl.scnu.curb.data.repository;
 import android.support.annotation.NonNull;
 
 import java.util.List;
+import java.util.UUID;
 
 import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
 
 /**
- * Created by irijw on 2017/10/15.
- * all great things are simple,
- * and many can be expressed in single words:
- * freedom, justice, honor, duty, mercy, hope.
- * --Winsdon Churchill
+ * @author iri-jwj
+ * @version 2
+ * last update 3/25
+ * 修改addToArrangement(ImmediateInformation)为addToReminder(ImmediateInformation)
+ * 新增注释
  */
 
 public interface InformationDataSource {
-    void getInformation(@NonNull getInformationCallback callback, int id);
+    /**
+     * 获取单个Information
+     *
+     * @param callback 获取单个information的回调函数
+     * @param id       目标information的id
+     */
+    void getInformation(@NonNull GetInformationCallback callback, UUID id);
 
-    void getInformations(@NonNull loadInformationCallback callback);
+    /**
+     * 获取多个information用于显示
+     *
+     * @param callback  装载information的回调函数
+     * @param userId    用户id
+     * @param timestamp 用户执行查询的时间
+     */
+    void getInformations(@NonNull LoadInformationCallback callback,
+                         String userId, String timestamp);
 
+    /**
+     * 将从网络中获取到的information保存到本地数据库
+     * @param immediateInformations 待保存的information
+     */
     void saveInfoFromWeb(List<ImmediateInformation> immediateInformations);
 
+    /**
+     * 刷新repository中的map缓存
+     * @see InformationRepository#cachedInfo
+     */
     void refreshInformation();
 
-    void addToArrangement(ImmediateInformation immediateInformation);
+    /**
+     * 将目标information添加到提醒中
+     *
+     * @param immediateInformation 目标information
+     */
+    void addToReminder(ImmediateInformation immediateInformation);
 
-    interface loadInformationCallback {
+    /**
+     * 将用户创建的information发送至服务器
+     *
+     * @param para_callback 回调函数，在发送成功和失败时调用不同的函数
+     * @param information   待发送的information
+     * @param userId        当前用户id
+     */
+    void postInformation(PostInformationCallback para_callback,
+                         String information,
+                         String userId);
+
+    /**
+     * 装载information信息的回调接口
+     */
+    interface LoadInformationCallback {
         void getInformationsLoaded(List<ImmediateInformation> immediateInformations);
 
         void onDataNotAvailable();
     }
 
-    interface getInformationCallback {
+    /**
+     * 获取单个information的回调接口
+     */
+    interface GetInformationCallback {
         void onInformationLoaded(ImmediateInformation immediateInformation);
 
         void onDataNotAvailable();
     }
 
+    interface PostInformationCallback {
+        void onInformationPosted();
+
+        void onPostFailed();
+    }
 }

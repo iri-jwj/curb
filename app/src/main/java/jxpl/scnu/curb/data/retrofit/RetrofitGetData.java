@@ -1,5 +1,6 @@
 package jxpl.scnu.curb.data.retrofit;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.File;
@@ -25,22 +26,26 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * 建立网络连接、发送接收数据
  * 尽量不执行数据的处理操作
+ * @author iri-jwj
+ * @version 2
+ * last update 2018/3/25
+ * 更新获取information的代码，添加参数 timestamp:String ,userId:String
  */
 public class RetrofitGetData {
     private static Retrofit retrofit = new Retrofit.Builder().baseUrl("http://39.108.105.150:8080")
             .addConverterFactory(GsonConverterFactory.create()).build();
     private static ServerInterface serverInterface = retrofit.create(ServerInterface.class);
 
-    public static List<ImmediateInformation> getDataFromWeb() {
+    public static List<ImmediateInformation> getInformationInRetrofit(@NonNull String userId,
+                                                                      @NonNull String timestamp) {
         Call<List<ImmediateInformation>> immediateInformationCall =
-                serverInterface.getInfoFromServer(2);
+                serverInterface.postInformation(userId, timestamp);
         Response<List<ImmediateInformation>> response;
         List<ImmediateInformation> immediateInformations = new ArrayList<>();
         try {
             response = immediateInformationCall.execute();
             if (response.isSuccessful()) {
                 immediateInformations = response.body();
-                Log.d("RESPONSE", "SUCCEED" + immediateInformations.size());
                 Log.d("RESPONSE", immediateInformations.get(1).getTitle());
             } else {
                 Log.d("RESPONSE", "FAIL");
@@ -49,6 +54,21 @@ public class RetrofitGetData {
             E.printStackTrace();
         }
         return immediateInformations;
+    }
+
+    public static String postCreateInformation(@NonNull String userId, @NonNull String information) {
+        RequestBody lc_requestBody = RequestBody
+                .create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), information);
+        Call<String> lc_stringCall = serverInterface.postCreateInformation(lc_requestBody, userId);
+        Response<String> lc_response = null;
+        try {
+            lc_response = lc_stringCall.execute();
+        } catch (IOException para_e) {
+            para_e.printStackTrace();
+        }
+        if (lc_response != null && lc_response.isSuccessful() && lc_response.body() != null)
+            return lc_response.body();
+        else return null;
     }
 
     public static boolean postLogin(String account, String password) {
