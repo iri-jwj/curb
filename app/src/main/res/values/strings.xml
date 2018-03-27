@@ -71,6 +71,17 @@
     <string name="sd_create_small_data">创建问卷</string>
     <string name="sd_check_created_small_data">创建的问卷</string>
 
+
+    <!--
+       lifumin
+       2018-03-23
+       注册模块：用户名,Log In,
+       -->
+    <!-- Strings related to register -->
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_register">Sign up</string>
+    <string name="prompt_account">Account</string>
+    <string name="prompt_register_password">Password</string>
+    <string name="prompt_confirm_password">Confirm Password</string>
 </resources>

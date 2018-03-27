@@ -19,6 +19,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -41,6 +43,7 @@ import butterknife.ButterKnife;
 import jxpl.scnu.curb.R;
 import jxpl.scnu.curb.data.retrofit.RetrofitGetData;
 import jxpl.scnu.curb.homePage.HomePageActivity;
+import jxpl.scnu.curb.register.RegisterActivity;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -57,8 +60,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     AutoCompleteTextView loginAccount;
     @BindView(R.id.password)
     EditText password;
-    @BindView(R.id.sign_in_button)
-    Button SignInButton;
+    //    @BindView(R.id.sign_in_button)
+//    Button SignInButton;
     @BindView(R.id.email_login_form)
     LinearLayout emailLoginForm;
     @BindView(R.id.login_form)
@@ -66,7 +69,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @BindView(R.id.login_linear)
     LinearLayout loginLinear;
 
-    public static int userid;
+    /**
+     * 2018-03-24
+     * lifumin
+     * 添加一个注册的textview，有点击事件
+     *
+     */
+    @BindView(R.id.registerTextView)
+    TextView registerTextView;
+    @BindView(R.id.signin_image)
+    ImageView signinLogo;
+
+    /**
+     * Keep track of the login task to ensure we can cancel it if requested.
+     */
 
     // UI references.
     @Override
@@ -86,12 +102,60 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
         });
-        SignInButton.setOnClickListener(new OnClickListener() {
+//        SignInButton.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                attemptLogin();
+//            }
+//        });
+        /**
+         * 2018-03-24
+         * lifumin
+         * 用logo代替了上面的登录按钮
+         */
+        signinLogo.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
+                Log.d("lifumin", "onClick:点击了登录logo ");
                 attemptLogin();
             }
         });
+        /**
+         * 2018-03-24
+         * lifumin
+         * 给注册的textview添加按钮事件，跳转到注册页面
+         * 从注册页面回到此页面时，会回调onActivityResult(int requestCode, int resultCode, Intent data)函数
+         */
+        registerTextView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("lifumin", "onClick:点击了注册 ");
+                Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivityForResult(registerIntent,1);
+            }
+        });
+    }
+
+    /**
+     * 2018-03-24
+     * lifumin
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     * 从注册页面返回的时候，获取注册页面传过来的值并填充在账号和密码的edittext上面
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case 1:
+                if(resultCode == RESULT_OK){
+                    loginAccount.setText(data.getStringExtra("return_account"));
+                    password.setText(data.getStringExtra("return_password"));
+                    //todo：可以在这里写将用户基本信息插入到数据库的逻辑
+                }
+                break;
+            default:break;
+        }
     }
 
     private void populateAutoComplete() {
@@ -216,13 +280,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     LoginActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getBaseContext(), "111", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getBaseContext(),"111",Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
             }
         });
         thread.start();
+        Intent intent = new Intent(LoginActivity.this,
+                HomePageActivity.class);
+        startActivity(intent);
+        LoginActivity.this.finish();
     }
 
     private boolean isEmailValid(String email) {

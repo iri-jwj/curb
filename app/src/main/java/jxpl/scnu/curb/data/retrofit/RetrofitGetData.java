@@ -73,7 +73,7 @@ public class RetrofitGetData {
 
     public static boolean postLogin(String account, String password) {
         boolean isLoginSucceed = false;
-        Call<String> loginCall = serverInterface.postLogin(2, account, password);
+        Call<String> loginCall = serverInterface.postLogin( account, password);
         Response<String> response;
         try {
             response = loginCall.execute();
@@ -92,6 +92,41 @@ public class RetrofitGetData {
         return isLoginSucceed;
     }
 
+    /**
+     * 2018-03-24
+     * lifumin
+     * @param registerId
+     * @param account
+     * @param password
+     * @return
+     * 注册后台逻辑的实现
+     */
+    public static boolean postRegister(String registerId,String account,String password){
+        boolean isRegisterSucceed = false;
+
+        Call<String> registerCall = serverInterface.postRegister(registerId, account, password);
+        Response<String> response;
+
+        try {
+            response = registerCall.execute();
+            String result = response.body();
+            if(response.isSuccessful()){
+                if(result.equals("111")){
+                    Log.d("Retrofit", "postRegister: "+response.body().toString());
+                    isRegisterSucceed = true;
+                }else{
+                    Log.d("Retrofit", "postRegister: " + "resultWrong");
+                }
+
+            }else{
+                Log.d("Retrofit", "postRegister: " + "ResponseWrong" + result);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return isRegisterSucceed;
+    }
     @Nullable
     public static List<SDDetail> postSmallDataDetail(String id) {
         Call<List<SDDetail>> sdDetailCall = serverInterface.postSmallDataDetail(id);
