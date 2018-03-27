@@ -31,15 +31,15 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import jxpl.scnu.curb.R;
-import jxpl.scnu.curb.immediateInformation.informationDetails.InformationDetailActivity;
+import jxpl.scnu.curb.immediateInformation.informationCreate.InformationCreateActivity;
 import jxpl.scnu.curb.utils.ScrollChildSwipeRefreshLayout;
 import me.wcy.htmltext.HtmlImageLoader;
 import me.wcy.htmltext.HtmlText;
@@ -136,22 +136,14 @@ public class InformationFragment extends Fragment implements InformationContract
         unbinder.unbind();
     }
 
-    /**
-     * @param immediateInformations 等待显示的资讯信息
-     *                              调用adapter中的replaceInfo(List)方法替换显示的信息
-     *                              {@link InfoAdapter#replaceInfo(List)}
-     */
+
     @Override
     public void showInfo(List<ImmediateInformation> immediateInformations) {
         Log.d("informationFragment", "showInfo: " + immediateInformations.isEmpty());
         m_minfoAdapter.replaceInfo(immediateInformations);
     }
 
-    /**
-     *
-     * @param active 指示loading状态旋转小圈是否显示
-     * 用于显示数据加载时的指示圈
-     */
+
     @Override
     public void setLoadingIndicator(final boolean active) {
         if (getView() == null)
@@ -164,12 +156,6 @@ public class InformationFragment extends Fragment implements InformationContract
         });
     }
 
-    /**
-     *
-     * @param type information的类型
-     * @return 返回所需要获取的图片id
-     * 根据目标information的type来选择drawable中的图片id
-     */
     @Override
     public int getImageIdByType(String type) {
         int imageId;
@@ -194,48 +180,31 @@ public class InformationFragment extends Fragment implements InformationContract
         return isAdded();
     }
 
-
-    /**
-     * @deprecated at 3.24
-     * @param id information的id
-     * @param context 应用上下文
-     */
     @Override
-    public void showInformationDetailsUi(int id, Context context) {
-        Intent intent = new Intent(context, InformationDetailActivity.class);
-        intent.putExtra(InformationDetailActivity.INFO_ID, id);
+    public void showInformationDetailsUi(UUID id, Context context) {
+        Intent intent = new Intent(context, InformationCreateActivity.class);
+        intent.putExtra(InformationCreateActivity.INFO_ID, id);
         startActivity(intent);
     }
 
-    /**
-     * 显示装载信息时发生错误
-     */
+
     @Override
     public void showLoadingError() {
         showLoadingErrorMessage(getString(R.string.info_loading_error));
     }
 
-    /**
-     * 显示没有信息的错误
-     */
+
     @Override
     public void showNoInfo() {
         showLoadingErrorMessage(getString(R.string.info_nothing));
     }
 
-    /**
-     * 显示没有新信息的错误
-     */
+
     @Override
     public void showNoNewInfo() {
         showLoadingErrorMessage(getString(R.string.info_no_new_info_error));
     }
 
-    /**
-     * 用于判断当前的adapter中是否已经存在信息
-     *
-     * @return 当前adapter中的list条目数量
-     */
     @Override
     public boolean isListShowing() {
         return m_minfoAdapter.getItemCount() == 0;
@@ -250,11 +219,7 @@ public class InformationFragment extends Fragment implements InformationContract
         Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
     }
 
-    /**
-     * 获取当前adapter中显示着的List
-     *
-     * @return List<ImmediateInformation>
-     */
+
     @Override
     public List<ImmediateInformation> getCurrentList() {
         return m_minfoAdapter.getInformation();

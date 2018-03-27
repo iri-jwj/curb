@@ -20,7 +20,12 @@ import jxpl.scnu.curb.smallData.SDSummaryCreate;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-
+/**
+ * @author iri-jwj
+ * @version 2
+ *          last update 3/25
+ *          更新了数据库的设计
+ */
 public class SmallDataLocalDataSource implements SmallDataDataSource {
     private static SmallDataLocalDataSource stc_smallDataLocalDataSource;
     private CurbDbHelper m_curbDbHelper;

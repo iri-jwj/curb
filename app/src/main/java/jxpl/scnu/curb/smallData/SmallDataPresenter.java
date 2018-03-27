@@ -48,14 +48,7 @@ public class SmallDataPresenter implements SmallDataInterface.Presenter {
     }
 
 
-    /**
-     * 用于提交用户填写的问卷
-     * 通过 checkHaveFinished() 判断用户是否已经完成问卷
-     *
-     * @see this#checkHaveFinished
-     * 若已完成则for循环中将 {@link this#answerTemp} 中的内容存至 {@see this#answer}
-     * 否则调用 {@see this#smallDataView} 中的showError方法提示未完成所有题目
-     */
+
     @Override
     public void commitAnswer() {
         if (checkHaveFinished()) {
@@ -88,12 +81,7 @@ public class SmallDataPresenter implements SmallDataInterface.Presenter {
         m_smallDataRepository.markAnswered(summaryId);
     }
 
-    /**
-     * 此处将用户正在填写问卷的信息记录到 answerTemp 中
-     *
-     * @param questionNum 题号
-     * @param chosen      选择的值
-     */
+
     @Override
     public void saveAnswerToMap(int questionNum, int chosen) {
         SDAnswer lc_sdAnswer = new SDAnswer(m_sdSummaryAnswering.getId(), questionNum, chosen);
@@ -162,6 +150,9 @@ public class SmallDataPresenter implements SmallDataInterface.Presenter {
     }
 
 
+    /**
+     * 内部类，用于将答案保存为服务器需要的格式
+     */
     private class CreatedAnswer {
         private String user_id;
         private String st_id;

@@ -14,12 +14,13 @@ public class CurbDbHelper extends SQLiteOpenHelper {
     private static final String COMMA_SEP = ",";
     private static final String SQL_CREATE_INFORMATION_ENTRIES =
             "CREATE TABLE " + PersistenceContract.informationEntry.TABLE_NAME + "(" +
-                    PersistenceContract.informationEntry.COLUMN_NAME_ID + INT_TYPE + " PRIMARY KEY, " +
+                    PersistenceContract.informationEntry.COLUMN_NAME_ID + TEXT_TYPE + " PRIMARY KEY, " +
                     PersistenceContract.informationEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.informationEntry.COLUMN_NAME_CONTENT + TEXT_TYPE + COMMA_SEP +
-                    PersistenceContract.informationEntry.COLUMN_NAME_DATE + TIMESTAMP_TYPE + COMMA_SEP +
-                    PersistenceContract.informationEntry.COLUMN_NAME_TYPE + TEXT_TYPE + COMMA_SEP +
-                    PersistenceContract.informationEntry.COLUMN_NAME_CONTENT_URL + TEXT_TYPE +
+                    PersistenceContract.informationEntry.COLUMN_NAME_BELONG + TEXT_TYPE + COMMA_SEP +
+                    PersistenceContract.informationEntry.COLUMN_NAME_CREATETIME + TEXT_TYPE + COMMA_SEP +
+                    PersistenceContract.informationEntry.COLUMN_NAME_TIME + TEXT_TYPE + COMMA_SEP +
+                    PersistenceContract.informationEntry.COLUMN_NAME_ADDRESS + TEXT_TYPE + COMMA_SEP +
                     ")";
     private static final String SQL_CREATE_ACCOUNT_ENTRIES =
             "CREATE TABLE " + PersistenceContract.AccountEntry.TABLE_NAME + "(" +

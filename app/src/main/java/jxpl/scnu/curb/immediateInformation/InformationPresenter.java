@@ -2,13 +2,14 @@ package jxpl.scnu.curb.immediateInformation;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import jxpl.scnu.curb.data.repository.InformationDataSource;
 import jxpl.scnu.curb.data.repository.InformationRepository;
@@ -43,16 +44,15 @@ public class InformationPresenter implements InformationContract.Presenter, Seri
         loadInformation(false);
     }
 
-    /**
-     * {void getInformationFromRepository()}
-     * 从Repository中获取资讯信息
-     * 3.24更新：取消了分类机制，直接显示所有信息;
-     * 将在View中Adapter中对新资讯与旧资讯的相同判断逻辑放到此处
-     */
+
     @Override
     public void getInformationFromRepository() {
 
-        informationRepository.getInformations(new InformationDataSource.loadInformationCallback() {
+        SimpleDateFormat lc_simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss",
+                Locale.CHINA);
+        Date lc_date = new Date(System.currentTimeMillis());
+        String timestamp = lc_simpleDateFormat.format(lc_date);
+        informationRepository.getInformations(new InformationDataSource.LoadInformationCallback() {
             @Override
             public void getInformationsLoaded(List<ImmediateInformation> immediateInformationsFromCB) {
                 /*for (ImmediateInformation i :
@@ -115,31 +115,23 @@ public class InformationPresenter implements InformationContract.Presenter, Seri
                 informationView.showLoadingError();
                 Log.d("getInfoFromR", "failed");
             }
-        });
-
+        }, "", timestamp);
+        //todo 替换这里的userid
     }
 
-    /**
-     *@deprecated
-     */
+
     @Override
     public String getFiltering() {
         return currentFilter.toString();
     }
 
-    /**
-     * @deprecated
-     * @param filtering 筛选的目的信息
-     */
+
     @Override
     public void setFiltering(String filtering) {
         currentFilter = InformationFilter.valueOf(filtering);
     }
 
-    /**
-     * @param forceUpdate 判断是否强制刷新，即强制从网络获取最新信息
-     * 判断是否是第一次刷新，然后调用真正的装载信息的方法{@link #loadInformations(boolean)}
-     */
+
     @Override
     public void loadInformation(boolean forceUpdate) {
         loadInformations(forceUpdate || firstLoad);
@@ -162,7 +154,6 @@ public class InformationPresenter implements InformationContract.Presenter, Seri
     }
 
     /**
-     *
      * @param immediateInformations 需要检查的List
      * 若内容是空的，则调用view中的方法显示没有消息
      * @see InformationFragment#showNoInfo()
@@ -184,16 +175,11 @@ public class InformationPresenter implements InformationContract.Presenter, Seri
         }
     }
 
-    /**
-     * @deprecated
-     * @param immediateInformation 需要显示详细的information
-     * @param context 应用上下文
-     */
     @Override
     public void openInformationDetails(@NonNull ImmediateInformation immediateInformation, @NonNull Context context) {
         checkNotNull(immediateInformation);
         checkNotNull(context);
-        informationView.showInformationDetailsUi(immediateInformation.getHomeworkId(), context);
+        informationView.showInformationDetailsUi(immediateInformation.getId(), context);
     }
 
 }

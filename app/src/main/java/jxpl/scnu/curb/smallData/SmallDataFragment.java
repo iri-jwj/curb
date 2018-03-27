@@ -137,7 +137,11 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
         return isAdded();
     }
 
-
+    /**
+     * 显示等待界面
+     *
+     * @param direction 获取信息的方向
+     */
     private void setLoadingIndicator(boolean direction) {
         if (direction) {
             Snackbar.make(checkNotNull(getView()), R.string.sd_loading_new_SD, 1500);
@@ -153,6 +157,10 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
         showSummary(m_sdSummaries.get(indexForSummary));
     }
 
+    /**
+     * 内部调用的显示summary的方法，前台单个单个显示
+     * @param para_sdSummary 目标 summary
+     */
     private void showSummary(final SDSummary para_sdSummary) {
         final String title = para_sdSummary.getTitle();
         final String description = para_sdSummary.getDescription();
@@ -214,6 +222,10 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
         showDetail(para_sdDetails.get(indexForDetail));
     }
 
+    /**
+     * 内部调用的显示方法，单个显示
+     * @param para_sdDetail 要显示的detail
+     */
     private void showDetail(SDDetail para_sdDetail) {
         final String question = para_sdDetail.getQuestion();
         final String optionOne = para_sdDetail.getOptionOne();

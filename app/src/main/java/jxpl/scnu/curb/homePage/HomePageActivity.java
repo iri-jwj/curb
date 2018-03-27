@@ -76,6 +76,9 @@ public class HomePageActivity extends AppCompatActivity
         initFragment();//初始化其它fragments
     }
 
+    /**
+     * 初始化Homepage中寄存的3个Fragment
+     */
     private void initFragment() {
         SmallDataFragment lc_smallDataFragment = SmallDataFragment.newInstance();
         ActivityUtil.addFragmentInHomePage(R.id.nav_river, new RiverFragment());

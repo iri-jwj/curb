@@ -34,6 +34,14 @@
     <string name="info_image_description">information type</string>
     <string name="info_no_new_info_error">have not new information</string>
 
+    <string name="add_info_title">标题：</string>
+    <string name="add_info_content">内容：</string>
+    <string name="add_info_time">时间：</string>
+    <string name="add_info_address">地址：</string>
+    <string name="add_info_belong">类别：</string>
+    <string name="add_info_unit">单位：</string>
+    <string name="add_info_commit">提交</string>
+
 
     <!-- Strings related to login -->
     <string name="prompt_email">ID</string>
