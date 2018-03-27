@@ -28,12 +28,13 @@ import retrofit2.http.Query;
 
 public interface ServerInterface {
     //获取information
-    /*@GET("/showUnfinishHomework/{userid}")
-    Call<List<ImmediateInformation>> getInfoFromServer(@Path("userid") int id);*/
+    @GET("/showUnfinishHomework/{userid}")
+    Call<List<ImmediateInformation>> getInfoFromServer(@Path("userid") int id);
 
-    @POST("/logintest")
-    Call<String> postLogin(@Query("id") int id, @Query("userName") String userName,
-                           @Query("password") String password);
+    //登陆
+//    @POST("/logintest")
+//    Call<String> postLogin(@Query("id") int id, @Query("userName") String userName,
+//                           @Query("password") String password);
 
     /**
      * 获取最新的资讯（information）的接口
@@ -126,4 +127,26 @@ public interface ServerInterface {
      */
     @GET("curb/smalldata/questionresult")
     Call<List<SDResult>> getSDResult(@Query("st_id") String summaryId);
+
+    /**
+     * lfumin
+     * 2018-03-23
+     * 注册接口
+     */
+    @POST("curb/account/register")
+    Call<String> postRegister(@Query("id") String id, @Query("account") String userName,
+                              @Query("password") String password);
+
+    /**
+     * lfumin
+     * 2018-03-23
+     *
+     * @param userName
+     * @param password
+     * @return
+     * 用户的登录入口
+     */
+    @POST("/curb/account/login")
+    Call<String> postLogin(@Query("userName") String userName,
+                           @Query("password") String password);
 }
