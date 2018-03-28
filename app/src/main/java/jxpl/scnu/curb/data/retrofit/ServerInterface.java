@@ -3,6 +3,7 @@ package jxpl.scnu.curb.data.retrofit;
 import java.util.List;
 
 import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
+import jxpl.scnu.curb.scholat.ScholatHomework;
 import jxpl.scnu.curb.smallData.SDAnswer;
 import jxpl.scnu.curb.smallData.SDDetail;
 import jxpl.scnu.curb.smallData.SDResult;
@@ -22,14 +23,23 @@ import retrofit2.http.Query;
 /**
  * @author iri-jwj
  * @version 2
- * last update 3/25
+ * update 3/25
  * 获取information的接口添加参数 userId:String , timestamp:String
+ * update 3/27
+ * 修改获取学者网信息的接口
  */
 
 public interface ServerInterface {
     //获取information
-    @GET("/showUnfinishHomework/{userid}")
-    Call<List<ImmediateInformation>> getInfoFromServer(@Path("userid") int id);
+
+    /**
+     * 获取学者网的作业信息
+     *
+     * @param id 用户的id
+     * @return 返回作业列表
+     */
+    @POST("curb/scholat/showUnfinishHomework")
+    Call<List<ScholatHomework>> getHomework(@Query("userid") String id);
 
     //登陆
 //    @POST("/logintest")
