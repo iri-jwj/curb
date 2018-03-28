@@ -5,8 +5,10 @@ import android.provider.BaseColumns;
 /**
  * @author iri-jwj
  * @version 2
- *          last update 3/25
- *          更新了information的表结构
+ * update 3/25
+ * 更新了information的表结构
+ * update 3/27
+ * 新增了scholat的数据表
  */
 final class PersistenceContract {
     private PersistenceContract() {
@@ -25,6 +27,15 @@ final class PersistenceContract {
         //static final String COLUMN_NAME_CONTENT_URL = "contentUrl";
     }
 
+    static abstract class ScholatEntry implements BaseColumns {
+        static final String TABLE_NAME = "scholatHomework";
+        static final String COLUMN_NAME_ID = "id";
+        static final String COLUMN_NAME_TITLE = "title";
+        static final String COLUMN_NAME_CONTENT = "content";
+        static final String COLMN_NAME_ENDTIME = "endtime";
+        static final String COLUMN_NAME_CREATETIME = "createtime";
+
+    }
     static abstract class AccountEntry implements BaseColumns {
         static final String COLUMN_NAME_ID = "id";
         static final String TABLE_NAME = "accountManage";

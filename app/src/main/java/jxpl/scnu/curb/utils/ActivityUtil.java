@@ -6,7 +6,10 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.util.SparseArray;
 
-
+/**
+ * @author iri-jwj
+ * @version 1
+ */
 public class ActivityUtil {
 
     private static final SparseArray<Fragment> fragments = new SparseArray<>();

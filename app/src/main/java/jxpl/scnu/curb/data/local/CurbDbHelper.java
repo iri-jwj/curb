@@ -4,7 +4,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-
+/**
+ * @author iri-jwj
+ * @version 2
+ *          update 3/27
+ *          新增 scholat 数据表的创建方法
+ */
 public class CurbDbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "Information.db";
@@ -63,12 +68,19 @@ public class CurbDbHelper extends SQLiteOpenHelper {
                     ")";
     private static final String SQL_CREATE_SDDETIALCREATE_ENTRIES =
             "CREATE TABLE " + PersistenceContract.SDDetailCreate.TABLE_NAME + "(" +
-                    PersistenceContract.SDDetailCreate.COLUMN_NAME_SUMMARYID + TEXT_TYPE +
+                    PersistenceContract.SDDetailCreate.COLUMN_NAME_SUMMARYID + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.SDDetailCreate.COLUMN_NAME_NUM + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.SDDetailCreate.COLUMN_NAME_QUESTION + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.SDDetailCreate.COLUMN_NAME_OPTION1 + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.SDDetailCreate.COLUMN_NAME_OPTION2 + TEXT_TYPE +
                     ")";
+    private static final String SQL_CREATE_SCHOLAT_ENTRIES =
+            "CREATE TABLE" + PersistenceContract.ScholatEntry.TABLE_NAME + "(" +
+                    PersistenceContract.ScholatEntry.COLUMN_NAME_ID + TEXT_TYPE + "PRIMARY KEY" +
+                    PersistenceContract.ScholatEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
+                    PersistenceContract.ScholatEntry.COLUMN_NAME_CONTENT + TEXT_TYPE + COMMA_SEP +
+                    PersistenceContract.ScholatEntry.COLMN_NAME_ENDTIME + TEXT_TYPE + COMMA_SEP +
+                    PersistenceContract.ScholatEntry.COLUMN_NAME_CREATETIME + TIMESTAMP_TYPE + ")" ;
 
     CurbDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -83,6 +95,7 @@ public class CurbDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_SDANSWER_ENTRIES);
         sqLiteDatabase.execSQL(SQL_CREATE_SDSUMMARYCREATE_ENTRIES);
         sqLiteDatabase.execSQL(SQL_CREATE_SDDETIALCREATE_ENTRIES);
+        sqLiteDatabase.execSQL(SQL_CREATE_SCHOLAT_ENTRIES);
     }
 
     @Override

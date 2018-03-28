@@ -7,11 +7,8 @@ import android.util.AttributeSet;
 import android.view.View;
 
 /**
- * Created by irijw on 2017/9/8.
- * all great things are simple,
- * and many can be expressed in single words:
- * freedom, justice, honor, duty, mercy, hope.
- * --Winsdon Churchill
+ * @author iri-jwj
+ * @version 1
  */
 
 

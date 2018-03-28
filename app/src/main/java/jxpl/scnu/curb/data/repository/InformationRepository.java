@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -76,7 +77,7 @@ public class InformationRepository implements InformationDataSource {
         checkNotNull(callback);
 
         if (!cachedInfo.isEmpty() && !cachedIsDirty) {
-            callback.getInformationsLoaded(new ArrayList<>(cachedInfo.values()));
+            callback.getInformationsLoaded(new LinkedList<>(cachedInfo.values()));
             return;
         }
         final Thread thread = new Thread(new Runnable() {

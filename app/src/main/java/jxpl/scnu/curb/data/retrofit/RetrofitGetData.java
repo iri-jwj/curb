@@ -6,11 +6,13 @@ import android.util.Log;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
 import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
+import jxpl.scnu.curb.scholat.ScholatHomework;
 import jxpl.scnu.curb.smallData.SDAnswer;
 import jxpl.scnu.curb.smallData.SDDetail;
 import jxpl.scnu.curb.smallData.SDResult;
@@ -22,6 +24,8 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * 建立网络连接、发送接收数据
@@ -56,6 +60,23 @@ public class RetrofitGetData {
         return immediateInformations;
     }
 
+    public static List<ScholatHomework> getHomeworkFromServer(String userId) {
+        List<ScholatHomework> lc_homeworks = new LinkedList<>();
+
+        Call<List<ScholatHomework>> lc_homeworkCall = serverInterface.getHomework(userId);
+        Response<List<ScholatHomework>> lc_response;
+        try {
+            lc_response = lc_homeworkCall.execute();
+            if (lc_response.isSuccessful() && lc_response.body() != null) {
+                lc_homeworks.addAll(checkNotNull(lc_response.body()));
+                return lc_homeworks;
+            } else
+                return null;
+        } catch (IOException para_e) {
+            para_e.printStackTrace();
+        }
+        return null;
+    }
     public static String postCreateInformation(@NonNull String userId, @NonNull String information) {
         RequestBody lc_requestBody = RequestBody
                 .create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), information);
