@@ -217,8 +217,8 @@ public class CreateFragment extends Fragment implements CreateInterface.View {
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             holder.m_QuestionTitle.setText(m_detailList.get(position).getQuestion());
-            holder.m_QuestionOne.setText(m_detailList.get(position).getOptionOne());
-            holder.m_QuestionTwo.setText(m_detailList.get(position).getOptionTwo());
+            holder.m_QuestionOne.setText(m_detailList.get(position).getOption1());
+            holder.m_QuestionTwo.setText(m_detailList.get(position).getOption2());
         }
 
         @Override

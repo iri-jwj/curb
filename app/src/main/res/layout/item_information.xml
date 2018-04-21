@@ -1,113 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/info_item_constraint"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/info_item_out_parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/recycler_item_touch">
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageButton
-            android:id="@+id/info_item_imagebutton_more"
-            android:layout_width="24dp"
-            android:layout_height="12dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/ic_info_item_more" />
-
-        <ImageView
-            android:id="@+id/info_item_image"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/info_item_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textSize="@dimen/text_body2"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <TextView
-            android:id="@+id/info_item_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="8dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="3dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textSize="@dimen/text_title"
-            app:layout_constraintBottom_toTopOf="@+id/info_item_imagebutton_more"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/info_item_image"
-            app:layout_constraintTop_toTopOf="parent" />
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/item_info_container"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:id="@+id/item_capacity"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/item_info_content"
+        <RelativeLayout
+            android:id="@+id/skeleton_info"
             android:layout_width="match_parent"
-            android:layout_height="22dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="48dp"
-            android:layout_marginTop="8dp"
-            android:gravity="start"
-            android:paddingEnd="16dp"
-            android:paddingStart="40dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content">
 
-        <ImageButton
-            android:id="@+id/item_info_imagebutton_less"
-            android:layout_width="24dp"
-            android:layout_height="12dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="3dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="5dp"
-            android:background="#00fad689"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_info_content"
-            app:srcCompat="@drawable/ic_info_item_less" />
+            <ImageView
+                android:id="@+id/info_item_image"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp" />
 
-        <ImageButton
-            android:id="@+id/item_info_imagebutton_add_reminder"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:background="#00fad689"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/item_info_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_add_reminder" />
-    </android.support.constraint.ConstraintLayout>
+            <TextView
+                android:id="@+id/info_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
 
+                android:layout_toEndOf="@+id/info_item_image"
+                android:gravity="center_vertical"
+                android:paddingEnd="3dp"
+                android:paddingStart="8dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textSize="@dimen/text_title" />
+
+            <TextView
+                android:id="@+id/info_item_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/info_item_title"
+                android:paddingTop="11dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textSize="@dimen/text_body2" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/item_info_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/item_info_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="36dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="3dp"
+                android:gravity="start"
+                android:paddingEnd="16dp"
+                android:paddingStart="40dp" />
+
+            <ImageButton
+                android:id="@+id/item_info_imagebutton_add_reminder"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                android:layout_gravity="bottom|end"
+                android:background="#00fad689"
+                app:srcCompat="@drawable/ic_add_reminder" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/info_item_image_more_less"
+        android:layout_width="24dp"
+        android:layout_height="12dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_gravity="bottom|center_horizontal"
+        app:srcCompat="@drawable/ic_info_item_more" />
 </LinearLayout>

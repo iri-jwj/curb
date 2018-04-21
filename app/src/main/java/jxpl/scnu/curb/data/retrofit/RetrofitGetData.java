@@ -3,6 +3,9 @@ package jxpl.scnu.curb.data.retrofit;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,8 +39,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * 更新获取information的代码，添加参数 timestamp:String ,userId:String
  */
 public class RetrofitGetData {
-    private static Retrofit retrofit = new Retrofit.Builder().baseUrl("http://39.108.105.150:8080")
-            .addConverterFactory(GsonConverterFactory.create()).build();
+    private static Retrofit retrofit;
+
+    static {
+        Gson lc_gson = new GsonBuilder().setLenient().create();
+        retrofit = new Retrofit.Builder().baseUrl("http://39.108.105.150:8080")
+                .addConverterFactory(GsonConverterFactory.create(lc_gson)).build();
+    }
+
     private static ServerInterface serverInterface = retrofit.create(ServerInterface.class);
 
     public static List<ImmediateInformation> getInformationInRetrofit(@NonNull String userId,
@@ -80,6 +89,7 @@ public class RetrofitGetData {
     public static String postCreateInformation(@NonNull String userId, @NonNull String information) {
         RequestBody lc_requestBody = RequestBody
                 .create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), information);
+
         Call<String> lc_stringCall = serverInterface.postCreateInformation(lc_requestBody, userId);
         Response<String> lc_response = null;
         try {
@@ -92,17 +102,17 @@ public class RetrofitGetData {
         else return null;
     }
 
-    public static boolean postLogin(String account, String password) {
-        boolean isLoginSucceed = false;
+    public static String postLogin(String account, String password) {
+        String userId = "";
         Call<String> loginCall = serverInterface.postLogin( account, password);
         Response<String> response;
         try {
             response = loginCall.execute();
             String result = response.body();
             if (response.isSuccessful()) {
-                if (result.equals("111")) {
+                if (result != null) {
                     Log.d("Retrofit", "postLogin: " + response.body().toString());
-                    isLoginSucceed = true;
+                    userId = result;
                 } else
                     Log.d("Retrofit", "postLogin: " + "resultWrong");
             } else
@@ -110,7 +120,7 @@ public class RetrofitGetData {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return isLoginSucceed;
+        return userId;
     }
 
     /**
@@ -174,6 +184,7 @@ public class RetrofitGetData {
             response = sdSummaryCall.execute();
             if (response.isSuccessful()) {
                 sdSummaryList = response.body();
+                Log.d("sdrds", "loadSummaries: lc_sdSummaries" + response.body().get(0).toString());
             } else
                 return null;
         } catch (IOException e) {
@@ -183,6 +194,7 @@ public class RetrofitGetData {
     }
 
     public static String postAnswer(String strEntity) {
+        Log.d("retrofit", "postAnswer:entity " + strEntity);
         RequestBody description =
                 RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), strEntity);
         Call<String> postAnswerCall = serverInterface.postAnswer(description);
@@ -240,12 +252,13 @@ public class RetrofitGetData {
 
     public static List<SDSummaryCreate> getCreatedSummaries() {
         Call<List<SDSummaryCreate>> lc_listCall = serverInterface.getCreatedSummaries();
-        List<SDSummaryCreate> lc_sdSummaryCreates = null;
+        List<SDSummaryCreate> lc_sdSummaryCreates = new ArrayList<>();
         Response<List<SDSummaryCreate>> lc_listResponse;
         try {
             lc_listResponse = lc_listCall.execute();
             if (lc_listResponse.isSuccessful() && lc_listResponse.body() != null) {
-                lc_sdSummaryCreates = new ArrayList<>(lc_listResponse.body());
+                lc_sdSummaryCreates.addAll(checkNotNull(lc_listResponse.body()));
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -270,12 +283,13 @@ public class RetrofitGetData {
 
     public static List<SDResult> getSDResult(String summaryId) {
         Call<List<SDResult>> lc_listCall = serverInterface.getSDResult(summaryId);
-        List<SDResult> lc_sdResults = null;
+        List<SDResult> lc_sdResults = new ArrayList<>();
         Response<List<SDResult>> lc_listResponse;
         try {
             lc_listResponse = lc_listCall.execute();
             if (lc_listResponse.isSuccessful() && lc_listResponse.body() != null)
-                lc_sdResults = new ArrayList<>(lc_listResponse.body());
+                lc_sdResults.addAll(checkNotNull(lc_listResponse.body()));
+            Log.d("retrofit", "getSDResult: " + lc_sdResults.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }

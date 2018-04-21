@@ -1,19 +1,21 @@
 package jxpl.scnu.curb.loading;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jxpl.scnu.curb.R;
 import jxpl.scnu.curb.homePage.HomePageActivity;
 import jxpl.scnu.curb.login.LoginActivity;
+import jxpl.scnu.curb.utils.SharedHelper;
+import jxpl.scnu.curb.utils.XmlDataStorage;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -96,6 +98,7 @@ public class LoadingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_fullscreen);
+
         ButterKnife.bind(this);
         loadingImage.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -103,23 +106,23 @@ public class LoadingActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        // TODO check if preferences is create
-        final SharedPreferences isFirstOpen = getSharedPreferences("isFirstOpen",
-                Context.MODE_PRIVATE);
+
+        if (!XmlDataStorage.isSharedHelperSet()) {
+            SharedHelper lc_sharedHelper = SharedHelper.getInstance(this);
+            XmlDataStorage.setM_sharedHelper(lc_sharedHelper);
+        }
+        final Map lc_map = XmlDataStorage.getUserInfo();
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (isFirstOpen.getString("isFirstOpen", "").equals("false")) {
+                if (!lc_map.get(XmlDataStorage.USER_ID).equals("")) {
                     Intent intent = new Intent(LoadingActivity.this,
                             HomePageActivity.class);
                     startActivity(intent);
                     LoadingActivity.this.finish();
                 } else {
-                    SharedPreferences.Editor editor = isFirstOpen.edit();
-                    editor.putString("isFirstOpen", "true");
-                    editor.apply();
                     Intent intent = new Intent(LoadingActivity.this,
                             LoginActivity.class);
                     startActivity(intent);

@@ -12,8 +12,8 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        app:cardCornerRadius="8dp"
-        app:elevation="1dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,8 +26,8 @@
 
             <ImageView
                 android:id="@+id/sd_content_image_image"
-                android:layout_width="96dp"
-                android:layout_height="96dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="15dp"
                 android:contentDescription="@string/smallData" />
@@ -36,19 +36,19 @@
                 android:id="@+id/sd_content_text_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="110dp"
+                android:layout_marginLeft="94dp"
                 android:layout_marginTop="10dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textSize="23sp" />
+                android:textSize="@dimen/text_title" />
 
             <TextView
                 android:id="@+id/sd_content_text_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="110dp"
+                android:layout_marginLeft="94dp"
                 android:layout_marginTop="10dp"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_body" />
 
             <TextView
                 android:id="@+id/sd_content_text_author"
@@ -58,7 +58,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="15dp"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                android:textSize="15sp" />
+                android:textSize="@dimen/text_body2" />
         </LinearLayout>
 
 
@@ -71,7 +71,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="#00fad689"
+        android:background="@drawable/smalldata_button"
         android:src="@drawable/ic_sd_favorites"
         app:layout_constraintEnd_toStartOf="@+id/sd_content_imagebutton_before"
         app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +83,7 @@
         android:layout_height="60dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:background="#00fad689"
+        android:background="@drawable/smalldata_button"
         app:layout_constraintEnd_toStartOf="@+id/space"
         app:layout_constraintTop_toBottomOf="@+id/cardView"
         app:srcCompat="@drawable/ic_sd_refresh_blue" />
@@ -94,7 +94,7 @@
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="#00fad689"
+        android:background="@drawable/smalldata_button"
         app:layout_constraintStart_toEndOf="@+id/space"
         app:layout_constraintTop_toBottomOf="@+id/cardView"
         app:srcCompat="@drawable/ic_sd_right" />
@@ -106,7 +106,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="#00fad689"
+        android:background="@drawable/smalldata_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/sd_content_imagebutton_after"
         app:layout_constraintTop_toBottomOf="@+id/cardView"

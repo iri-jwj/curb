@@ -1,6 +1,7 @@
 package jxpl.scnu.curb.data.remote;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.io.File;
 import java.util.List;
@@ -30,6 +31,7 @@ public class SDRemoteDataSource implements SmallDataDataSource {
     @Override
     public void loadSummaries(@NonNull loadSummaryCallback callback, String time, int direction) {
         List<SDSummary> lc_sdSummaries = RetrofitGetData.getSmallDataSummary(time, direction);
+
         if (lc_sdSummaries == null || lc_sdSummaries.isEmpty())
             callback.onDataNotAvailable();
         else
@@ -136,7 +138,7 @@ public class SDRemoteDataSource implements SmallDataDataSource {
     }
 
     @Override
-    public void saveCreatedSDToLocal(SDSummaryCreate para_sdSummaryCreate, List<SDDetail> para_sdDetails) throws Exception {
+    public void saveCreatedSDToLocal(SDSummaryCreate para_sdSummaryCreate, List<SDDetail> para_sdDetails) {
 
     }
 }

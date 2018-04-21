@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
  */
 public class SmallDataPresenterTest {
     @Test
-    public void loadSummaries() throws Exception {
+    public void loadSummaries() {
     }
 
 }

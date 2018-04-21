@@ -1,6 +1,8 @@
 package jxpl.scnu.curb.data.repository;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ import jxpl.scnu.curb.smallData.SDDetail;
 import jxpl.scnu.curb.smallData.SDResult;
 import jxpl.scnu.curb.smallData.SDSummary;
 import jxpl.scnu.curb.smallData.SDSummaryCreate;
+import jxpl.scnu.curb.utils.SharedHelper;
+import jxpl.scnu.curb.utils.XmlDataStorage;
 
 
 public class SmallDataRepository implements SmallDataDataSource {
@@ -28,19 +32,25 @@ public class SmallDataRepository implements SmallDataDataSource {
     private boolean isSummaryCacheDirty = true;
 
     private Map<UUID, SDSummaryCreate> m_summaryCreateMap = new LinkedHashMap<>();
-    private boolean summaryCreateCache = true;
+    private boolean summaryCreateCache;
 
     private SmallDataRepository(@NonNull SDRemoteDataSource para_sdRemoteDataSource,
-                                @NonNull SmallDataLocalDataSource para_smallDataLocalDataSource) {
+                                @NonNull SmallDataLocalDataSource para_smallDataLocalDataSource,
+                                @NonNull Context para_context) {
         m_sdRemoteDataSource = para_sdRemoteDataSource;
         m_smallDataLocalDataSource = para_smallDataLocalDataSource;
+        if (!XmlDataStorage.isSharedHelperSet()) {
+            XmlDataStorage.setM_sharedHelper(SharedHelper.getInstance(para_context));
+        }
+        isSummaryCacheDirty = XmlDataStorage.getFirstRunState(XmlDataStorage.IS_SD_FIRST_RUN);
     }
 
     public static SmallDataRepository getInstance(@NonNull SDRemoteDataSource para_sdRemoteDataSource,
-                                                  @NonNull SmallDataLocalDataSource para_smallDataLocalDataSource) {
+                                                  @NonNull SmallDataLocalDataSource para_smallDataLocalDataSource,
+                                                  @NonNull Context para_context) {
         if (stc_smallDataRepository == null)
             stc_smallDataRepository = new SmallDataRepository(para_sdRemoteDataSource,
-                    para_smallDataLocalDataSource);
+                    para_smallDataLocalDataSource, para_context);
         return stc_smallDataRepository;
     }
 
@@ -142,7 +152,10 @@ public class SmallDataRepository implements SmallDataDataSource {
                 m_sdRemoteDataSource.loadSummaries(new loadSummaryCallback() {
                     @Override
                     public void onSummaryLoaded(List<SDSummary> sdSummaries) {
+                        refreshSummaryCache(sdSummaries);
+                        saveSummariesToLocal(sdSummaries);
                         para_loadSummaryCallback.onSummaryLoaded(sdSummaries);
+
                     }
 
                     @Override
@@ -339,9 +352,11 @@ public class SmallDataRepository implements SmallDataDataSource {
 
     @Override
     public void markAnswered(String summaryId) {
+        Log.d("sdr", "markAnswered:id: " + summaryId);
         m_smallDataLocalDataSource.markAnswered(summaryId);
         UUID lc_uuid = UUID.fromString(summaryId);
         SDSummary lc_sdSummary = m_summaryMap.get(lc_uuid);
+        Log.d("sdr", "markAnswered:lc_sdSummary: " + (lc_sdSummary == null));
         lc_sdSummary.setHasFinish(true);
         m_summaryMap.put(lc_uuid, lc_sdSummary);
     }
@@ -370,7 +385,7 @@ public class SmallDataRepository implements SmallDataDataSource {
 
     @Override
     public void saveCreatedSDToLocal(final SDSummaryCreate para_sdSummaryCreate,
-                                     final List<SDDetail> para_sdDetails) throws Exception {
+                                     final List<SDDetail> para_sdDetails) {
         final Thread lc_thread = new Thread(new Runnable() {
             @Override
             public void run() {

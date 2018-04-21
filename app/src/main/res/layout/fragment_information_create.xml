@@ -1,188 +1,221 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/info_detail_constraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
+    android:layout_height="wrap_content"
     tools:context="jxpl.scnu.curb.immediateInformation.informationCreate.InformationCreateFragment">
 
-
-    <TextView
-        android:id="@+id/add_info_text_title"
-        android:layout_width="wrap_content"
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:labelFor="@+id/add_info_edit_title"
-        android:text="@string/add_info_title"
-        android:textSize="@dimen/text_title"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/info_detail_constraintLayout"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
-    <EditText
-        android:id="@+id/add_info_edit_title"
-        android:layout_width="225dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/edit_text_border"
-        android:inputType="text"
-        app:layout_constraintStart_toEndOf="@+id/add_info_text_title"
-        app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:id="@+id/linear_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-    <TextView
-        android:id="@+id/add_info_text_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/add_info_content"
-        android:textSize="@dimen/text_title"
-        android:labelFor="@id/add_info_edit_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_info_text_title" />
+            <TextView
+                android:id="@+id/add_info_text_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:labelFor="@+id/add_info_edit_title"
+                android:text="@string/add_info_title"
+                android:textSize="@dimen/text_title" />
 
-    <EditText
-        android:id="@+id/add_info_edit_content"
-        android:layout_width="225dp"
-        android:layout_height="250dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:inputType="textMultiLine"
-        android:maxHeight="300dp"
-        android:background="@drawable/edit_text_border"
-        app:layout_constraintStart_toEndOf="@+id/add_info_text_content"
-        app:layout_constraintTop_toBottomOf="@+id/add_info_edit_title" />
+            <EditText
+                android:id="@+id/add_info_edit_title"
+                android:layout_width="225dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edit_text_border"
+                android:inputType="text" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/add_info_text_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:labelFor="@id/add_info_edit_date"
-        android:text="@string/add_info_time"
-        android:textSize="@dimen/text_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_info_edit_content" />
 
-    <EditText
-        android:id="@+id/add_info_edit_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:ems="5"
-        android:inputType="date"
-        app:layout_constraintStart_toEndOf="@+id/add_info_text_time"
-        app:layout_constraintTop_toBottomOf="@+id/add_info_edit_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linear_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear_title">
 
-    <EditText
-        android:id="@+id/add_info_edit_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:ems="5"
-        android:inputType="time"
-        app:layout_constraintStart_toEndOf="@+id/add_info_edit_date"
-        app:layout_constraintTop_toBottomOf="@+id/add_info_edit_content" />
+            <TextView
+                android:id="@+id/add_info_text_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:labelFor="@id/add_info_edit_content"
+                android:text="@string/add_info_content"
+                android:textSize="@dimen/text_title" />
 
-    <TextView
-        android:id="@+id/add_info_text_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/add_info_address"
-        android:textSize="@dimen/text_title"
-        android:labelFor="@id/add_info_edit_address"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_info_text_time" />
+            <EditText
+                android:id="@+id/add_info_edit_content"
+                android:layout_width="225dp"
+                android:layout_height="250dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/edit_text_border"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:maxHeight="300dp" />
+        </LinearLayout>
 
-    <EditText
-        android:id="@+id/add_info_edit_address"
-        android:layout_width="225dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:inputType="text"
-        android:background="@drawable/edit_text_border"
-        app:layout_constraintStart_toEndOf="@+id/add_info_text_address"
-        app:layout_constraintTop_toBottomOf="@+id/add_info_edit_date" />
+        <LinearLayout
+            android:id="@+id/linear_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/linear_content"
+            app:layout_constraintStart_toStartOf="parent">
 
-    <TextView
-        android:id="@+id/add_info_text_belong"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/add_info_belong"
-        android:textSize="@dimen/text_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_info_text_address" />
+            <TextView
+                android:id="@+id/add_info_text_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:labelFor="@id/add_info_edit_date"
+                android:text="@string/add_info_time"
+                android:textSize="@dimen/text_title" />
 
-    <Spinner
-        android:id="@+id/add_info_spinner_belong"
-        android:layout_width="225dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="34dp"
-        android:entries="@array/information_belong"
-        app:layout_constraintStart_toEndOf="@+id/add_info_text_belong"
-        app:layout_constraintTop_toBottomOf="@+id/add_info_edit_address" />
+            <EditText
+                android:id="@+id/add_info_edit_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:ems="7"
+                android:inputType="date" />
 
-    <TextView
-        android:id="@+id/add_info_text_unit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/add_info_unit"
-        android:textSize="@dimen/text_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_info_text_belong" />
+            <EditText
+                android:id="@+id/add_info_edit_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:ems="5"
+                android:gravity="center"
+                android:inputType="time" />
 
-    <Spinner
-        android:id="@+id/add_info_spinner_unit"
-        android:layout_width="225dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="40dp"
-        android:entries="@array/information_unit"
-        app:layout_constraintStart_toEndOf="@+id/add_info_text_unit"
-        app:layout_constraintTop_toBottomOf="@+id/add_info_spinner_belong" />
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/add_info_button_commit"
-        android:layout_width="80dp"
-        android:layout_height="36dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        android:textSize="@dimen/text_title"
-        android:background="#00fad689"
-        android:text="@string/add_info_commit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        <LinearLayout
+            android:id="@+id/linear_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/linear_time"
+            app:layout_constraintStart_toStartOf="parent">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:visibility="gone"
-        android:elevation="3dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/add_info_text_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:labelFor="@id/add_info_edit_address"
+                android:text="@string/add_info_address"
+                android:textSize="@dimen/text_title" />
 
-</android.support.constraint.ConstraintLayout>
+            <EditText
+                android:id="@+id/add_info_edit_address"
+                android:layout_width="225dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/edit_text_border"
+                android:inputType="text" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linear_belong"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linear_address">
+
+            <TextView
+                android:id="@+id/add_info_text_belong"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:text="@string/add_info_belong"
+                android:textSize="@dimen/text_title" />
+
+            <Spinner
+                android:id="@+id/add_info_spinner_belong"
+                android:layout_width="225dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:entries="@array/information_belong" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_unit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/linear_belong"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/add_info_text_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:text="@string/add_info_unit"
+                android:textSize="@dimen/text_title" />
+
+            <Spinner
+                android:id="@+id/add_info_spinner_unit"
+                android:layout_width="225dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:entries="@array/information_unit" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/add_info_button_commit"
+            android:layout_width="80dp"
+            android:layout_height="36dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="8dp"
+            android:textSize="@dimen/text_title"
+            android:background="#00fad689"
+            android:text="@string/add_info_commit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear_unit" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationZ="5dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            android:elevation="3dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
+
+</ScrollView>

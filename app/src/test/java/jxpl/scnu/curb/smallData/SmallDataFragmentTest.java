@@ -12,12 +12,12 @@ public class SmallDataFragmentTest {
     private SmallDataFragment m_smallDataFragment;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         m_smallDataFragment = SmallDataFragment.newInstance();
     }
 
     @Test
-    public void showSummaries() throws Exception {
+    public void showSummaries() {
 
     }
 

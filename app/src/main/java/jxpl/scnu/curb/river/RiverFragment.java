@@ -37,7 +37,6 @@ public class RiverFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment RiverFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static RiverFragment newInstance(String param1, String param2) {
         RiverFragment fragment = new RiverFragment();
         Bundle args = new Bundle();

@@ -12,6 +12,7 @@ import jxpl.scnu.curb.smallData.SDSummaryCreate;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
@@ -65,7 +66,7 @@ public interface ServerInterface {
      */
     @Headers({"Content-type:application/json;charset=UTF-8"})
     @POST("curb/information/send")
-    Call<String> postCreateInformation(@Part("createdInformation") RequestBody information,
+    Call<String> postCreateInformation(@Body RequestBody information,
                                        @Query("userId") String userId);
 
     /**
@@ -91,9 +92,10 @@ public interface ServerInterface {
      * @param body 用户的答案转化为json
      * @return 返回结果
      */
+
     @Headers({"Content-type:application/json;charset=UTF-8"})
     @POST("curb/smalldata/userans")
-    Call<String> postAnswer(@Part("description") RequestBody body);
+    Call<String> postAnswer(@Body RequestBody body);
 
     /**
      * 获取用户的答题结果
@@ -135,7 +137,7 @@ public interface ServerInterface {
      * @param summaryId 即问卷的id
      * @return 返回结果信息
      */
-    @GET("curb/smalldata/questionresult")
+    @POST("curb/smalldata/questionresult")
     Call<List<SDResult>> getSDResult(@Query("st_id") String summaryId);
 
     /**
@@ -151,12 +153,12 @@ public interface ServerInterface {
      * lfumin
      * 2018-03-23
      *
-     * @param userName
+     * @param accountName
      * @param password
      * @return
      * 用户的登录入口
      */
     @POST("/curb/account/login")
-    Call<String> postLogin(@Query("userName") String userName,
+    Call<String> postLogin(@Query("account") String accountName,
                            @Query("password") String password);
 }

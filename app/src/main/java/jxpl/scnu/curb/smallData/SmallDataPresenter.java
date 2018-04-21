@@ -3,13 +3,13 @@ package jxpl.scnu.curb.smallData;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
+import android.util.Xml;
 
 import com.google.gson.Gson;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,13 +20,15 @@ import java.util.UUID;
 import jxpl.scnu.curb.R;
 import jxpl.scnu.curb.data.repository.SmallDataDataSource;
 import jxpl.scnu.curb.data.repository.SmallDataRepository;
+import jxpl.scnu.curb.utils.SharedHelper;
+import jxpl.scnu.curb.utils.XmlDataStorage;
 
 public class SmallDataPresenter implements SmallDataInterface.Presenter {
     private final SmallDataInterface.View smallDataView;
     private final SmallDataRepository m_smallDataRepository;
     private final Context m_homePageActivity;
 
-    private boolean isFirstLoad = true;
+    private boolean firstLoad = true;
     private SDSummary m_sdSummaryAnswering;
     private int sumOfQuestions;
     private Map<Integer, Integer> answers = new LinkedHashMap<>();
@@ -60,6 +62,7 @@ public class SmallDataPresenter implements SmallDataInterface.Presenter {
                     sumOfQuestions,
                     answers);
             String strEntry = lc_gson.toJson(lc_createdAnswer);
+            Log.d("smallDataPresenter", "postAnswer:entity " + strEntry);
             m_smallDataRepository.commitAnswer(strEntry);
             saveAnswersToLocal();
         } else {
@@ -89,12 +92,37 @@ public class SmallDataPresenter implements SmallDataInterface.Presenter {
         answers.put(questionNum, chosen);
     }
 
+    @Override
+    public int getChosenAnswer(int questionNum) {
+        if (answers.containsKey(questionNum))
+            return answers.get(questionNum);
+        else
+            return 0;
+    }
 
+    @Override
+    public boolean getAnswerState() {
+        return answers.size() > 0;
+    }
+
+    @Override
+    public void clearAnswer() {
+        answers.clear();
+        m_sdAnswers.clear();
+    }
 
     @Override
     public void loadSummaries(boolean forceUpdate, int direction) {
-        loadSummariesFromRepository(forceUpdate || isFirstLoad, direction);
-        isFirstLoad = false;
+        if (!XmlDataStorage.isSharedHelperSet()) {
+            SharedHelper lc_sharedHelper = SharedHelper.getInstance(m_homePageActivity);
+            XmlDataStorage.setM_sharedHelper(lc_sharedHelper);
+        }
+        firstLoad = XmlDataStorage.getFirstRunState(XmlDataStorage.IS_SD_FIRST_RUN);
+        loadSummariesFromRepository(forceUpdate || firstLoad, direction);
+        if (firstLoad) {
+            XmlDataStorage.setSDFirstRun(false);
+            firstLoad = false;
+        }
     }
 
     private void loadSummariesFromRepository(boolean forceUpdate, int direction) {
@@ -122,11 +150,26 @@ public class SmallDataPresenter implements SmallDataInterface.Presenter {
     }
     @Override
     public void loadDetails(String summaryId) {
-
         m_smallDataRepository.loadDetails(new SmallDataDataSource.loadDetailCallback() {
             @Override
             public void onDetailLoaded(List<SDDetail> para_sdDetails) {
                 sumOfQuestions = para_sdDetails.size();
+                if (m_sdSummaryAnswering.isHasFinish()) {
+                    m_smallDataRepository.loadAnswers(new SmallDataDataSource.loadAnswersCallback() {
+                        @Override
+                        public void onAnswerLoaded(List<SDAnswer> para_sdAnswers) {
+                            for (SDAnswer answer :
+                                    para_sdAnswers) {
+                                answers.put(answer.getQuestionNum(), answer.getAnswer());
+                            }
+                        }
+
+                        @Override
+                        public void onDataNotAvailable() {
+                            smallDataView.showError("加载答案错误");
+                        }
+                    }, m_sdSummaryAnswering.getId().toString());
+                }
                 smallDataView.showDetails(para_sdDetails);
             }
 

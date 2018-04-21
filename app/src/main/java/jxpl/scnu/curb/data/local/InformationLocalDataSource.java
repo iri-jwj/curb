@@ -33,7 +33,6 @@ import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.TAB
 public class InformationLocalDataSource implements InformationDataSource {
     private static InformationLocalDataSource INSTANCE;
     private CurbDbHelper curbDbHelper;
-
     private InformationLocalDataSource(@NonNull Context context) {
         checkNotNull(context);
         curbDbHelper = new CurbDbHelper(context);
@@ -106,8 +105,9 @@ public class InformationLocalDataSource implements InformationDataSource {
                 PersistenceContract.informationEntry.COLUMN_NAME_TIME,
                 PersistenceContract.informationEntry.COLUMN_NAME_ADDRESS
         };
+        String orderBy = PersistenceContract.informationEntry.COLUMN_NAME_CREATETIME + " DESC";
         Cursor cursor = sqLiteDatabase.query(PersistenceContract.informationEntry.TABLE_NAME, projection,
-                null, null, null, null, null);
+                null, null, null, null, orderBy);
 
         ImmediateInformation immediateInformation;
         List<ImmediateInformation> immediateInformations = new ArrayList<>();
@@ -161,7 +161,7 @@ public class InformationLocalDataSource implements InformationDataSource {
             contentValues.put(COLUMN_NAME_TITLE, i.getTitle());
             contentValues.put(COLUMN_NAME_CONTENT, i.getContent());
             contentValues.put(COLUMN_NAME_BELONG, i.getBelong());
-            contentValues.put(COLUMN_NAME_CREATETIME, i.getCreate_time());
+            contentValues.put(COLUMN_NAME_CREATETIME, i.getCreateTime());
             contentValues.put(COLUMN_NAME_TIME, i.getTime());
             contentValues.put(COLUMN_NAME_ADDRESS, i.getAddress());
             sqLiteDatabase.insert(TABLE_NAME, null, contentValues);

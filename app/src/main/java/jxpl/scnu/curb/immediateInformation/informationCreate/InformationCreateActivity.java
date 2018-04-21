@@ -33,6 +33,7 @@ public class InformationCreateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_information_create);
         ButterKnife.bind(this);
+        m_ToolbarTitle.setText("新建资讯");
 
         ActivityUtil.setFragmentManagerNotHome(getSupportFragmentManager());
         ActivityUtil.setContainerViewNotHome(R.id.content_frame);
@@ -41,9 +42,9 @@ public class InformationCreateActivity extends AppCompatActivity {
                 InformationCreateFragment.newInstance();
         ActivityUtil.addFragmentNotInHomePage(lc_informationCreateFragment);
 
-        InformationCreatePresenter lc_informationCreatePresenter = new InformationCreatePresenter(
+        new InformationCreatePresenter(
                 InformationRepository.getInstance(InformationLocalDataSource.getInstance(this),
-                        InformationRemoteDataSource.getInstance())
+                        InformationRemoteDataSource.getInstance(), this)
                 , lc_informationCreateFragment, this);
         ActivityUtil.setCurrentFragmentNotInHome();
 

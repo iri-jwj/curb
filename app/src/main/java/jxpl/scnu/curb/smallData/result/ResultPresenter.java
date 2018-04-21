@@ -1,15 +1,12 @@
 package jxpl.scnu.curb.smallData.result;
 
-import android.app.Activity;
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
 
 import java.util.List;
 
 import jxpl.scnu.curb.R;
 import jxpl.scnu.curb.data.repository.SmallDataDataSource;
 import jxpl.scnu.curb.data.repository.SmallDataRepository;
-import jxpl.scnu.curb.smallData.SDAnswer;
 import jxpl.scnu.curb.smallData.SDResult;
 
 
@@ -24,6 +21,7 @@ public class ResultPresenter implements ResultInterface.Presenter {
         m_smallDataRepository = para_smallDataRepository;
         m_view = para_view;
         m_context = para_context;
+        para_view.setPresenter(this);
     }
 
     @Override

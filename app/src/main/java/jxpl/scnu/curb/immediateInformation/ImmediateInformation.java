@@ -19,9 +19,9 @@ public final class ImmediateInformation {
     @NonNull
     private final String content;//正文内容
     @NonNull
-    private final String belong;//类型 用于区分教务信息、学者网信息、招聘信息、兼职信息等
+    private final String belong;//类型 用于区分教务信息、招聘信息、兼职信息等
     @NonNull
-    private final String create_time;
+    private final String createTime;
     @Nullable
     private final String time;
     @Nullable
@@ -31,14 +31,14 @@ public final class ImmediateInformation {
                                 @NonNull String para_title,
                                 @NonNull String para_content,
                                 @NonNull String para_type,
-                                @NonNull String para_create_time,
+                                @NonNull String para_createTime,
                                 @Nullable String para_time,
                                 @Nullable String para_address) {
         id = para_id;
         title = para_title;
         content = para_content;
         belong = para_type;
-        create_time = para_create_time;
+        createTime = para_createTime;
         time = para_time;
         address = para_address;
     }
@@ -48,8 +48,8 @@ public final class ImmediateInformation {
 
 
     @NonNull
-    public String getCreate_time() {
-        return create_time;
+    public String getCreateTime() {
+        return createTime;
     }
 
     @Nullable

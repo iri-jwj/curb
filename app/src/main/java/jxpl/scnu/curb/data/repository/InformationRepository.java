@@ -1,7 +1,9 @@
 package jxpl.scnu.curb.data.repository;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.util.Xml;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -13,6 +15,8 @@ import java.util.UUID;
 import jxpl.scnu.curb.data.local.InformationLocalDataSource;
 import jxpl.scnu.curb.data.remote.InformationRemoteDataSource;
 import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
+import jxpl.scnu.curb.utils.SharedHelper;
+import jxpl.scnu.curb.utils.XmlDataStorage;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -31,18 +35,23 @@ public class InformationRepository implements InformationDataSource {
     private InformationRemoteDataSource informationRemoteDataSource;
 
     private Map<UUID, ImmediateInformation> cachedInfo = new LinkedHashMap<>();
-    private boolean cachedIsDirty = true;
+    private boolean cachedIsDirty;
 
     private InformationRepository(@NonNull InformationLocalDataSource informationLocalDataSource,
-                                  @NonNull InformationRemoteDataSource informationRemoteDataSource) {
+                                  @NonNull InformationRemoteDataSource informationRemoteDataSource,
+                                  Context para_context) {
         this.informationLocalDataSource = checkNotNull(informationLocalDataSource);
         this.informationRemoteDataSource = checkNotNull(informationRemoteDataSource);
+        if (!XmlDataStorage.isSharedHelperSet()) {
+            XmlDataStorage.setM_sharedHelper(SharedHelper.getInstance(para_context));
+        }
+        cachedIsDirty = XmlDataStorage.getFirstRunState(XmlDataStorage.IS_INFO_FIRST_RUN);
     }
 
     public static InformationRepository getInstance(InformationLocalDataSource informationLocalDataSource,
-                                                    InformationRemoteDataSource informationRemoteDataSource) {
+                                                    InformationRemoteDataSource informationRemoteDataSource, Context para_context) {
         if (INSTANCE == null)
-            INSTANCE = new InformationRepository(informationLocalDataSource, informationRemoteDataSource);
+            INSTANCE = new InformationRepository(informationLocalDataSource, informationRemoteDataSource, para_context);
         return INSTANCE;
     }
 
@@ -90,6 +99,7 @@ public class InformationRepository implements InformationDataSource {
         if (cachedIsDirty) {
             thread.start();
         } else {
+            Log.d("InformationRepository", "getInformations-localdatasource: ");
             informationLocalDataSource.getInformations(new LoadInformationCallback() {
                 @Override
                 public void getInformationsLoaded(List<ImmediateInformation> immediateInformations) {
@@ -163,8 +173,14 @@ public class InformationRepository implements InformationDataSource {
     }
 
     @Override
-    public void postInformation(PostInformationCallback para_callback, String information,
-                                String userId) {
-        informationRemoteDataSource.postInformation(para_callback, information, userId);
+    public void postInformation(final PostInformationCallback para_callback, final String information,
+                                final String userId) {
+        final Thread lc_thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                informationRemoteDataSource.postInformation(para_callback, information, userId);
+            }
+        });
+        lc_thread.start();
     }
 }
