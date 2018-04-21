@@ -256,11 +256,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                 });
 
                 if (registerResult) {
-                    final SharedPreferences isFirstOpen = getSharedPreferences("isFirstOpen",
-                            Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor=isFirstOpen.edit();
-                    editor.putString("isFirstOpen","false");
-                    editor.apply();
 
                     /**
                      * 2018-03-24

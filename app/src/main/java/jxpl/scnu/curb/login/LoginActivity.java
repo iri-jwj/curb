@@ -26,7 +26,6 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,6 +43,8 @@ import jxpl.scnu.curb.R;
 import jxpl.scnu.curb.data.retrofit.RetrofitGetData;
 import jxpl.scnu.curb.homePage.HomePageActivity;
 import jxpl.scnu.curb.register.RegisterActivity;
+import jxpl.scnu.curb.utils.SharedHelper;
+import jxpl.scnu.curb.utils.XmlDataStorage;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -80,6 +81,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @BindView(R.id.signin_image)
     ImageView signinLogo;
 
+
+    private String userId;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -151,6 +154,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 if(resultCode == RESULT_OK){
                     loginAccount.setText(data.getStringExtra("return_account"));
                     password.setText(data.getStringExtra("return_password"));
+                    userId = data.getStringExtra("return_id");
                     //todo：可以在这里写将用户基本信息插入到数据库的逻辑
                 }
                 break;
@@ -258,7 +262,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         showProgress(true);
                     }
                 });
-                boolean loginResult = RetrofitGetData.postLogin(account, password);
+                String id = RetrofitGetData.postLogin(account, password);
 
                 LoginActivity.this.runOnUiThread(new Runnable() {
                     @Override
@@ -266,12 +270,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         showProgress(false);
                     }
                 });
-                if (loginResult) {
-                    final SharedPreferences isFirstOpen = getSharedPreferences("isFirstOpen",
+                if (!id.equals("failed")) {
+                    /*final SharedPreferences isFirstOpen = getSharedPreferences("isFirstOpen",
                             Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor=isFirstOpen.edit();
                     editor.putString("isFirstOpen","false");
-                    editor.apply();
+                    editor.apply();*/
+
+                    if (!XmlDataStorage.isSharedHelperSet()) {
+                        XmlDataStorage.setM_sharedHelper(SharedHelper.getInstance(LoginActivity.this));
+                    }
+                    userId = id;
+                    XmlDataStorage.saveUserInfo(userId, password, account);
+
+                    XmlDataStorage.setInfoFirstRun(true);
+                    XmlDataStorage.setRiverFirstRun(true);
+                    XmlDataStorage.setScholatFirstRun(true);
+                    XmlDataStorage.setSDFirstRun(true);
+
                     Intent intent = new Intent(LoginActivity.this,
                             HomePageActivity.class);
                     startActivity(intent);
@@ -280,17 +296,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     LoginActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getBaseContext(),"111",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getBaseContext(), "用户名或密码错误", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
             }
         });
         thread.start();
-        Intent intent = new Intent(LoginActivity.this,
+        /*Intent intent = new Intent(LoginActivity.this,
                 HomePageActivity.class);
         startActivity(intent);
-        LoginActivity.this.finish();
+        LoginActivity.this.finish();*/
     }
 
     private boolean isEmailValid(String email) {

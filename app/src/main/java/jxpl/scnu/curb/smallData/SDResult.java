@@ -6,10 +6,10 @@ public class SDResult {
     private String question;
     private String option1;
     private String option2;
-    private int option1ans;
-    private int option2ans;
+    private float option1ans;
+    private float option2ans;
 
-    public SDResult(int para_question_num, String para_question, String para_option1, String para_option2, int para_option1ans, int para_option2ans) {
+    public SDResult(int para_question_num, String para_question, String para_option1, String para_option2, float para_option1ans, float para_option2ans) {
         question_num = para_question_num;
         question = para_question;
         option1 = para_option1;
@@ -58,11 +58,18 @@ public class SDResult {
         return option2;
     }
 
-    public int getOption1ans() {
+    public float getOption1ans() {
         return option1ans;
     }
 
-    public int getOption2ans() {
+    public float getOption2ans() {
         return option2ans;
+    }
+
+    @Override
+    public String toString() {
+        return "questionNum:" + question_num + "\tquestion:" + question +
+                "\toption1:" + option1 + "\toption2" + option2 + "\toption1Ans:" + option1ans +
+                "\toption2Ans:" + option2ans;
     }
 }

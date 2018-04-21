@@ -4,34 +4,34 @@ package jxpl.scnu.curb.smallData;
 import java.util.UUID;
 
 public class SDDetail {
-    private UUID sd_id;
-    private int question_num; //题号
+    private UUID sdId;
+    private int questionNum; //题号
     private String question;     //题目
-    private String optionOne;    //选项1
-    private String optionTwo;    //选项2
+    private String option1;    //选项1
+    private String option2;    //选项2
 
-    public SDDetail(UUID sd_id, int question_num, String question, String optionOne, String optionTwo) {
-        this.sd_id = sd_id;
-        this.question_num = question_num;
+    public SDDetail(UUID sdId, int questionNum, String question, String option1, String option2) {
+        this.sdId = sdId;
+        this.questionNum = questionNum;
         this.question = question;
-        this.optionOne = optionOne;
-        this.optionTwo = optionTwo;
+        this.option1 = option1;
+        this.option2 = option2;
     }
 
-    public UUID getSd_id() {
-        return sd_id;
+    public UUID getSdId() {
+        return sdId;
     }
 
-    public void setSd_id(UUID sd_id) {
-        this.sd_id = sd_id;
+    public void setSdId(UUID sd_id) {
+        this.sdId = sd_id;
     }
 
-    public int getQuestion_num() {
-        return question_num;
+    public int getQuestionNum() {
+        return questionNum;
     }
 
-    public void setQuestion_num(int question_num) {
-        this.question_num = question_num;
+    public void setQuestionNum(int question_num) {
+        this.questionNum = question_num;
     }
 
     public String getQuestion() {
@@ -43,19 +43,19 @@ public class SDDetail {
         this.question = question;
     }
 
-    public String getOptionOne() {
-        return optionOne;
+    public String getOption1() {
+        return option1;
     }
 
-    public void setOptionOne(String optionOne) {
-        this.optionOne = optionOne;
+    public void setOption1(String optionOne) {
+        this.option1 = optionOne;
     }
 
-    public String getOptionTwo() {
-        return optionTwo;
+    public String getOption2() {
+        return option2;
     }
 
-    public void setOptionTwo(String optionTwo) {
-        this.optionTwo = optionTwo;
+    public void setOption2(String optionTwo) {
+        this.option2 = optionTwo;
     }
 }

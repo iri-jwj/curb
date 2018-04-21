@@ -3,108 +3,94 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageButton
-            android:id="@+id/info_item_imagebutton_more"
-            android:layout_width="24dp"
-            android:layout_height="12dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/ic_info_item_more" />
-
-        <ImageView
-            android:id="@+id/scholat_item_image"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/scholat_item_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textSize="@dimen/text_body2"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <TextView
-            android:id="@+id/scholat_item_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="8dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="3dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textSize="@dimen/text_title"
-            app:layout_constraintBottom_toTopOf="@+id/info_item_imagebutton_more"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/scholat_item_image"
-            app:layout_constraintTop_toTopOf="parent" />
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/scholat_item_container"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:id="@+id/scholat_skeleton"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/scholat_item_content"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="22dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="48dp"
-            android:layout_marginTop="8dp"
-            android:gravity="start"
-            android:paddingEnd="16dp"
-            android:paddingStart="40dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content">
 
-        <ImageButton
-            android:id="@+id/scholat_item_imagebutton_less"
-            android:layout_width="24dp"
-            android:layout_height="12dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="3dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="5dp"
-            android:background="#00fad689"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scholat_item_content"
-            app:srcCompat="@drawable/ic_info_item_less" />
+            <TextView
+                android:id="@+id/scholat_item_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="72dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:paddingEnd="3dp"
+                android:paddingStart="8dp"
+                android:gravity="center_vertical"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textSize="@dimen/text_title" />
 
-        <ImageButton
-            android:id="@+id/scholat_item_imagebutton_add_reminder"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:background="#00fad689"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/scholat_item_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_add_reminder" />
-    </android.support.constraint.ConstraintLayout>
+            <TextView
+                android:id="@+id/scholat_item_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:paddingBottom="3dp"
+                android:layout_alignEnd="@+id/scholat_item_title"
+                android:layout_alignTop="@+id/scholat_item_title"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textSize="@dimen/text_body2" />
+
+            <TextView
+                android:id="@+id/scholat_item_end_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:layout_marginTop="8dp"
+                android:paddingTop="3dp"
+                android:layout_alignTop="@+id/scholat_item_time"
+                android:layout_alignEnd="@+id/scholat_item_title"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textSize="@dimen/text_body2" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/scholat_item_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/scholat_item_content"
+                android:layout_width="match_parent"
+                android:layout_height="22dp"
+                android:layout_marginEnd="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="start"
+                android:paddingEnd="16dp"
+                android:paddingStart="40dp" />
+
+            <ImageButton
+                android:id="@+id/scholat_item_imagebutton_add_reminder"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="#00fad689"
+                android:layout_gravity="bottom|end" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/scholat_item_image_moreless"
+        android:layout_width="24dp"
+        android:layout_height="12dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_gravity="bottom|center_horizontal"
+        app:srcCompat="@drawable/ic_info_item_more" />
 </LinearLayout>

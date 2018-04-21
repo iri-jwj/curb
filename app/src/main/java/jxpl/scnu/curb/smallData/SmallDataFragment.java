@@ -1,15 +1,19 @@
 package jxpl.scnu.curb.smallData;
 
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,13 +28,10 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
-import com.github.ikidou.fragmentBackHandler.BackHandlerHelper;
 import com.github.ikidou.fragmentBackHandler.FragmentBackHandler;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,7 +40,7 @@ import butterknife.Unbinder;
 import jxpl.scnu.curb.R;
 import jxpl.scnu.curb.smallData.result.ResultActivity;
 
-import static com.bumptech.glide.request.RequestOptions.fitCenterTransform;
+import static com.bumptech.glide.request.RequestOptions.centerCropTransform;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -118,6 +119,12 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        presenter.start();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_small_data, menu);
     }
@@ -165,21 +172,19 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
         final String title = para_sdSummary.getTitle();
         final String description = para_sdSummary.getDescription();
         final String creator = para_sdSummary.getCreator();
-        try {
-            if (para_sdSummary.getImg() != null) {
-                final Bitmap lc_bitmap = Glide.with(checkNotNull(getActivity()).getApplicationContext())
-                        .asBitmap()
-                        .load(para_sdSummary.getImg())
-                        .apply(fitCenterTransform())
-                        .into(1, 1)
-                        .get();
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        m_SdContentImageImage.setImageBitmap(lc_bitmap);
-                    }
-                });
-            }
+        if (para_sdSummary.getImg() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Glide.with(getActivity()
+                            .getApplicationContext())
+                            .asBitmap()
+                            .load(para_sdSummary.getImg())
+                            .apply(centerCropTransform())
+                            .into(m_SdContentImageImage);
+                }
+            });
+        }
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -198,21 +203,15 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
                     }
                     //当问卷是已完成时，改变背景颜色
                     if (para_sdSummary.isHasFinish()) {
-                        m_CardView.setBackgroundColor(getResources()
+                        m_CardView.setCardBackgroundColor(getResources()
                                 .getColor(R.color.card_small_data_finished));
 
                     } else {
-                        m_CardView.setBackgroundColor(getResources()
+                        m_CardView.setCardBackgroundColor(getResources()
                                 .getColor(R.color.card_small_data_unfinished));
                     }
                 }
             });
-        } catch (InterruptedException para_e) {
-            para_e.printStackTrace();
-        } catch (ExecutionException para_e) {
-            para_e.printStackTrace();
-        }
-
     }
 
     @Override
@@ -228,8 +227,8 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
      */
     private void showDetail(SDDetail para_sdDetail) {
         final String question = para_sdDetail.getQuestion();
-        final String optionOne = para_sdDetail.getOptionOne();
-        final String optionTwo = para_sdDetail.getOptionTwo();
+        final String optionOne = para_sdDetail.getOption1();
+        final String optionTwo = para_sdDetail.getOption2();
         checkNotNull(getActivity()).runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -240,14 +239,30 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
                 else
                     m_SdItemImagebuttonLeft.setClickable(true);
 
-                if (indexForDetail == (m_sdDetailsCache.size() - 1))
+                if (indexForDetail == (m_sdDetailsCache.size() - 1)) {
                     m_SdItemImagebuttonRight.setClickable(false);
-                else
+                    if (!m_sdSummaries.get(indexForSummary).isHasFinish())
+                        m_SdItemButtonCommit.setVisibility(View.VISIBLE);
+                } else {
                     m_SdItemImagebuttonRight.setClickable(true);
-
+                    m_SdItemButtonCommit.setVisibility(View.GONE);
+                }
                 m_SdItemQuestionTitle.setText(question);
                 m_SdItemRadiobuttonUp.setText(optionOne);
                 m_SdItemRadiobuttonDown.setText(optionTwo);
+                int chosenAnswer = presenter.getChosenAnswer(m_sdDetailsCache.get(indexForDetail).getQuestionNum());
+                switch (chosenAnswer) {
+                    case 1:
+                        m_SdItemRadioGroup.check(m_SdItemRadiobuttonUp.getId());
+                        break;
+                    case 2:
+                        m_SdItemRadioGroup.check(m_SdItemRadiobuttonDown.getId());
+                        break;
+                    default:
+                        m_SdItemRadioGroup.clearCheck();
+                        break;
+
+                }
             }
         });
     }
@@ -261,13 +276,40 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
      */
     @Override
     public boolean onBackPressed() {
-        if (m_CardView.getVisibility() == View.GONE) {
-            m_SmallDataItem.setVisibility(View.GONE);
-            m_CardView.setVisibility(View.VISIBLE);
-            //假设反回时数据会丢失
-            showSummary(m_sdSummaries.get(indexForSummary));
+        if (m_SmallDataContent.getVisibility() == View.GONE) {
+            if (presenter.getAnswerState() && !m_sdSummaries.get(indexForSummary).isHasFinish()) {
+                Dialog lc_dialog = new AlertDialog.Builder(getContext()).setTitle("嘿，确认返回吗？")
+                        .setMessage("返回将丢失您当前已填写的内容哦")
+                        .setNegativeButton("不了!", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .setNeutralButton("返回！", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                itemToContent();
+                            }
+                        })
+                        .create();
+                lc_dialog.show();
+            } else {
+                itemToContent();
+            }
+            return true;
         }
-        return BackHandlerHelper.handleBackPress(this);
+        return false;
+    }
+
+    /**
+     * 从问题的界面返回到概要界面
+     */
+    private void itemToContent() {
+        m_SmallDataItem.setVisibility(View.GONE);
+        m_SmallDataContent.setVisibility(View.VISIBLE);
+        //假设反回时数据会丢失
+        showSummary(m_sdSummaries.get(indexForSummary));
     }
 
     /**
@@ -352,33 +394,49 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
     public void onM_SdContentImagebuttonResultClicked() {
         Intent lc_intent = new Intent(presenter.getContextInPresenter(), ResultActivity.class);
         lc_intent.putExtra("summary_id", m_sdSummaries.get(indexForSummary).getId());
+        Log.d("sdf", "onM_SdContentImagebuttonResultClicked: ");
         startActivity(lc_intent);
     }
 
     @OnClick(R.id.sd_item_radiobutton_up)
     public void onM_SdItemRadiobuttonUpClicked() {
-        presenter.saveAnswerToMap(m_sdDetailsCache.get(indexForDetail).getQuestion_num(), 1);
+        presenter.saveAnswerToMap(m_sdDetailsCache.get(indexForDetail).getQuestionNum(), 1);
 
-        if (indexForDetail != (m_sdDetailsCache.size() - 1))
-            showDetail(m_sdDetailsCache.get(++indexForDetail));
+        if (indexForDetail != (m_sdDetailsCache.size() - 1)) {
+            onM_SdItemImagebuttonRightClicked();
+        }
+
     }
 
     @OnClick(R.id.sd_item_radiobutton_down)
     public void onM_SdItemRadiobuttonDownClicked() {
-        presenter.saveAnswerToMap(m_sdDetailsCache.get(indexForDetail).getQuestion_num(), 2);
-
-        if (indexForDetail != (m_sdDetailsCache.size() - 1))
-            showDetail(m_sdDetailsCache.get(++indexForDetail));
+        presenter.saveAnswerToMap(m_sdDetailsCache.get(indexForDetail).getQuestionNum(), 2);
+        if (indexForDetail != (m_sdDetailsCache.size() - 1)) {
+            onM_SdItemImagebuttonRightClicked();
+        }
     }
 
     @OnClick(R.id.sd_item_imagebutton_left)
     public void onM_SdItemImagebuttonLeftClicked() {
         showDetail(m_sdDetailsCache.get(--indexForDetail));
+        /*int chosenAnswer = presenter.getChosenAnswer(m_sdDetailsCache.get(indexForDetail).getQuestionNum());
+        switch (chosenAnswer){
+            case 1:m_SdItemRadioGroup.check(m_SdItemRadiobuttonUp.getId());break;
+            case 2:m_SdItemRadioGroup.check(m_SdItemRadiobuttonDown.getId());break;
+            default:m_SdItemRadioGroup.clearCheck();break;
+
+        }*/
     }
 
     @OnClick(R.id.sd_item_imagebutton_right)
     public void onM_SdItemImagebuttonRightClicked() {
         showDetail(m_sdDetailsCache.get(++indexForDetail));
+        /*int chosenAnswer = presenter.getChosenAnswer(m_sdDetailsCache.get(indexForDetail).getQuestionNum());
+        switch (chosenAnswer){
+            case 1:m_SdItemRadioGroup.check(m_SdItemRadiobuttonUp.getId());break;
+            case 2:m_SdItemRadioGroup.check(m_SdItemRadiobuttonDown.getId());break;
+            default:m_SdItemRadioGroup.clearCheck();break;
+        }*/
     }
 
     @OnClick(R.id.sd_item_button_commit)
@@ -388,7 +446,7 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
                 .getId()
                 .toString());
         m_SmallDataItem.setVisibility(View.GONE);
-        m_CardView.setVisibility(View.VISIBLE);
+        m_SmallDataContent.setVisibility(View.VISIBLE);
         m_sdSummaries.get(indexForSummary).setHasFinish(true);
         //假设反回时数据会丢失
         showSummary(m_sdSummaries.get(indexForSummary));

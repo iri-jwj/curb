@@ -96,5 +96,25 @@ public interface SmallDataInterface {
          * @param summaryId 问卷的id，用于查找目的详细信息
          */
         void loadDetails(String summaryId);
+
+        /**
+         * 获取对应题号的用户已选择的答案
+         *
+         * @param questionNum 题号
+         * @return 用户选择的答案，若为选择则返回0
+         */
+        int getChosenAnswer(int questionNum);
+
+        /**
+         * 获取当前显示的问卷题目是否已作答
+         *
+         * @return 如果用户已作答返回true，否则返回false
+         */
+        boolean getAnswerState();
+
+        /**
+         * 当用户退出了问卷题目界面时，清除answer的缓存
+         */
+        void clearAnswer();
     }
 }

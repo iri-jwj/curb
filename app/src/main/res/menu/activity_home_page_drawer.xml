@@ -5,27 +5,23 @@
     <group
         android:id="@+id/nav_item_first"
         android:checkableBehavior="single">
-        <item
+        <!--<item
             android:id="@+id/nav_arrange"
             android:icon="@drawable/ic_nav_icon_arrange"
-            android:title="@string/arrangement" />
-        <item
-            android:id="@+id/nav_my_collection"
-            android:icon="@drawable/ic_nav_icon_collection"
-            android:title="@string/my_collection" />
-        <item
-            android:id="@+id/nav_concerned_topic"
-            android:icon="@drawable/ic_nav_icon_topic"
-            android:title="@string/concerned_topic" />
-        <item
-            android:id="@+id/group_dynamic"
-            android:icon="@drawable/ic_nav_icon_group_dynamics"
-            android:title="@string/group_dynamics" />
-    </group>
+            android:title="@string/arrangement" />-->
+        <!-- <item
+             android:id="@+id/nav_my_collection"
+             android:icon="@drawable/ic_nav_icon_collection"
+             android:title="@string/my_collection" />-->
+        <!--  <item
+              android:id="@+id/nav_concerned_topic"
+              android:icon="@drawable/ic_nav_icon_my_remind"
+              android:title="@string/concerned_topic" />-->
+        <!--    <item
+                android:id="@+id/group_dynamic"
+                android:icon="@drawable/ic_nav_icon_group_dynamics"
+                android:title="@string/group_dynamics" />-->
 
-    <group
-        android:id="@+id/nav_item_second"
-        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_info"
             android:icon="@drawable/ic_nav_icon_information"
@@ -38,22 +34,21 @@
             android:id="@+id/nav_small_data"
             android:icon="@drawable/ic_nav_icon_small_data"
             android:title="@string/smallData" />
-
-    </group>
-    <group
-        android:id="@+id/nav_item_third"
-        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_scholat"
+            android:icon="@drawable/ic_filter_scholar"
+            android:title="@string/scholat" />
         <item
             android:id="@+id/nav_remind"
-            android:icon="@drawable/ic_nav_icon_remind"
+            android:icon="@drawable/ic_nav_icon_my_remind"
             android:title="@string/remind" />
-        <item
-            android:id="@+id/nav_share"
-            android:icon="@drawable/ic_nav_icon_share"
-            android:title="@string/share" />
+        <!-- <item
+             android:id="@+id/nav_share"
+             android:icon="@drawable/ic_nav_icon_share"
+             android:title="@string/share" />-->
         <item
             android:id="@+id/nav_setting"
-            android:icon="@drawable/ic_nav_icon_setting"
+            android:icon="@drawable/ic_nav_icon_newsetting"
             android:title="@string/setting" />
     </group>
 

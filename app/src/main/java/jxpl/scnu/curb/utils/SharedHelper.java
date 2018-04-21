@@ -16,7 +16,7 @@ public class SharedHelper {
         stc_sharedPreferences = para_context.getSharedPreferences(fileName, Context.MODE_PRIVATE);
     }
 
-    public SharedHelper getInstance(Context para_context) {
+    public static SharedHelper getInstance(Context para_context) {
         if (Instance == null)
             Instance = new SharedHelper(para_context);
         return Instance;
@@ -26,19 +26,19 @@ public class SharedHelper {
         SharedPreferences.Editor lc_editor = stc_sharedPreferences.edit();
         String type = value.getClass().getSimpleName();
         switch (type) {
-            case "int":
+            case "Integer":
                 lc_editor.putInt(key, (int) value);
                 break;
             case "String":
                 lc_editor.putString(key, (String) value);
                 break;
-            case "boolean":
+            case "Boolean":
                 lc_editor.putBoolean(key, (boolean) value);
                 break;
-            case "float":
+            case "Float":
                 lc_editor.putFloat(key, (float) value);
                 break;
-            case "long":
+            case "Long":
                 lc_editor.putLong(key, (long) value);
                 break;
         }
@@ -49,19 +49,19 @@ public class SharedHelper {
         String type = defaultValue.getClass().getSimpleName();
         Object result = null;
         switch (type) {
-            case "int":
+            case "Integer":
                 result = stc_sharedPreferences.getInt(key, (int) defaultValue);
                 break;
             case "String":
                 result = stc_sharedPreferences.getString(key, (String) defaultValue);
                 break;
-            case "boolean":
+            case "Boolean":
                 result = stc_sharedPreferences.getBoolean(key, (boolean) defaultValue);
                 break;
-            case "float":
+            case "Float":
                 result = stc_sharedPreferences.getFloat(key, (float) defaultValue);
                 break;
-            case "long":
+            case "Long":
                 result = stc_sharedPreferences.getLong(key, (long) defaultValue);
                 break;
         }

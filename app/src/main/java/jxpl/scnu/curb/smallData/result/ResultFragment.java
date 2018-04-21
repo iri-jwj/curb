@@ -1,21 +1,28 @@
 package jxpl.scnu.curb.smallData.result;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -24,16 +31,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import jxpl.scnu.curb.R;
-import jxpl.scnu.curb.smallData.SDAnswer;
 import jxpl.scnu.curb.smallData.SDResult;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ResultFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ResultFragment extends Fragment implements ResultInterface.View {
     private static final String ARG_SD_ID = "summary_id";
     @BindView(R.id.result_recycler)
@@ -51,7 +53,7 @@ public class ResultFragment extends Fragment implements ResultInterface.View {
 
     public static ResultFragment newInstance(UUID summaryId) {
         Bundle lc_bundle = new Bundle();
-        lc_bundle.putSerializable(ARG_SD_ID, summaryId);
+        lc_bundle.putString(ARG_SD_ID, summaryId.toString());
         ResultFragment fragment = new ResultFragment();
         fragment.setArguments(lc_bundle);
         return fragment;
@@ -60,8 +62,7 @@ public class ResultFragment extends Fragment implements ResultInterface.View {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        summaryId = (UUID) getArguments().getSerializable(ARG_SD_ID);
-
+        summaryId = UUID.fromString(getArguments().getString(ARG_SD_ID));
     }
 
     @Override
@@ -71,10 +72,9 @@ public class ResultFragment extends Fragment implements ResultInterface.View {
         View view = inflater.inflate(R.layout.fragment_result, container, false);
         unbinder = ButterKnife.bind(this, view);
         m_resultAdapter = new ResultAdapter(new LinkedList<SDResult>());
-        LinearLayoutManager lc_layoutManager = new LinearLayoutManager(m_presenter.getPresenterContext());
+        LinearLayoutManager lc_layoutManager = new LinearLayoutManager(getContext());
         m_ResultRecycler.setLayoutManager(lc_layoutManager);
         m_ResultRecycler.setAdapter(m_resultAdapter);
-        m_presenter.start();
         return view;
     }
 
@@ -84,6 +84,11 @@ public class ResultFragment extends Fragment implements ResultInterface.View {
         unbinder.unbind();
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        m_presenter.start();
+    }
 
     @Override
     public void setPresenter(ResultInterface.Presenter presenter) {
@@ -106,7 +111,7 @@ public class ResultFragment extends Fragment implements ResultInterface.View {
     }
 
 
-    class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder> {
+    class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultViewHolder> {
         List<SDResult> m_resultList;
 
         ResultAdapter(List<SDResult> para_resultList) {
@@ -127,27 +132,44 @@ public class ResultFragment extends Fragment implements ResultInterface.View {
 
         @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public ResultViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View lc_view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_result, parent, false);
-            return new ViewHolder(lc_view);
+            ResultViewHolder lc_viewHolder = new ResultViewHolder(lc_view);
+            return lc_viewHolder;
         }
 
         @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull ResultViewHolder holder, int position) {
             List<PieEntry> lc_pieEntry = new LinkedList<>();
-            List<Integer> lc_colors = new LinkedList<>();
-            lc_colors.add(R.color.small_data_result1);
-            lc_colors.add(R.color.small_data_result2);
-            lc_pieEntry.add(new PieEntry(1, m_resultList.get(position).getOption1ans()));
-            lc_pieEntry.add(new PieEntry(2, m_resultList.get(position).getOption2ans()));
+
+            lc_pieEntry.add(new PieEntry(m_resultList.get(position).getOption1ans(), m_resultList.get(position).getOption1()));
+            lc_pieEntry.add(new PieEntry(m_resultList.get(position).getOption2ans(), m_resultList.get(position).getOption2()));
             PieDataSet lc_pieDataSet = new PieDataSet(lc_pieEntry,
-                    m_resultList.get(position).getQuestion());
+                    "Question:" + m_resultList.get(position).getQuestion());
+
+            List<Integer> lc_colors = new LinkedList<>();
+            lc_colors.add(Color.parseColor("#f9d07e"));
+            lc_colors.add(Color.parseColor("#92b6dc"));
             lc_pieDataSet.setColors(lc_colors);
-            lc_pieDataSet.setValueTextColors(lc_colors);
+
+            lc_pieDataSet.setValueTextColor(Color.BLACK);
             lc_pieDataSet.setSliceSpace(2);
+
             PieData lc_pieData = new PieData(lc_pieDataSet);
+            lc_pieData.setValueFormatter(new PercentFormatter());
+            lc_pieData.setValueTextColor(Color.BLACK);
+
+            holder.m_ItemChart.getDescription().setEnabled(false);
+            Legend lc_legend = holder.m_ItemChart.getLegend();
+            lc_legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+            lc_legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+            lc_legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+            lc_legend.setXEntrySpace(5.0f);
+            lc_legend.setDrawInside(false);
             holder.m_ItemChart.setData(lc_pieData);
+            holder.m_ItemChart.highlightValues(null);
+            holder.m_ItemChart.setEntryLabelColor(Color.BLACK);
             holder.m_ItemChart.setMaxAngle(360);
             holder.m_ItemChart.setHoleRadius(0);
         }
@@ -157,12 +179,13 @@ public class ResultFragment extends Fragment implements ResultInterface.View {
             return m_resultList.size();
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        class ResultViewHolder extends RecyclerView.ViewHolder {
             @BindView(R.id.item_chart)
             PieChart m_ItemChart;
 
-            ViewHolder(View itemView) {
+            ResultViewHolder(View itemView) {
                 super(itemView);
+                ButterKnife.bind(this, itemView);
             }
         }
     }

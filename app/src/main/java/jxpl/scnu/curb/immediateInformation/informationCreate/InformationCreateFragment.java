@@ -3,12 +3,16 @@ package jxpl.scnu.curb.immediateInformation.informationCreate;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -81,6 +86,11 @@ public class InformationCreateFragment extends Fragment implements InformationCr
     private InformationCreateContract.Presenter mPresenter;
     private Activity m_activity;
 
+    private String year;
+    private String month;
+    private String day;
+    private String hours;
+    private String minutes;
     public InformationCreateFragment() {
         // Required empty public constructor
     }
@@ -100,8 +110,23 @@ public class InformationCreateFragment extends Fragment implements InformationCr
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_information_create, container, false);
-
         unbinder = ButterKnife.bind(this, view);
+
+        m_AddInfoEditTime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    showTimePicker();
+                }
+            }
+        });
+        m_AddInfoEditDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    showDatePicker();
+            }
+        });
         return view;
     }
 
@@ -165,8 +190,9 @@ public class InformationCreateFragment extends Fragment implements InformationCr
      * @param day   日
      */
     private void setDate(int year, int month, int day) {
-        String toShow = year + "-" + month + "-" + day;
-        m_AddInfoEditDate.setText(toShow);
+        this.year = year + "";
+        this.month = month + "";
+        this.day = day + "";
     }
 
     /**
@@ -176,49 +202,18 @@ public class InformationCreateFragment extends Fragment implements InformationCr
      * @param minute 分钟
      */
     private void setTime(int hour, int minute) {
-        String toShow = hour + ":" + minute;
-        m_AddInfoEditTime.setText(toShow);
+        hours = hour + "";
+        minutes = minute + "";
     }
 
     @OnClick(R.id.add_info_edit_date)
     public void onM_AddInfoEditDateClicked() {
-        DatePicker lc_datePicker = new DatePicker(m_activity);
-        lc_datePicker.setElevation(3);
-        ConstraintLayout.LayoutParams lc_layoutParams = new ConstraintLayout
-                .LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lc_layoutParams.setMarginStart(16);
-        m_InfoDetailConstraintLayout.addView(lc_datePicker, lc_layoutParams);
-        lc_datePicker.setVisibility(View.VISIBLE);
-
-        Calendar lc_calendar = Calendar.getInstance();
-        int lc_currentYear = lc_calendar.get(Calendar.YEAR);
-        int lc_currentMonth = lc_calendar.get(Calendar.MONTH);
-        int lc_currentDay = lc_calendar.get(Calendar.DAY_OF_MONTH);
-        lc_datePicker.init(lc_currentYear, lc_currentMonth, lc_currentDay,
-                new DatePicker.OnDateChangedListener() {
-                    @Override
-                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        setDate(year, monthOfYear, dayOfMonth);
-                        view.setVisibility(View.GONE);
-                    }
-                });
+        showDatePicker();
     }
 
     @OnClick(R.id.add_info_edit_time)
     public void onM_AddInfoEditTimeClicked() {
-        TimePicker lc_timePicker = new TimePicker(m_activity);
-        lc_timePicker.setElevation(3);
-        ConstraintLayout.LayoutParams lc_layoutParams = new ConstraintLayout
-                .LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        m_InfoDetailConstraintLayout.addView(lc_timePicker, lc_layoutParams);
-        lc_timePicker.setVisibility(View.VISIBLE);
-
-        lc_timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            @Override
-            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                setTime(hourOfDay, minute);
-            }
-        });
+        showTimePicker();
     }
 
     @OnClick(R.id.add_info_button_commit)
@@ -229,12 +224,106 @@ public class InformationCreateFragment extends Fragment implements InformationCr
         String address = m_AddInfoEditAddress.getText().toString();
         String belong = (String) m_AddInfoSpinnerBelong.getSelectedItem();
         String unit = (String) m_AddInfoSpinnerUnit.getSelectedItem();
-        SimpleDateFormat lc_simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss",
+        SimpleDateFormat lc_simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss",
                 Locale.CHINA);
         Date lc_date = new Date(System.currentTimeMillis());
         String createTime = lc_simpleDateFormat.format(lc_date);
         Log.d("InformationCreateFrag", "onM_AddInfoButtonCommitClicked: belong:" + belong);
         mPresenter.commitInformation(new ImmediateInformation(UUID.randomUUID(), title, content,
                 belong,createTime,time,address));
+    }
+
+    /**
+     * 当用户点击了目标控件时，显示TimePicker
+     */
+    private void showTimePicker() {
+        AlertDialog.Builder lc_builder = new AlertDialog.Builder(m_activity);
+        lc_builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                m_AddInfoEditTime.setText(hours + ":" + minutes);
+            }
+        });
+        lc_builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog lc_alertDialog = lc_builder.create();
+
+        Calendar lc_calendar = Calendar.getInstance();
+        int lc_hour = lc_calendar.get(Calendar.HOUR);
+        int lc_minutes = lc_calendar.get(Calendar.MINUTE);
+
+        TimePicker lc_timePicker = new TimePicker(m_activity);
+        lc_timePicker.setElevation(3);
+        lc_timePicker.setIs24HourView(true);
+        if (Build.VERSION.SDK_INT > 23) {
+            lc_timePicker.setHour(lc_hour);
+            lc_timePicker.setMinute(lc_minutes);
+        } else {
+            lc_timePicker.setCurrentHour(lc_hour);
+            lc_timePicker.setCurrentMinute(lc_minutes);
+        }
+        setTime(lc_hour, lc_minutes);
+        lc_timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                setTime(hourOfDay, minute);
+            }
+        });
+        LinearLayout lc_linearLayout = new LinearLayout(m_activity);
+        LinearLayout.LayoutParams lc_layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        lc_layoutParams.gravity = Gravity.CENTER;
+        lc_linearLayout.setLayoutParams(lc_layoutParams);
+        lc_linearLayout.setOrientation(LinearLayout.VERTICAL);
+        lc_linearLayout.addView(lc_timePicker);
+
+        lc_alertDialog.setView(lc_linearLayout);
+        lc_alertDialog.show();
+    }
+
+    private void showDatePicker() {
+        AlertDialog.Builder lc_builder = new AlertDialog.Builder(m_activity);
+        lc_builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                m_AddInfoEditDate.setText(year + "年" + month + "月" + day + "日");
+            }
+        });
+        lc_builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog lc_alertDialog = lc_builder.create();
+        DatePicker lc_datePicker = new DatePicker(m_activity);
+        lc_datePicker.setElevation(3);
+        Calendar lc_calendar = Calendar.getInstance();
+        int lc_currentYear = lc_calendar.get(Calendar.YEAR);
+        int lc_currentMonth = lc_calendar.get(Calendar.MONTH);
+        int lc_currentDay = lc_calendar.get(Calendar.DAY_OF_MONTH);
+        setDate(lc_currentYear, lc_currentMonth, lc_currentDay);
+        lc_datePicker.init(lc_currentYear, lc_currentMonth, lc_currentDay,
+                new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        setDate(year, monthOfYear, dayOfMonth);
+                    }
+                });
+
+        LinearLayout lc_linearLayout = new LinearLayout(m_activity);
+        LinearLayout.LayoutParams lc_layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        lc_layoutParams.gravity = Gravity.CENTER;
+        lc_linearLayout.setLayoutParams(lc_layoutParams);
+        lc_linearLayout.setOrientation(LinearLayout.VERTICAL);
+        lc_linearLayout.addView(lc_datePicker);
+
+        lc_alertDialog.setView(lc_linearLayout);
+        lc_alertDialog.show();
     }
 }

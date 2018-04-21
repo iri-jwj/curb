@@ -25,7 +25,7 @@ public class CurbDbHelper extends SQLiteOpenHelper {
                     PersistenceContract.informationEntry.COLUMN_NAME_BELONG + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.informationEntry.COLUMN_NAME_CREATETIME + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.informationEntry.COLUMN_NAME_TIME + TEXT_TYPE + COMMA_SEP +
-                    PersistenceContract.informationEntry.COLUMN_NAME_ADDRESS + TEXT_TYPE + COMMA_SEP +
+                    PersistenceContract.informationEntry.COLUMN_NAME_ADDRESS + TEXT_TYPE +
                     ")";
     private static final String SQL_CREATE_ACCOUNT_ENTRIES =
             "CREATE TABLE " + PersistenceContract.AccountEntry.TABLE_NAME + "(" +
@@ -54,7 +54,7 @@ public class CurbDbHelper extends SQLiteOpenHelper {
                     ")";
     private static final String SQL_CREATE_SDANSWER_ENTRIES =
             "CREATE TABLE " + PersistenceContract.SDAnswer.TABLE_NAME + "(" +
-                    PersistenceContract.SDAnswer.COLUMN_NAME_SUMMARYID + TEXT_TYPE + " PRIMARY KEY," +
+                    PersistenceContract.SDAnswer.COLUMN_NAME_SUMMARYID + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.SDAnswer.COLUMN_NAME_NUM + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.SDAnswer.COLUMN_NAME_ANSWER + TEXT_TYPE +
                     ")";
@@ -67,7 +67,7 @@ public class CurbDbHelper extends SQLiteOpenHelper {
                     PersistenceContract.SDSummaryCreate.COLUMN_NAME_DESCRIPTION + TEXT_TYPE +
                     ")";
     private static final String SQL_CREATE_SDDETIALCREATE_ENTRIES =
-            "CREATE TABLE " + PersistenceContract.SDDetailCreate.TABLE_NAME + "(" +
+            "CREATE TABLE  " + PersistenceContract.SDDetailCreate.TABLE_NAME + "(" +
                     PersistenceContract.SDDetailCreate.COLUMN_NAME_SUMMARYID + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.SDDetailCreate.COLUMN_NAME_NUM + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.SDDetailCreate.COLUMN_NAME_QUESTION + TEXT_TYPE + COMMA_SEP +
@@ -75,8 +75,8 @@ public class CurbDbHelper extends SQLiteOpenHelper {
                     PersistenceContract.SDDetailCreate.COLUMN_NAME_OPTION2 + TEXT_TYPE +
                     ")";
     private static final String SQL_CREATE_SCHOLAT_ENTRIES =
-            "CREATE TABLE" + PersistenceContract.ScholatEntry.TABLE_NAME + "(" +
-                    PersistenceContract.ScholatEntry.COLUMN_NAME_ID + TEXT_TYPE + "PRIMARY KEY" +
+            "CREATE TABLE " + PersistenceContract.ScholatEntry.TABLE_NAME + "(" +
+                    PersistenceContract.ScholatEntry.COLUMN_NAME_ID + TEXT_TYPE + " PRIMARY KEY, " +
                     PersistenceContract.ScholatEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.ScholatEntry.COLUMN_NAME_CONTENT + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.ScholatEntry.COLMN_NAME_ENDTIME + TEXT_TYPE + COMMA_SEP +

@@ -1,5 +1,6 @@
 package jxpl.scnu.curb.immediateInformation;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -10,9 +11,13 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 
 import jxpl.scnu.curb.data.repository.InformationDataSource;
 import jxpl.scnu.curb.data.repository.InformationRepository;
+import jxpl.scnu.curb.utils.SharedHelper;
+import jxpl.scnu.curb.utils.XmlDataStorage;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static jxpl.scnu.curb.immediateInformation.InformationFilter.ALL_INFORMATIONS;
@@ -20,19 +25,26 @@ import static jxpl.scnu.curb.immediateInformation.InformationFilter.ALL_INFORMAT
 /**
  *@author iri-jwj
  * @version 2
- * last update: 3.24
+ * update: 3/24
+ *
+ * update:3/29
+ * 连接XmlDataStorage，获取userId
+ * @see XmlDataStorage#getUserInfo()
  */
 
 public class InformationPresenter implements InformationContract.Presenter, Serializable {
 
     private final InformationRepository informationRepository;
     private final InformationContract.View informationView;
+    private final Activity m_activity;
     private InformationFilter currentFilter = ALL_INFORMATIONS;
-    private boolean firstLoad = true;
+    private boolean firstLoad;
 
     public InformationPresenter(@NonNull InformationRepository informationRepository,
-                                InformationContract.View informationView) {
+                                InformationContract.View informationView,
+                                Activity para_activity) {
         this.informationRepository = checkNotNull(informationRepository);
+        m_activity = checkNotNull(para_activity);
         this.informationView = checkNotNull(informationView);
         informationView.setPresenter(this);
     }
@@ -44,60 +56,36 @@ public class InformationPresenter implements InformationContract.Presenter, Seri
         loadInformation(false);
     }
 
-
     @Override
     public void getInformationFromRepository() {
-
         SimpleDateFormat lc_simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss",
                 Locale.CHINA);
         Date lc_date = new Date(System.currentTimeMillis());
         String timestamp = lc_simpleDateFormat.format(lc_date);
+        if (!XmlDataStorage.isSharedHelperSet()) {
+            SharedHelper lc_sharedHelper = SharedHelper.getInstance(m_activity);
+            XmlDataStorage.setM_sharedHelper(lc_sharedHelper);
+        }
+        Map<String, String> lc_stringMap = XmlDataStorage.getUserInfo();
         informationRepository.getInformations(new InformationDataSource.LoadInformationCallback() {
             @Override
             public void getInformationsLoaded(List<ImmediateInformation> immediateInformationsFromCB) {
-                /*for (ImmediateInformation i :
-                        immediateInformationsFromCB) {
-                    Log.d("getInfoFromR", i.toString());
-                    switch (currentFilter) {
-                        case ALL_INFORMATIONS:
-                            informationToShow.add(i);
-                            Log.d("getInfoIsSucceed?", "YES");
-                            break;
-                        case EDU_INFORMATIONS:
-                            if (i.getType().equals("EDU_INFORMATIONS")) {
-                                informationToShow.add(i);
-                            }
-                            break;
-                        case PRA_INFORMATIONS:
-                            if (i.getType().equals("PRA_INFORMATIONS")) {
-                                informationToShow.add(i);
-                            }
-                            break;
-                        case SCHOLAR_INFORMATIONS:
-                            if (i.getType().equals("SCHOLAR_INFORMATIONS")) {
-                                informationToShow.add(i);
-                            }
-                            break;
-                        case WORK_STUDY_INFORMATIONS:
-                            if (i.getType().equals("WORK_STUDY_INFORMATIONS"))
-                                informationToShow.add(i);
-                            break;
-                        default:
-                            informationToShow.add(i);
-                            break;
-                    }
-                }*/
                 List<ImmediateInformation> lc_informationListShown =
                         new LinkedList<>(informationView.getCurrentList());
+
+                List<UUID> lc_uuids = new LinkedList<>();
+                for (ImmediateInformation i : lc_informationListShown) {
+                    lc_uuids.add(i.getId());
+                }
 
                 List<ImmediateInformation> lc_informations =
                         new LinkedList<>(immediateInformationsFromCB);
 
-                for (ImmediateInformation i :
-                        immediateInformationsFromCB) {
-                    if (lc_informationListShown.contains(i))
+                for (ImmediateInformation i : immediateInformationsFromCB) {
+                    if (lc_uuids.contains(i.getId()))
                         lc_informations.remove(i);
                 }
+
                 if (!lc_informations.isEmpty()) {
                     lc_informations.addAll(lc_informationListShown);
                     CheckIfInfoEmpty(lc_informations);
@@ -113,10 +101,8 @@ public class InformationPresenter implements InformationContract.Presenter, Seri
                 if (!informationView.isActive())
                     return;
                 informationView.showLoadingError();
-                Log.d("getInfoFromR", "failed");
             }
-        }, "", timestamp);
-        //todo 替换这里的userid
+        }, lc_stringMap.get(XmlDataStorage.USER_ID), timestamp);
     }
 
 
@@ -134,8 +120,17 @@ public class InformationPresenter implements InformationContract.Presenter, Seri
 
     @Override
     public void loadInformation(boolean forceUpdate) {
+        if (!XmlDataStorage.isSharedHelperSet()) {
+            SharedHelper lc_sharedHelper = SharedHelper.getInstance(m_activity);
+            XmlDataStorage.setM_sharedHelper(lc_sharedHelper);
+        }
+        firstLoad = XmlDataStorage.getFirstRunState(XmlDataStorage.IS_INFO_FIRST_RUN);
         loadInformations(forceUpdate || firstLoad);
-        firstLoad = false;
+        if (firstLoad) {
+            XmlDataStorage.setInfoFirstRun(false);
+            firstLoad = false;
+        }
+
     }
 
     /**
@@ -162,7 +157,7 @@ public class InformationPresenter implements InformationContract.Presenter, Seri
      *
      * 3.24 添加判断： 当list和view中中list都为空时才显示 NoInfo
      */
-    private void CheckIfInfoEmpty(List<ImmediateInformation> immediateInformations) {
+    private void CheckIfInfoEmpty(final List<ImmediateInformation> immediateInformations) {
         Log.d("informationPresenter", "CheckIfInfoEmpty: " + immediateInformations.isEmpty());
         if (immediateInformations.isEmpty()) {
             if (informationView.isListShowing()) {
@@ -171,7 +166,12 @@ public class InformationPresenter implements InformationContract.Presenter, Seri
                 informationView.showNoNewInfo();
             }
         } else {
-            informationView.showInfo(immediateInformations);
+            m_activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    informationView.showInfo(immediateInformations);
+                }
+            });
         }
     }
 

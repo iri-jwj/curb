@@ -36,4 +36,9 @@ public class SDAnswer {
     public void setAnswer(int answer) {
         this.answer = answer;
     }
+
+    @Override
+    public String toString() {
+        return "id:" + summaryId.toString() + " " + "questionNum:" + questionNum + " " + "answer:" + answer;
+    }
 }
