@@ -11,6 +11,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.jpush.android.api.JPushInterface;
 import jxpl.scnu.curb.R;
 import jxpl.scnu.curb.homePage.HomePageActivity;
 import jxpl.scnu.curb.login.LoginActivity;
@@ -118,6 +119,9 @@ public class LoadingActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (!lc_map.get(XmlDataStorage.USER_ID).equals("")) {
+                    JPushInterface.setDebugMode(true);
+                    JPushInterface.init(LoadingActivity.this);
+                    JPushInterface.setAlias(LoadingActivity.this, 1, (String) lc_map.get(XmlDataStorage.USER_ID));
                     Intent intent = new Intent(LoadingActivity.this,
                             HomePageActivity.class);
                     startActivity(intent);
@@ -129,7 +133,7 @@ public class LoadingActivity extends AppCompatActivity {
                     LoadingActivity.this.finish();
                 }
             }
-        }, 2500);
+        }, 1500);
 
 //        mVisible = true;
 //        mControlsView = findViewById(R.id.fullscreen_content_controls);

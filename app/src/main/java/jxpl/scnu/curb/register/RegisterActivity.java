@@ -3,24 +3,20 @@ package jxpl.scnu.curb.register;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -61,11 +57,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
-
     // UI references.
 //    @BindView(R.id.signup_account)
 //    private EditText account_et;
@@ -75,7 +66,10 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     Button register_button;
     @BindView(R.id.signup_account)
     AutoCompleteTextView account_et;
-
+    /**
+     * Keep track of the login task to ensure we can cancel it if requested.
+     */
+    private UserLoginTask mAuthTask = null;
     //private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -223,18 +217,18 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            register(account,password);
+            register(account, password);
         }
     }
 
     /**
      * 2018-03-24
      * lifumin
+     *
      * @param account
-     * @param password
-     * 注册逻辑（仿照login的逻辑）
+     * @param password 注册逻辑（仿照login的逻辑）
      */
-    public void register(final String account, final String password){
+    public void register(final String account, final String password) {
         final Thread registerThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -247,7 +241,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
                 //生成一个UUid类型
                 String registerId = UUID.randomUUID().toString();
-                boolean registerResult = RetrofitGetData.postRegister(registerId,account, password);
+                boolean registerResult = RetrofitGetData.postRegister(registerId, account, password);
                 RegisterActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -264,10 +258,10 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                      * start
                      */
                     Intent intent = new Intent();
-                    intent.putExtra("return_id",registerId);
-                    intent.putExtra("return_account",account);
-                    intent.putExtra("return_password",password);
-                    setResult(RESULT_OK,intent);
+                    intent.putExtra("return_id", registerId);
+                    intent.putExtra("return_account", account);
+                    intent.putExtra("return_password", password);
+                    setResult(RESULT_OK, intent);
                     /**
                      * end
                      */
@@ -276,7 +270,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                     RegisterActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getBaseContext(),"111",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getBaseContext(), "111", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -285,6 +279,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         registerThread.start();
 
     }
+
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
         return email.contains("@");

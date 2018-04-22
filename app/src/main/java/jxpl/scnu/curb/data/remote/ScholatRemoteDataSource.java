@@ -1,6 +1,5 @@
 package jxpl.scnu.curb.data.remote;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import jxpl.scnu.curb.data.repository.ScholatDataSource;

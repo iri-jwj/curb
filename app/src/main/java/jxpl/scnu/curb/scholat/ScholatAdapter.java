@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -37,12 +42,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class ScholatAdapter extends AutoFitAdapter<ScholatViewHolder> {
 
-    private List<ScholatHomework> m_scholatHomeworks;
     private final AutoFitRecyclerView m_autoFitRecyclerView;
+
+    private List<ScholatHomework> m_scholatHomeworks;
     private Context m_context;
-    private Map<UUID, Integer> m_expandedHeight = new HashMap<>();
-    private Map<UUID, Integer> m_skeletonHeight = new HashMap<>();
-    private Map<UUID, Boolean> itemIsMeasured = new HashMap<>();
+    private Map<String, Integer> m_expandedHeight = new HashMap<>();
+    private Map<String, Integer> m_skeletonHeight = new HashMap<>();
+    private Map<String, Boolean> itemIsMeasured = new HashMap<>();
 
     private int mHiddenViewMeasuredHeight = 0;
 
@@ -60,10 +66,6 @@ public class ScholatAdapter extends AutoFitAdapter<ScholatViewHolder> {
         return m_scholatHomeworks;
     }
 
-    public void repalceHomeworks(List<ScholatHomework> para_homeworkList) {
-        setScholatHomeworks(para_homeworkList);
-    }
-
     private void setScholatHomeworks(List<ScholatHomework> para_homeworkList) {
         m_scholatHomeworks = para_homeworkList;
         m_isExpand.clear();
@@ -78,6 +80,10 @@ public class ScholatAdapter extends AutoFitAdapter<ScholatViewHolder> {
         notifyDataSetChanged();
     }
 
+    public void repalceHomeworks(List<ScholatHomework> para_homeworkList) {
+        setScholatHomeworks(para_homeworkList);
+    }
+
     @NonNull
     @Override
     public ScholatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -89,11 +95,29 @@ public class ScholatAdapter extends AutoFitAdapter<ScholatViewHolder> {
     }
 
     @Override
+    public void onViewRecycled(@NonNull ScholatViewHolder holder) {
+        int position = holder.getAdapterPosition();
+        if (m_isExpand.size() > position && position >= 0) {
+            m_isExpand.remove(position);
+            m_isExpand.add(position, false);
+            itemIsMeasured.remove(m_scholatHomeworks.get(position).getHomeworkId());
+            itemIsMeasured.put(m_scholatHomeworks.get(position).getHomeworkId(), false);
+            m_expandedHeight.remove(m_scholatHomeworks.get(position).getHomeworkId());
+            m_skeletonHeight.remove(m_scholatHomeworks.get(position).getHomeworkId());
+            m_skeletonHeight.put(m_scholatHomeworks.get(position).getHomeworkId(), 0);
+            m_expandedHeight.put(m_scholatHomeworks.get(position).getHomeworkId(), 0);
+        }
+        super.onViewRecycled(holder);
+    }
+
+    @Override
     public void onBindViewHolder(@NonNull final ScholatViewHolder holder, int position) {
         final ScholatHomework lc_homework = m_scholatHomeworks.get(position);
         holder.m_ScholatItemTitle.setText(lc_homework.getTitle());
-        holder.m_ScholatItemTime.setText(lc_homework.getCreateTime());
-        holder.m_ScholatItemEndTime.setText(lc_homework.getEndTime());
+        holder.m_ScholatItemTime.setText(getTimeToShow(lc_homework.getCreateTime()));
+        holder.m_ScholatItemEndTime.setText(getTimeToShow(lc_homework.getEndTime()));
+
+
         final String content = lc_homework.getContent();
         HtmlText.from(content)
                 .setImageLoader(new HtmlImageLoader() {
@@ -134,7 +158,6 @@ public class ScholatAdapter extends AutoFitAdapter<ScholatViewHolder> {
                 })
                 .into(holder.m_ScholatItemContent);
 
-
         holder.m_ScholatSkeleton.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -144,20 +167,20 @@ public class ScholatAdapter extends AutoFitAdapter<ScholatViewHolder> {
                 holder.m_ScholatSkeleton.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
-        holder.m_imageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        holder.m_ScholatItemImageMoreless.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 if (!itemIsMeasured.get(lc_homework.getHomeworkId())) {
                     int height = m_skeletonHeight.get(lc_homework.getHomeworkId());
                     m_skeletonHeight.remove(lc_homework.getHomeworkId());
-                    m_skeletonHeight.put(lc_homework.getHomeworkId(), height + holder.m_imageView.getHeight());
+                    m_skeletonHeight.put(lc_homework.getHomeworkId(), height + holder.m_ScholatItemImageMoreless.getHeight());
                     itemIsMeasured.remove(lc_homework.getHomeworkId());
                     itemIsMeasured.put(lc_homework.getHomeworkId(), true);
                     holder.m_ScholatItemContainer.setVisibility(View.GONE);
                     View child = holder.itemView;
                     m_autoFitRecyclerView.changeHeight(child, m_skeletonHeight.get(lc_homework.getHomeworkId()));
                 }
-                holder.m_imageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                holder.m_ScholatItemImageMoreless.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
 
@@ -170,6 +193,31 @@ public class ScholatAdapter extends AutoFitAdapter<ScholatViewHolder> {
                 holder.m_ScholatItemContainer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
+    }
+
+    private String getTimeToShow(String time) {
+        SimpleDateFormat lc_simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.CHINA);
+        Date lc_createTime = null;
+        long currentTime = System.currentTimeMillis();
+        try {
+            lc_createTime = lc_simpleDateFormat.parse(time);
+        } catch (ParseException para_e) {
+            para_e.printStackTrace();
+        }
+        String timeToShow;
+        if (lc_createTime != null) {
+            long deviation = currentTime - lc_createTime.getTime();
+            double days = deviation / (1000 * 60 * 60 * 24);
+            if (days < 1) {
+                if (deviation / (1000 * 60 * 60) >= 1)
+                    timeToShow = Math.round(deviation / (1000 * 60 * 60)) + "小时前";
+                else
+                    timeToShow = Math.round(deviation / (1000 * 60)) + "分钟前";
+            } else {
+                timeToShow = Math.round(days) + "天前";
+            }
+            return timeToShow;
+        } else return "";
     }
 
     @Override
@@ -191,7 +239,7 @@ public class ScholatAdapter extends AutoFitAdapter<ScholatViewHolder> {
                 m_skeletonHeight.get(lc_homework.getHomeworkId()) + m_expandedHeight.get(lc_homework.getHomeworkId()));
         mHiddenViewMeasuredHeight = m_expandedHeight.get(lc_homework.getHomeworkId());
         v.m_ScholatItemContainer.setVisibility(View.VISIBLE);
-        animOpen(v.m_ScholatItemContainer, v.m_imageView);
+        animOpen(v.m_ScholatItemContainer, v.m_ScholatItemImageMoreless);
     }
 
     @Override
@@ -203,7 +251,7 @@ public class ScholatAdapter extends AutoFitAdapter<ScholatViewHolder> {
         ScholatHomework lc_homework = m_scholatHomeworks.get(position);
         ScholatViewHolder v = (ScholatViewHolder) m_autoFitRecyclerView.getChildViewHolder(child);
         mHiddenViewMeasuredHeight = m_expandedHeight.get(lc_homework.getHomeworkId());
-        animClose(v.m_ScholatItemContainer, v.m_imageView);
+        animClose(v.m_ScholatItemContainer, v.m_ScholatItemImageMoreless);
         //m_autoFitRecyclerView.changeHeight(child,m_skeletonHeight.get(i.getId()));
         m_autoFitRecyclerView.changeHeight(child, child.getHeight(), m_skeletonHeight.get(lc_homework.getHomeworkId()));
     }
@@ -226,6 +274,7 @@ public class ScholatAdapter extends AutoFitAdapter<ScholatViewHolder> {
         float to = 180.0f;
         RotateAnimation lc_rotateAnimation = new RotateAnimation(from, to, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         lc_rotateAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        lc_rotateAnimation.setDuration(300);
         lc_rotateAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {

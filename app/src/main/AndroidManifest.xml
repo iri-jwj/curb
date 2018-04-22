@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -76,8 +77,23 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
+        <activity
+            android:name=".userProfile.setScholat.SetScholatActivity"
+            android:theme="@style/AppTheme.NoActionBar">
 
-        <!--FirebaseService-->
+        </activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="jxpl.scnu.curb.getimage"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/imagepath" />
+        </provider>
+
+        <!-- FirebaseService -->
         <service
             android:name=".utils.service.MyFirebaseMessageService"
             android:enabled="true"
@@ -115,9 +131,8 @@
         <activity
             android:name="cn.jpush.android.ui.PopWinActivity"
             android:exported="false"
-            android:theme="@style/MyDialogStyle">
+            android:theme="@style/MyDialogStyle"></activity>
 
-        </activity>
 
         <!-- Required SDK核心功能 -->
         <activity
@@ -203,7 +218,8 @@
         <meta-data
             android:name="JPUSH_APPKEY"
             android:value="ddfad7444e3429c8060d8846" />
-        <!--极光推送结束！！！！！-->
+        <!-- 极光推送结束！！！！！ -->
+
 
     </application>
 

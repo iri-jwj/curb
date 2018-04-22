@@ -4,7 +4,6 @@ package jxpl.scnu.curb.smallData;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.util.Xml;
 
 import com.google.gson.Gson;
 
@@ -48,7 +47,6 @@ public class SmallDataPresenter implements SmallDataInterface.Presenter {
     public void start() {
         loadSummaries(false, 1);
     }
-
 
 
     @Override
@@ -148,6 +146,7 @@ public class SmallDataPresenter implements SmallDataInterface.Presenter {
             }
         }, time, direction);
     }
+
     @Override
     public void loadDetails(String summaryId) {
         m_smallDataRepository.loadDetails(new SmallDataDataSource.loadDetailCallback() {
@@ -181,7 +180,6 @@ public class SmallDataPresenter implements SmallDataInterface.Presenter {
     }
 
 
-
     private boolean checkHaveFinished() {
         return sumOfQuestions == m_sdAnswers.size();
     }
@@ -192,6 +190,10 @@ public class SmallDataPresenter implements SmallDataInterface.Presenter {
                 .getString(messageId));
     }
 
+    @Override
+    public Context getContextInPresenter() {
+        return m_homePageActivity;
+    }
 
     /**
      * 内部类，用于将答案保存为服务器需要的格式
@@ -240,10 +242,5 @@ public class SmallDataPresenter implements SmallDataInterface.Presenter {
         public void setResult(Map<Integer, Integer> para_result) {
             result = para_result;
         }
-    }
-
-    @Override
-    public Context getContextInPresenter() {
-        return m_homePageActivity;
     }
 }

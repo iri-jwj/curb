@@ -23,10 +23,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static jxpl.scnu.curb.immediateInformation.InformationFilter.ALL_INFORMATIONS;
 
 /**
- *@author iri-jwj
+ * @author iri-jwj
  * @version 2
  * update: 3/24
- *
+ * <p>
  * update:3/29
  * 连接XmlDataStorage，获取userId
  * @see XmlDataStorage#getUserInfo()
@@ -134,11 +134,10 @@ public class InformationPresenter implements InformationContract.Presenter, Seri
     }
 
     /**
-     *
      * @param forceUpdate 判断是否强制刷新，即强制从网络获取最新信息；
-     *  若为强制刷新，则调用
-     *  @see InformationRepository#refreshInformation() 方法
-     *  再调用 {@link #getInformationFromRepository()} 方法获取资讯
+     *                    若为强制刷新，则调用
+     * @see InformationRepository#refreshInformation() 方法
+     * 再调用 {@link #getInformationFromRepository()} 方法获取资讯
      */
     private void loadInformations(boolean forceUpdate) {
         informationView.setLoadingIndicator(true);
@@ -150,11 +149,11 @@ public class InformationPresenter implements InformationContract.Presenter, Seri
 
     /**
      * @param immediateInformations 需要检查的List
-     * 若内容是空的，则调用view中的方法显示没有消息
+     *                              若内容是空的，则调用view中的方法显示没有消息
      * @see InformationFragment#showNoInfo()
      * 若内容不为空，则显示List
      * @see InformationFragment#showInfo(List)
-     *
+     * <p>
      * 3.24 添加判断： 当list和view中中list都为空时才显示 NoInfo
      */
     private void CheckIfInfoEmpty(final List<ImmediateInformation> immediateInformations) {

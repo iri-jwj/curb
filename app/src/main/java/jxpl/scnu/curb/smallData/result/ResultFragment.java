@@ -9,7 +9,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +19,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -40,11 +37,10 @@ public class ResultFragment extends Fragment implements ResultInterface.View {
     private static final String ARG_SD_ID = "summary_id";
     @BindView(R.id.result_recycler)
     RecyclerView m_ResultRecycler;
-
+    Unbinder unbinder;
     private ResultInterface.Presenter m_presenter;
     private ResultAdapter m_resultAdapter;
     private UUID summaryId;
-    Unbinder unbinder;
 
     public ResultFragment() {
         // Required empty public constructor

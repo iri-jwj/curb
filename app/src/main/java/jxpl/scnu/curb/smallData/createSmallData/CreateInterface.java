@@ -1,8 +1,6 @@
 package jxpl.scnu.curb.smallData.createSmallData;
 
 
-import android.text.method.LinkMovementMethod;
-
 import java.io.File;
 import java.util.List;
 

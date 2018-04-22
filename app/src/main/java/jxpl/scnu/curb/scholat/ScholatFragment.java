@@ -8,15 +8,14 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -42,14 +41,9 @@ public class ScholatFragment extends Fragment implements ScholatContract.View {
     @BindView(R.id.frameLayout)
     ConstraintLayout m_FrameLayout;
     Unbinder unbinder;
-    @BindView(R.id.scholat_loading_indicator)
-    ProgressBar m_ScholatLoadingIndicator;
-
     private Activity m_activity;
     private ScholatContract.Presenter m_presenter;
     private ScholatAdapter m_scholatAdapter;
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
 
     public ScholatFragment() {
@@ -57,11 +51,9 @@ public class ScholatFragment extends Fragment implements ScholatContract.View {
     }
 
 
-    public static ScholatFragment newInstance(String param1, String param2) {
+    public static ScholatFragment newInstance() {
         ScholatFragment fragment = new ScholatFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,8 +61,7 @@ public class ScholatFragment extends Fragment implements ScholatContract.View {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        m_scholatAdapter =
-                new ScholatAdapter(new LinkedList<ScholatHomework>(), checkNotNull(getContext()), m_ScholatRecycler);
+
     }
 
     @Override
@@ -79,6 +70,23 @@ public class ScholatFragment extends Fragment implements ScholatContract.View {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_scholat, container, false);
         unbinder = ButterKnife.bind(this, view);
+        LinearLayoutManager lc_linearLayoutManager = new LinearLayoutManager(m_activity);
+        m_ScholatRecycler.setLayoutManager(lc_linearLayoutManager);
+        m_scholatAdapter =
+                new ScholatAdapter(new LinkedList<ScholatHomework>(), checkNotNull(getContext()), m_ScholatRecycler);
+        m_ScholatRecycler.setAdapter(m_scholatAdapter);
+        m_ScholatRecycler.addItemDecoration(new DividerItemDecoration(
+                checkNotNull(getActivity()), DividerItemDecoration.HORIZONTAL));
+
+        m_ScholatRefresh.setScrollUpChild(m_ScholatRecycler);
+        m_ScholatRefresh.canChildScrollUp();
+        m_ScholatRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                m_presenter.loadScholats(true);
+            }
+        });
+
         return view;
     }
 
@@ -101,7 +109,7 @@ public class ScholatFragment extends Fragment implements ScholatContract.View {
 
     @Override
     public void showMessage(String message) {
-        Snackbar.make(checkNotNull(getView()), message, 1300);
+        Snackbar.make(checkNotNull(getView()), message, 1300).show();
     }
 
     @Override
@@ -110,25 +118,15 @@ public class ScholatFragment extends Fragment implements ScholatContract.View {
     }
 
     @Override
-    public void setLoadingIndicator(boolean active) {
-        if (active) {
-            m_activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            m_activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    m_ScholatLoadingIndicator.setVisibility(View.VISIBLE);
-                }
-            });
-        } else {
-            m_activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            m_activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    m_ScholatLoadingIndicator.setVisibility(View.GONE);
-                }
-            });
-        }
+    public void setLoadingIndicator(final boolean active) {
+        if (getView() == null)
+            return;
+        m_ScholatRefresh.post(new Runnable() {
+            @Override
+            public void run() {
+                m_ScholatRefresh.setRefreshing(active);
+            }
+        });
     }
 
     @Override

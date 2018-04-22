@@ -1,11 +1,10 @@
 package jxpl.scnu.curb.immediateInformation.informationCreate;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
@@ -17,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -46,7 +44,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * @author iri-jwj
  * @version 2
- *          last update 3/26
+ * last update 3/26
  */
 public class InformationCreateFragment extends Fragment implements InformationCreateContract.View {
 
@@ -91,6 +89,7 @@ public class InformationCreateFragment extends Fragment implements InformationCr
     private String day;
     private String hours;
     private String minutes;
+
     public InformationCreateFragment() {
         // Required empty public constructor
     }
@@ -143,33 +142,53 @@ public class InformationCreateFragment extends Fragment implements InformationCr
 
     @Override
     public void setLoadingIndicator(final boolean active) {
-        if (active) {
-            m_activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            m_activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    m_ProgressBar.setVisibility(View.VISIBLE);
+        m_activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (active) {
+                    m_activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    m_activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            m_ProgressBar.setVisibility(View.VISIBLE);
+                        }
+                    });
+                } else {
+                    m_activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    checkNotNull(getActivity()).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            m_ProgressBar.setVisibility(View.GONE);
+                        }
+                    });
                 }
-            });
-        } else {
-            m_activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            checkNotNull(getActivity()).runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    m_ProgressBar.setVisibility(View.GONE);
-                }
-            });
-        }
+            }
+        });
+
     }
 
     @Override
-    public void showPostResult(boolean result) {
-        if (result) {
-            Snackbar.make(checkNotNull(getView()), "发送成功", 1000);
-            m_activity.finish();
-        } else
-            Snackbar.make(checkNotNull(getView()), "发送失败", 1000);
+    public void showPostResult(final boolean result) {
+        m_activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (result) {
+                    Snackbar.make(checkNotNull(getView()), "发送成功", 1000).show();
+                    m_activity = null;
+                    Handler lc_handler = new Handler();
+                    lc_handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            getActivity().finish();
+                        }
+                    }, 1300);
+
+                } else
+                    Snackbar.make(checkNotNull(getView()), "发送失败", 1000).show();
+            }
+        });
+
     }
 
     @Override
@@ -230,7 +249,7 @@ public class InformationCreateFragment extends Fragment implements InformationCr
         String createTime = lc_simpleDateFormat.format(lc_date);
         Log.d("InformationCreateFrag", "onM_AddInfoButtonCommitClicked: belong:" + belong);
         mPresenter.commitInformation(new ImmediateInformation(UUID.randomUUID(), title, content,
-                belong,createTime,time,address));
+                belong, createTime, time, address));
     }
 
     /**
@@ -304,14 +323,14 @@ public class InformationCreateFragment extends Fragment implements InformationCr
         lc_datePicker.setElevation(3);
         Calendar lc_calendar = Calendar.getInstance();
         int lc_currentYear = lc_calendar.get(Calendar.YEAR);
-        int lc_currentMonth = lc_calendar.get(Calendar.MONTH);
+        int lc_currentMonth = lc_calendar.get(Calendar.MONTH) + 1;
         int lc_currentDay = lc_calendar.get(Calendar.DAY_OF_MONTH);
         setDate(lc_currentYear, lc_currentMonth, lc_currentDay);
         lc_datePicker.init(lc_currentYear, lc_currentMonth, lc_currentDay,
                 new DatePicker.OnDateChangedListener() {
                     @Override
                     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        setDate(year, monthOfYear, dayOfMonth);
+                        setDate(year, monthOfYear + 1, dayOfMonth);
                     }
                 });
 

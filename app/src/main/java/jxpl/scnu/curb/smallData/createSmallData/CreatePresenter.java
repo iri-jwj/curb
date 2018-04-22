@@ -20,7 +20,9 @@ public class CreatePresenter implements CreateInterface.Presenter {
     private final CreateInterface.View m_createView;
     private final SmallDataRepository m_smallDataRepository;
     private final Context m_createContext;
-
+    private List<SDDetail> m_sdCreatedDetails = new LinkedList<>();
+    private SDSummary m_sdCreatedSummary;
+    private File m_imageFile;
     public CreatePresenter(SmallDataRepository para_smallDataRepository,
                            CreateInterface.View para_view,
                            Context para_context) {
@@ -28,10 +30,6 @@ public class CreatePresenter implements CreateInterface.Presenter {
         m_createView = para_view;
         m_createContext = para_context;
     }
-
-    private List<SDDetail> m_sdCreatedDetails = new LinkedList<>();
-    private SDSummary m_sdCreatedSummary;
-    private File m_imageFile;
 
     @Override
     public void start() {

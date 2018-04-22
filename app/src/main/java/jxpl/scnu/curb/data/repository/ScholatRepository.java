@@ -1,5 +1,6 @@
 package jxpl.scnu.curb.data.repository;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.util.LinkedHashMap;
@@ -22,18 +23,24 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 
 public class ScholatRepository implements ScholatDataSource {
+    private volatile static ScholatRepository instance = null;
     private final ScholatLocalDataSource m_scholatLocalDataSource;
     private final ScholatRemoteDataSource m_scholatRemoteDataSource;
 
-    private Map<UUID, ScholatHomework> m_homeworkCache = new LinkedHashMap<>();
+    private Map<String, ScholatHomework> m_homeworkCache = new LinkedHashMap<>();
     private boolean isCacheDirty = true;
 
-    public ScholatRepository(@NonNull ScholatLocalDataSource para_scholatLocalDataSource,
-                             @NonNull ScholatRemoteDataSource para_scholatRemoteDataSource) {
+    private ScholatRepository(@NonNull ScholatLocalDataSource para_scholatLocalDataSource,
+                              @NonNull ScholatRemoteDataSource para_scholatRemoteDataSource) {
         m_scholatLocalDataSource = checkNotNull(para_scholatLocalDataSource);
         m_scholatRemoteDataSource = checkNotNull(para_scholatRemoteDataSource);
     }
 
+    public static ScholatRepository getInstance(Context para_context) {
+        if (instance == null)
+            instance = new ScholatRepository(new ScholatLocalDataSource(para_context), new ScholatRemoteDataSource());
+        return instance;
+    }
     @Override
     public void saveHomeworkToLocal(final List<ScholatHomework> para_homeworkList) {
         final Thread lc_thread = new Thread(new Runnable() {

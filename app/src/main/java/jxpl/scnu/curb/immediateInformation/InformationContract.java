@@ -32,8 +32,9 @@ interface InformationContract {
         void showInformationDetailsUi(UUID id, Context context);
 
         /**
-         *  调用adapter中的replaceInfo(List)方法替换显示的信息
-         *  {@link InformationFragment.InfoAdapter#replaceInfo(List)}
+         * 调用adapter中的replaceInfo(List)方法替换显示的信息
+         * {@link InformationFragment.InfoAdapter#replaceInfo(List)}
+         *
          * @param immediateInformations 等待显示的资讯信息
          */
         void showInfo(List<ImmediateInformation> immediateInformations);
@@ -55,6 +56,7 @@ interface InformationContract {
 
         /**
          * 用于显示数据加载时的指示圈
+         *
          * @param active 指示loading状态旋转小圈是否显示
          */
         void setLoadingIndicator(boolean active);
@@ -84,25 +86,26 @@ interface InformationContract {
         void getInformationFromRepository();
 
         /**
-         *@deprecated at 3/25
+         * @deprecated at 3/25
          */
         String getFiltering();
 
         /**
-         * @deprecated at 3/25
          * @param filtering 筛选的目的信息
+         * @deprecated at 3/25
          */
         void setFiltering(String filtering);
 
         /**
-         * @deprecated at 3/25
          * @param immediateInformation 需要显示详细的information
-         * @param context 应用上下文
+         * @param context              应用上下文
+         * @deprecated at 3/25
          */
         void openInformationDetails(ImmediateInformation immediateInformation, Context context);
 
         /**
          * 判断是否是第一次刷新，然后调用真正的装载信息的方法{@link #loadInformations(boolean)}
+         *
          * @param forceUpdate 判断是否强制刷新，即强制从网络获取最新信息
          */
         void loadInformation(boolean forceUpdate);

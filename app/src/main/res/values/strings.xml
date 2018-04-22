@@ -104,4 +104,9 @@
     <string name="user_profile_account">账号</string>
     <string name="user_profile_scholat">学者网账号</string>
     <string name="user_profile_logout">退出登录</string>
+
+    <!--setScholat-->
+    <string name="user_profile_scholat_account">账号</string>
+    <string name="user_profile_scholat_psw">密码</string>
+    <string name="user_profile_scholat_confirm">确认</string>
 </resources>

@@ -36,6 +36,7 @@ final class PersistenceContract {
         static final String COLUMN_NAME_CREATETIME = "createtime";
 
     }
+
     static abstract class AccountEntry implements BaseColumns {
         static final String COLUMN_NAME_ID = "id";
         static final String TABLE_NAME = "accountManage";

@@ -16,12 +16,12 @@ import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_ADDRESS;
+import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_BELONG;
 import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_CONTENT;
 import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_CREATETIME;
 import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_ID;
 import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_TIME;
 import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_TITLE;
-import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_BELONG;
 import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.TABLE_NAME;
 
 /**
@@ -33,6 +33,7 @@ import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.TAB
 public class InformationLocalDataSource implements InformationDataSource {
     private static InformationLocalDataSource INSTANCE;
     private CurbDbHelper curbDbHelper;
+
     private InformationLocalDataSource(@NonNull Context context) {
         checkNotNull(context);
         curbDbHelper = new CurbDbHelper(context);

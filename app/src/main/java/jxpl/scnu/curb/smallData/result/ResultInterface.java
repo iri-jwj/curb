@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import jxpl.scnu.curb.BasePresenter;
 import jxpl.scnu.curb.BaseView;
-import jxpl.scnu.curb.smallData.SDAnswer;
 import jxpl.scnu.curb.smallData.SDResult;
 
 

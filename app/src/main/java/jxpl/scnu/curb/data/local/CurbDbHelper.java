@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * @author iri-jwj
  * @version 2
- *          update 3/27
- *          新增 scholat 数据表的创建方法
+ * update 3/27
+ * 新增 scholat 数据表的创建方法
  */
 public class CurbDbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
@@ -80,7 +80,7 @@ public class CurbDbHelper extends SQLiteOpenHelper {
                     PersistenceContract.ScholatEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.ScholatEntry.COLUMN_NAME_CONTENT + TEXT_TYPE + COMMA_SEP +
                     PersistenceContract.ScholatEntry.COLMN_NAME_ENDTIME + TEXT_TYPE + COMMA_SEP +
-                    PersistenceContract.ScholatEntry.COLUMN_NAME_CREATETIME + TIMESTAMP_TYPE + ")" ;
+                    PersistenceContract.ScholatEntry.COLUMN_NAME_CREATETIME + TIMESTAMP_TYPE + ")";
 
     CurbDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

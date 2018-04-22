@@ -46,7 +46,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * @author iri-jwj
  * @version 1
- *          2018-3-23
+ * 2018-3-23
  */
 public class SmallDataFragment extends Fragment implements SmallDataInterface.View, FragmentBackHandler {
     @BindView(R.id.sd_content_image_image)
@@ -134,6 +134,7 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
 
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public void setPresenter(SmallDataInterface.Presenter presenter) {
         this.presenter = presenter;
@@ -166,6 +167,7 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
 
     /**
      * 内部调用的显示summary的方法，前台单个单个显示
+     *
      * @param para_sdSummary 目标 summary
      */
     private void showSummary(final SDSummary para_sdSummary) {
@@ -185,33 +187,33 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
                 }
             });
         }
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    m_SdContentTextTitle.setText(title);
-                    m_SdContentTextDescription.setText(description);
-                    m_SdContentTextAuthor.setText(creator);
-                    if (indexForSummary == 0) {
-                        m_SdContentImagebuttonBefore.setImageResource(R.drawable.ic_sd_refresh_blue);
-                    } else {
-                        m_SdContentImagebuttonBefore.setImageResource(R.drawable.ic_sd_left);
-                    }
-                    if (indexForSummary == (m_sdSummaries.size() - 1)) {
-                        m_SdContentImagebuttonAfter.setImageResource(R.drawable.ic_refresh_grey);
-                    } else {
-                        m_SdContentImagebuttonAfter.setImageResource(R.drawable.ic_sd_right);
-                    }
-                    //当问卷是已完成时，改变背景颜色
-                    if (para_sdSummary.isHasFinish()) {
-                        m_CardView.setCardBackgroundColor(getResources()
-                                .getColor(R.color.card_small_data_finished));
-
-                    } else {
-                        m_CardView.setCardBackgroundColor(getResources()
-                                .getColor(R.color.card_small_data_unfinished));
-                    }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                m_SdContentTextTitle.setText(title);
+                m_SdContentTextDescription.setText(description);
+                m_SdContentTextAuthor.setText(creator);
+                if (indexForSummary == 0) {
+                    m_SdContentImagebuttonBefore.setImageResource(R.drawable.ic_sd_refresh_blue);
+                } else {
+                    m_SdContentImagebuttonBefore.setImageResource(R.drawable.ic_sd_left);
                 }
-            });
+                if (indexForSummary == (m_sdSummaries.size() - 1)) {
+                    m_SdContentImagebuttonAfter.setImageResource(R.drawable.ic_refresh_grey);
+                } else {
+                    m_SdContentImagebuttonAfter.setImageResource(R.drawable.ic_sd_right);
+                }
+                //当问卷是已完成时，改变背景颜色
+                if (para_sdSummary.isHasFinish()) {
+                    m_CardView.setCardBackgroundColor(getResources()
+                            .getColor(R.color.card_small_data_finished));
+
+                } else {
+                    m_CardView.setCardBackgroundColor(getResources()
+                            .getColor(R.color.card_small_data_unfinished));
+                }
+            }
+        });
     }
 
     @Override
@@ -223,6 +225,7 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
 
     /**
      * 内部调用的显示方法，单个显示
+     *
      * @param para_sdDetail 要显示的detail
      */
     private void showDetail(SDDetail para_sdDetail) {
@@ -313,8 +316,8 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
     }
 
     /**
-     * @deprecated
      * @param para_context 用于实现弹出按钮
+     * @deprecated
      */
     @Override
     public void showPopUpMenu(Context para_context) {
@@ -330,6 +333,7 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
     /**
      * {void showError(String)}
      * 当出现了某些错误，如问卷未完成时调用这个方法
+     *
      * @param error 错误信息
      */
     @Override
@@ -359,10 +363,10 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
     }
 
     /**
-     *  {onM_SdContentImagebuttonBeforeClicked()}
-     *  向左按钮的点击事件，判断indexForSummary的值
-     *  若为 0 ,即第一个summary ， 就刷新 {@link #m_sdSummaries}
-     *  若不为 0 ，即显示上一条summary ， {@link #indexForSummary} 减一
+     * {onM_SdContentImagebuttonBeforeClicked()}
+     * 向左按钮的点击事件，判断indexForSummary的值
+     * 若为 0 ,即第一个summary ， 就刷新 {@link #m_sdSummaries}
+     * 若不为 0 ，即显示上一条summary ， {@link #indexForSummary} 减一
      */
     @OnClick(R.id.sd_content_imagebutton_before)
     public void onM_SdContentImagebuttonBeforeClicked() {

@@ -36,12 +36,14 @@ public interface InformationDataSource {
 
     /**
      * 将从网络中获取到的information保存到本地数据库
+     *
      * @param immediateInformations 待保存的information
      */
     void saveInfoFromWeb(List<ImmediateInformation> immediateInformations);
 
     /**
      * 刷新repository中的map缓存
+     *
      * @see InformationRepository#cachedInfo
      */
     void refreshInformation();

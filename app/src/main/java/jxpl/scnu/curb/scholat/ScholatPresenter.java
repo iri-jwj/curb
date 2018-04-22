@@ -1,6 +1,7 @@
 package jxpl.scnu.curb.scholat;
 
 import android.app.Activity;
+import android.util.Log;
 
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,7 @@ public class ScholatPresenter implements ScholatContract.Presenter {
 
     @Override
     public void loadScholats(boolean forceUpdate) {
+        m_view.setLoadingIndicator(true);
         innerLoadScholats(forceUpdate || isFirstLoaded);
     }
 
@@ -53,6 +55,7 @@ public class ScholatPresenter implements ScholatContract.Presenter {
         if (forceUpdate) {
             m_scholatRepository.refreshCache();
             isFirstLoaded = false;
+            XmlDataStorage.setScholatFirstRun(false);
         }
 
         if (!XmlDataStorage.isSharedHelperSet()) {
@@ -60,17 +63,32 @@ public class ScholatPresenter implements ScholatContract.Presenter {
             XmlDataStorage.setM_sharedHelper(lc_sharedHelper);
         }
         Map<String, String> lc_stringMap = XmlDataStorage.getUserInfo();
+        Log.d("scholat", "innerLoadScholats: ");
         m_scholatRepository.loadHomeworks(new ScholatDataSource.LoadHomeworkCallback() {
             @Override
-            public void onHomeworkLoaded(List<ScholatHomework> para_homeworkList) {
-                m_view.showScholats(para_homeworkList);
+            public void onHomeworkLoaded(final List<ScholatHomework> para_homeworkList) {
+                m_activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        m_view.setLoadingIndicator(false);
+                        m_view.showScholats(para_homeworkList);
+                    }
+                });
             }
 
             @Override
             public void onDataNotAvailable() {
-                m_view.showMessage("获取消息错误");
+                m_activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        m_view.setLoadingIndicator(false);
+                        m_view.showMessage("获取消息错误");
+                    }
+                });
+
             }
         }, lc_stringMap.get(XmlDataStorage.USER_ID));
+
     }
 
     @Override

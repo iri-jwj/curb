@@ -1,15 +1,18 @@
 package jxpl.scnu.curb.homePage;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -17,23 +20,31 @@ import android.widget.TextView;
 
 import com.github.ikidou.fragmentBackHandler.BackHandlerHelper;
 
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.jpush.android.api.JPushInterface;
+import de.hdodenhof.circleimageview.CircleImageView;
 import jxpl.scnu.curb.R;
 import jxpl.scnu.curb.data.local.InformationLocalDataSource;
 import jxpl.scnu.curb.data.local.SmallDataLocalDataSource;
 import jxpl.scnu.curb.data.remote.InformationRemoteDataSource;
 import jxpl.scnu.curb.data.remote.SDRemoteDataSource;
 import jxpl.scnu.curb.data.repository.InformationRepository;
+import jxpl.scnu.curb.data.repository.ScholatRepository;
 import jxpl.scnu.curb.data.repository.SmallDataRepository;
 import jxpl.scnu.curb.immediateInformation.InformationFragment;
 import jxpl.scnu.curb.immediateInformation.InformationPresenter;
 import jxpl.scnu.curb.river.RiverFragment;
+import jxpl.scnu.curb.scholat.ScholatFragment;
+import jxpl.scnu.curb.scholat.ScholatPresenter;
 import jxpl.scnu.curb.smallData.SmallDataFragment;
 import jxpl.scnu.curb.smallData.SmallDataPresenter;
 import jxpl.scnu.curb.userProfile.UserProfileActivity;
+import jxpl.scnu.curb.userProfile.setScholat.SetScholatActivity;
 import jxpl.scnu.curb.utils.ActivityUtil;
+import jxpl.scnu.curb.utils.SharedHelper;
+import jxpl.scnu.curb.utils.XmlDataStorage;
 
 /**
  * @author iri-jwj
@@ -44,9 +55,9 @@ import jxpl.scnu.curb.utils.ActivityUtil;
 public class HomePageActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private final static String ITEM_TO_SHOW = "ItemToShow";
     private final String bundleKey = "lastItem";
     private final String infoFilterKey = "currentFilter";
-    private final static String ITEM_TO_SHOW = "ItemToShow";
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.nav_view)
@@ -57,13 +68,12 @@ public class HomePageActivity extends AppCompatActivity
     TextView toolbarTitle;
     private InformationPresenter informationPresenter;
 
+    private CircleImageView m_avatar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
         ButterKnife.bind(this);
-        JPushInterface.setDebugMode(true);
-        JPushInterface.init(this);
         setSupportActionBar(toolbar);
         ActionBar ab = getSupportActionBar();
 
@@ -79,7 +89,6 @@ public class HomePageActivity extends AppCompatActivity
         ActivityUtil.setFragmentManagerInHome(getSupportFragmentManager());
 
         InformationFragment informationFragment = InformationFragment.newInstance();
-        Log.d("HomePageCreateInfoFrag", "onCreate:infoFrag " + informationFragment.isAdded());
         ActivityUtil.addFragmentInHomePage(R.id.nav_info, informationFragment);
         informationPresenter = new InformationPresenter(InformationRepository.
                 getInstance(InformationLocalDataSource.getInstance(HomePageActivity.this),
@@ -113,6 +122,17 @@ public class HomePageActivity extends AppCompatActivity
         for (int i = 0; i < lc_linearLayout.getChildCount(); i++) {
             View lc_view = lc_linearLayout.getChildAt(i);
             if (lc_view.getId() == R.id.nav_header_imageView) {
+                m_avatar = (CircleImageView) lc_view;
+                if (!XmlDataStorage.isSharedHelperSet()) {
+                    XmlDataStorage.setM_sharedHelper(SharedHelper.getInstance(HomePageActivity.this));
+                }
+                String path = XmlDataStorage.getAvatarPath();
+
+                if (!path.equals("")) {
+                    Bitmap lc_bitmap = BitmapFactory.decodeFile(path);
+                    m_avatar.setImageBitmap(lc_bitmap);
+                }
+
                 lc_view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -120,7 +140,12 @@ public class HomePageActivity extends AppCompatActivity
                         HomePageActivity.this.startActivity(lc_intent);
                     }
                 });
-                break;
+            } else {
+                if (lc_view.getId() == R.id.nav_header_account) {
+                    TextView lc_account = (TextView) lc_view;
+                    Map userInfo = XmlDataStorage.getUserInfo();
+                    lc_account.setText((String) userInfo.get(XmlDataStorage.USER_ACCOUNT));
+                }
             }
         }
     }
@@ -131,13 +156,28 @@ public class HomePageActivity extends AppCompatActivity
     private void initFragment() {
 
         SmallDataFragment lc_smallDataFragment = SmallDataFragment.newInstance();
+        ScholatFragment lc_scholatFragment = ScholatFragment.newInstance();
+
         ActivityUtil.addFragmentInHomePage(R.id.nav_river, new RiverFragment());
         //ActivityUtil.addFragmentInHomePage(R.id.nav_arrange, new ArrangeFragment());
         ActivityUtil.addFragmentInHomePage(R.id.nav_small_data, lc_smallDataFragment);
+        ActivityUtil.addFragmentInHomePage(R.id.nav_scholat, lc_scholatFragment);
+
+        new ScholatPresenter(lc_scholatFragment, ScholatRepository.getInstance(this), this);
 
         new SmallDataPresenter(lc_smallDataFragment
                 , SmallDataRepository.getInstance(SDRemoteDataSource.getInstance()
                 , SmallDataLocalDataSource.getInstance(this), this), this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String path = XmlDataStorage.getAvatarPath();
+        if (!path.equals("")) {
+            Bitmap lc_bitmap = BitmapFactory.decodeFile(path);
+            m_avatar.setImageBitmap(lc_bitmap);
+        }
     }
 
     @Override
@@ -164,10 +204,43 @@ public class HomePageActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
-        ActivityUtil.setCurrentFragment(item.getItemId());
-        toolbarTitle.setText(item.getTitle());
-        item.setChecked(true);
-        drawerLayout.closeDrawer(GravityCompat.START);
+        if (item.getItemId() == R.id.nav_scholat) {
+            if (!XmlDataStorage.isSharedHelperSet())
+                XmlDataStorage.setM_sharedHelper(SharedHelper.getInstance(HomePageActivity.this));
+            Map scholatInfo = XmlDataStorage.getScholat();
+            String scholatAccount = (String) scholatInfo.get(XmlDataStorage.SCHOLAT_ACCOUNT);
+            if (!scholatAccount.equals("")) {
+                ActivityUtil.setCurrentFragment(item.getItemId());
+                toolbarTitle.setText(item.getTitle());
+                item.setChecked(true);
+                drawerLayout.closeDrawer(GravityCompat.START);
+            } else {
+                AlertDialog.Builder lc_builder = new AlertDialog.Builder(HomePageActivity.this);
+                lc_builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                lc_builder.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent lc_intent = new Intent(HomePageActivity.this, SetScholatActivity.class);
+                        HomePageActivity.this.startActivity(lc_intent);
+                        dialog.dismiss();
+                    }
+                });
+                lc_builder.setMessage("你还没有添加学者网账号哦~");
+                lc_builder.setTitle("出错啦");
+                AlertDialog lc_alertDialog = lc_builder.create();
+                lc_alertDialog.show();
+            }
+        } else {
+            ActivityUtil.setCurrentFragment(item.getItemId());
+            toolbarTitle.setText(item.getTitle());
+            item.setChecked(true);
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
         return true;
     }
 
@@ -205,7 +278,6 @@ public class HomePageActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-        Log.d("inHomePage", "onDestroy: ");
         ActivityUtil.removeFragment();
         super.onDestroy();
     }

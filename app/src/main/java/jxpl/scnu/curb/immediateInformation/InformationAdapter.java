@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.style.TtsSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +17,7 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -45,19 +42,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 
 public class InformationAdapter extends AutoFitAdapter<InformationViewHolder> {
-    private List<ImmediateInformation> immediateInformations;
+    private static final String TAG = "InformationAdapter";
     private final AutoFitRecyclerView m_autoFitRecyclerView;
+    private List<ImmediateInformation> immediateInformations;
     private Context m_context;
-
     private Map<UUID, Integer> m_expandedHeight = new HashMap<>();
     private Map<UUID, Integer> m_skeletonHeight = new HashMap<>();
     private Map<UUID, Boolean> itemIsMeasured = new HashMap<>();
-
     private Animator mOpenValueAnimator = null;
     private Animator mCloseValueAnimator = null;
     private int mHiddenViewMeasuredHeight = 0;
-
-    private static final String TAG = "InformationAdapter";
 
     public InformationAdapter(List<ImmediateInformation> para_immediateInformations,
                               Context para_context,
@@ -68,14 +62,11 @@ public class InformationAdapter extends AutoFitAdapter<InformationViewHolder> {
 
         m_context = para_context;
         m_autoFitRecyclerView = para_autoFitRecyclerView;
+
     }
 
     public List<ImmediateInformation> getImmediateInformations() {
         return immediateInformations;
-    }
-
-    public void replaceInfo(List<ImmediateInformation> immediateInformations) {
-        setImmediateInformations(immediateInformations);
     }
 
     private void setImmediateInformations(List<ImmediateInformation> para_immediateInformations) {
@@ -90,6 +81,11 @@ public class InformationAdapter extends AutoFitAdapter<InformationViewHolder> {
             }
         }
         notifyDataSetChanged();
+    }
+
+
+    public void replaceInfo(List<ImmediateInformation> immediateInformations) {
+        setImmediateInformations(immediateInformations);
     }
 
     @NonNull

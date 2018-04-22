@@ -21,9 +21,12 @@ import jxpl.scnu.curb.smallData.SDDetail;
 import jxpl.scnu.curb.smallData.SDResult;
 import jxpl.scnu.curb.smallData.SDSummary;
 import jxpl.scnu.curb.smallData.SDSummaryCreate;
+import jxpl.scnu.curb.userProfile.UserProfileContract;
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -33,21 +36,21 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * 建立网络连接、发送接收数据
  * 尽量不执行数据的处理操作
+ *
  * @author iri-jwj
  * @version 2
  * last update 2018/3/25
  * 更新获取information的代码，添加参数 timestamp:String ,userId:String
  */
 public class RetrofitGetData {
-    private static Retrofit retrofit;
+    private static ServerInterface serverInterface;
 
     static {
         Gson lc_gson = new GsonBuilder().setLenient().create();
-        retrofit = new Retrofit.Builder().baseUrl("http://39.108.105.150:8080")
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://39.108.105.150")
                 .addConverterFactory(GsonConverterFactory.create(lc_gson)).build();
+        serverInterface = retrofit.create(ServerInterface.class);
     }
-
-    private static ServerInterface serverInterface = retrofit.create(ServerInterface.class);
 
     public static List<ImmediateInformation> getInformationInRetrofit(@NonNull String userId,
                                                                       @NonNull String timestamp) {
@@ -77,15 +80,22 @@ public class RetrofitGetData {
         try {
             lc_response = lc_homeworkCall.execute();
             if (lc_response.isSuccessful() && lc_response.body() != null) {
+                Log.d("retrofit", "getHomeworkFromServer: success:");
                 lc_homeworks.addAll(checkNotNull(lc_response.body()));
                 return lc_homeworks;
-            } else
+            } else {
+                String message = lc_response.message();
+                Log.d("retrofit", "getHomeworkFromServer: message:" + message);
+                String error = lc_response.errorBody().string();
+                Log.d("retrofit", "getHomeworkFromServer: message:" + error);
                 return null;
+            }
         } catch (IOException para_e) {
             para_e.printStackTrace();
         }
         return null;
     }
+
     public static String postCreateInformation(@NonNull String userId, @NonNull String information) {
         RequestBody lc_requestBody = RequestBody
                 .create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), information);
@@ -104,7 +114,7 @@ public class RetrofitGetData {
 
     public static String postLogin(String account, String password) {
         String userId = "";
-        Call<String> loginCall = serverInterface.postLogin( account, password);
+        Call<String> loginCall = serverInterface.postLogin(account, password);
         Response<String> response;
         try {
             response = loginCall.execute();
@@ -126,13 +136,13 @@ public class RetrofitGetData {
     /**
      * 2018-03-24
      * lifumin
+     *
      * @param registerId
      * @param account
      * @param password
-     * @return
-     * 注册后台逻辑的实现
+     * @return 注册后台逻辑的实现
      */
-    public static boolean postRegister(String registerId,String account,String password){
+    public static boolean postRegister(String registerId, String account, String password) {
         boolean isRegisterSucceed = false;
 
         Call<String> registerCall = serverInterface.postRegister(registerId, account, password);
@@ -141,15 +151,15 @@ public class RetrofitGetData {
         try {
             response = registerCall.execute();
             String result = response.body();
-            if(response.isSuccessful()){
-                if(result.equals("111")){
-                    Log.d("Retrofit", "postRegister: "+response.body().toString());
+            if (response.isSuccessful()) {
+                if (result.equals("111")) {
+                    Log.d("Retrofit", "postRegister: " + response.body().toString());
                     isRegisterSucceed = true;
-                }else{
+                } else {
                     Log.d("Retrofit", "postRegister: " + "resultWrong");
                 }
 
-            }else{
+            } else {
                 Log.d("Retrofit", "postRegister: " + "ResponseWrong" + result);
             }
         } catch (IOException e) {
@@ -158,6 +168,7 @@ public class RetrofitGetData {
 
         return isRegisterSucceed;
     }
+
     @Nullable
     public static List<SDDetail> postSmallDataDetail(String id) {
         Call<List<SDDetail>> sdDetailCall = serverInterface.postSmallDataDetail(id);
@@ -294,5 +305,73 @@ public class RetrofitGetData {
             e.printStackTrace();
         }
         return lc_sdResults;
+    }
+
+    public static void uploadAvatar(final String userId, final File para_avatar, final UserProfileContract.UploadAvatarCallback para_callback) {
+        RequestBody lc_requestBody = RequestBody.create(MediaType.parse("image/jpg"), para_avatar);
+        MultipartBody.Builder lc_builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+        lc_builder.addFormDataPart("imgfile", para_avatar.getName(), lc_requestBody);
+        //MultipartBody.Part upload = MultipartBody.Part.createFormData("imgfile",para_avatar.getName(),lc_requestBody);
+
+        //RequestBody id  = RequestBody.create(MediaType.parse("multipart/form-data"),userId);
+        Call<String> lc_call = serverInterface.postAvatar(userId, lc_builder.build().part(0));
+        lc_call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                String result = response.body();
+                if (result != null && result.equals("success"))
+                    para_callback.onAvatarUploaded();
+                else
+                    para_callback.onUploadedFailed();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                para_callback.onUploadedFailed();
+                Log.d("retrofit", "onFailure: " + t.getStackTrace().toString());
+            }
+        });
+    }
+
+    public static void uploadScholatInfo(final String id, final String scholatAccount, final String scholatPsw,
+                                         final UserProfileContract.UploadScholatInfoCallback para_callback) {
+        Call<String> lc_call = serverInterface.postScholatInfo(id, scholatAccount, scholatPsw);
+
+        lc_call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                String result = response.body();
+                if (result != null && result.equals("success"))
+                    para_callback.onScholatInfoUploaded();
+                else
+                    para_callback.onUploadedFailed();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                para_callback.onUploadedFailed();
+            }
+        });
+    }
+
+    public static void uploadNickname(final String id, final String nickname,
+                                      final UserProfileContract.UploadNicknameCallback para_callback) {
+        Call<String> lc_call = serverInterface.postNickname(id, nickname);
+        lc_call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                String result = response.body();
+                if (result != null && result.equals("success"))
+                    para_callback.onNicknameUploaded();
+                else
+                    para_callback.onUploadedFailed();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                para_callback.onUploadedFailed();
+                Log.d("retrofit", "onFailure: " + t.getStackTrace().toString());
+            }
+        });
     }
 }

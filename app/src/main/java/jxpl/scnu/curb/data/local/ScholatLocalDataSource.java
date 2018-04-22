@@ -26,7 +26,7 @@ public class ScholatLocalDataSource implements ScholatDataSource {
     private CurbDbHelper m_curbDbHelper;
     private ScholatLocalDataSource m_scholatLocalDataSource = null;
 
-    private ScholatLocalDataSource(Context para_context) {
+    public ScholatLocalDataSource(Context para_context) {
         m_curbDbHelper = new CurbDbHelper(para_context);
     }
 
@@ -78,10 +78,10 @@ public class ScholatLocalDataSource implements ScholatDataSource {
         if (lc_cursor != null && lc_cursor.getCount() >= 0) {
             while (lc_cursor.moveToNext()) {
                 lc_homeworks.add(new ScholatHomework(
-                        UUID.fromString(lc_cursor
+                        lc_cursor
                                 .getString(lc_cursor
                                         .getColumnIndexOrThrow(PersistenceContract
-                                                .ScholatEntry.COLUMN_NAME_ID))),
+                                                .ScholatEntry.COLUMN_NAME_ID)),
                         lc_cursor.getString(lc_cursor
                                 .getColumnIndexOrThrow(PersistenceContract
                                         .ScholatEntry.COLUMN_NAME_TITLE)),

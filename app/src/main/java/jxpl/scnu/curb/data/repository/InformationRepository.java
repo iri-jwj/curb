@@ -3,9 +3,7 @@ package jxpl.scnu.curb.data.repository;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.util.Xml;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -143,6 +141,7 @@ public class InformationRepository implements InformationDataSource {
 
     /**
      * 刷新当前的map缓存 {@link #cachedInfo}
+     *
      * @param immediateInformations 用于刷新的Information List
      */
     private void refreshCached(List<ImmediateInformation> immediateInformations) {

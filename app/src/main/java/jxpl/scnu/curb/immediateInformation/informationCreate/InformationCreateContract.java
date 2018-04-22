@@ -1,7 +1,6 @@
 package jxpl.scnu.curb.immediateInformation.informationCreate;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
 
 import jxpl.scnu.curb.BasePresenter;
 import jxpl.scnu.curb.BaseView;
@@ -10,18 +9,20 @@ import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
 /**
  * @author iri-jwj
  * @version 2
- *          last update 3/25
+ * last update 3/25
  */
 public interface InformationCreateContract {
     interface View extends BaseView<Presenter> {
         /**
          * 设置显示等待界面
+         *
          * @param active true为显示等待界面，false为不显示
          */
         void setLoadingIndicator(boolean active);
 
         /**
          * 判断当前的view是否已经显示出来了
+         *
          * @return true为已加入Fragment，false为否
          */
         boolean isActive();

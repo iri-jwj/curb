@@ -13,12 +13,13 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -32,7 +33,6 @@ import retrofit2.http.Query;
 
 public interface ServerInterface {
     //获取information
-
     /**
      * 获取学者网的作业信息
      *
@@ -41,11 +41,6 @@ public interface ServerInterface {
      */
     @POST("curb/scholat/showUnfinishHomework")
     Call<List<ScholatHomework>> getHomework(@Query("userid") String id);
-
-    //登陆
-//    @POST("/logintest")
-//    Call<String> postLogin(@Query("id") int id, @Query("userName") String userName,
-//                           @Query("password") String password);
 
     /**
      * 获取最新的资讯（information）的接口
@@ -71,6 +66,7 @@ public interface ServerInterface {
 
     /**
      * 获取用户点击的summary的详细信息
+     *
      * @param id 用户点击的summaryId
      * @return 服务器返回对应id的问题详情
      */
@@ -79,7 +75,8 @@ public interface ServerInterface {
 
     /**
      * 获取smallData概要的接口
-     * @param time 发起获取的时间
+     *
+     * @param time      发起获取的时间
      * @param direction 向前获取还是向后
      * @return 返回获得的smallData
      */
@@ -89,6 +86,7 @@ public interface ServerInterface {
 
     /**
      * 发送用户完成问卷的答案
+     *
      * @param body 用户的答案转化为json
      * @return 返回结果
      */
@@ -99,6 +97,7 @@ public interface ServerInterface {
 
     /**
      * 获取用户的答题结果
+     *
      * @param id summary id
      * @return 返回结果
      */
@@ -107,8 +106,9 @@ public interface ServerInterface {
 
     /**
      * 发送用户创建的smallData
+     *
      * @param para_requestBody 用户编写的题目、问题等
-     * @param file 用户选择的图片文件
+     * @param file             用户选择的图片文件
      * @return 返回结果
      */
     @Multipart
@@ -119,6 +119,7 @@ public interface ServerInterface {
 
     /**
      * 获取用户自身创建的summary
+     *
      * @return 返回List
      */
     @GET("/smallData/getCreatedSummaries")
@@ -126,6 +127,7 @@ public interface ServerInterface {
 
     /**
      * 返回用户自身创建的summary对应的详情
+     *
      * @param id 问卷id
      * @return 返回list
      */
@@ -134,6 +136,7 @@ public interface ServerInterface {
 
     /**
      * 返回用户完成问卷之后，问卷的结果信息
+     *
      * @param summaryId 即问卷的id
      * @return 返回结果信息
      */
@@ -155,10 +158,22 @@ public interface ServerInterface {
      *
      * @param accountName
      * @param password
-     * @return
-     * 用户的登录入口
+     * @return 用户的登录入口
      */
     @POST("/curb/account/login")
     Call<String> postLogin(@Query("account") String accountName,
                            @Query("password") String password);
+
+
+    @Multipart
+    @POST("/curb/account/uploadimg")
+    Call<String> postAvatar(@Query("accountId") String id, @Part MultipartBody.Part avatar);
+
+    @POST("/curb/scholat/binding")
+    Call<String> postScholatInfo(@Query("userid") String userId,
+                                 @Query("scholatAccount") String scholatAccount,
+                                 @Query("scholatPsw") String scholatPsw);
+
+    @POST("/curb/account/notifyName")
+    Call<String> postNickname(@Query("accountId") String userId, @Query("name") String nickname);
 }

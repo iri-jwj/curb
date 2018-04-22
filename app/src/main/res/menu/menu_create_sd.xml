@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:title="@string/sd_create_small_data"
         android:id="@+id/sd_create"
         android:icon="@drawable/ic_small_data_add"
+        android:title="@string/sd_create_small_data"
         app:showAsAction="always" />
 </menu>

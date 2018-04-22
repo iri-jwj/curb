@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public final class ScholatHomework {
     @NonNull
-    private final UUID homeworkId;
+    private final String homeworkId;
     @NonNull
     private final String title;
     @NonNull
@@ -23,7 +23,7 @@ public final class ScholatHomework {
     @NonNull
     private final String endTime;
 
-    public ScholatHomework(@NonNull UUID para_homeworkId,
+    public ScholatHomework(@NonNull String para_homeworkId,
                            @NonNull String para_title,
                            @NonNull String para_content,
                            @NonNull String para_createTime,
@@ -36,7 +36,7 @@ public final class ScholatHomework {
     }
 
     @NonNull
-    public UUID getHomeworkId() {
+    public String getHomeworkId() {
         return homeworkId;
     }
 

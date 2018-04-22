@@ -1,6 +1,5 @@
 package jxpl.scnu.curb.immediateInformation;
 
-import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;

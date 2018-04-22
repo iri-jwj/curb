@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:id="@+id/item_scholat"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/scholat_capacity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/scholat_skeleton"
         android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/scholat_skeleton">
 
             <TextView
                 android:id="@+id/scholat_item_title"
@@ -22,9 +24,9 @@
                 android:layout_marginEnd="72dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
                 android:paddingEnd="3dp"
                 android:paddingStart="8dp"
-                android:gravity="center_vertical"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textSize="@dimen/text_title" />
 
@@ -32,10 +34,9 @@
                 android:id="@+id/scholat_item_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:paddingBottom="3dp"
-                android:layout_alignEnd="@+id/scholat_item_title"
-                android:layout_alignTop="@+id/scholat_item_title"
+                android:layout_toStartOf="@+id/scholat_item_end_time"
+                android:layout_below="@+id/scholat_item_title"
+                android:paddingTop="11dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textSize="@dimen/text_body2" />
 
@@ -43,11 +44,9 @@
                 android:id="@+id/scholat_item_end_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:layout_marginTop="8dp"
-                android:paddingTop="3dp"
-                android:layout_alignTop="@+id/scholat_item_time"
-                android:layout_alignEnd="@+id/scholat_item_title"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/scholat_item_title"
+                android:paddingTop="11dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textSize="@dimen/text_body2" />
 
@@ -62,10 +61,10 @@
             <TextView
                 android:id="@+id/scholat_item_content"
                 android:layout_width="match_parent"
-                android:layout_height="22dp"
-                android:layout_marginEnd="48dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="36dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="3dp"
                 android:gravity="start"
                 android:paddingEnd="16dp"
                 android:paddingStart="40dp" />
@@ -74,11 +73,12 @@
                 android:id="@+id/scholat_item_imagebutton_add_reminder"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:layout_gravity="bottom|end"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="3dp"
                 android:background="#00fad689"
-                android:layout_gravity="bottom|end" />
+                app:srcCompat="@drawable/ic_add_reminder" />
         </LinearLayout>
 
     </LinearLayout>
@@ -87,10 +87,10 @@
         android:id="@+id/scholat_item_image_moreless"
         android:layout_width="24dp"
         android:layout_height="12dp"
-        android:layout_marginTop="3dp"
+        android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="3dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginTop="3dp"
         app:srcCompat="@drawable/ic_info_item_more" />
 </LinearLayout>

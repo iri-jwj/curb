@@ -2,7 +2,6 @@ package jxpl.scnu.curb.immediateInformation;
 
 import android.content.Context;
 import android.content.Intent;
-
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -30,6 +29,7 @@ import jxpl.scnu.curb.R;
 import jxpl.scnu.curb.immediateInformation.informationCreate.InformationCreateActivity;
 import jxpl.scnu.curb.utils.ScrollChildSwipeRefreshLayout;
 import jxpl.scnu.curb.utils.autoFitRecycler.AutoFitRecyclerView;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -79,7 +79,7 @@ public class InformationFragment extends Fragment implements InformationContract
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View info = inflater.inflate(R.layout.fragment_information, container, false);
-        ButterKnife.bind(this, info);
+        unbinder = ButterKnife.bind(this, info);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         infoRecycler.setLayoutManager(layoutManager);
@@ -91,7 +91,6 @@ public class InformationFragment extends Fragment implements InformationContract
         infoRecycler.addItemDecoration(new DividerItemDecoration(
                 checkNotNull(getActivity()), DividerItemDecoration.HORIZONTAL));
 
-
         refreshInfoLayout.setColorSchemeColors(
                 ContextCompat.getColor(checkNotNull(getActivity()), R.color.toolsBar),
                 ContextCompat.getColor(checkNotNull(getActivity()), R.color.colorAccent),
@@ -100,6 +99,7 @@ public class InformationFragment extends Fragment implements InformationContract
 
         // Set the scrolling view in the custom SwipeRefreshLayout.
         refreshInfoLayout.setScrollUpChild(infoRecycler);
+        refreshInfoLayout.canChildScrollUp();
         refreshInfoLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -107,7 +107,6 @@ public class InformationFragment extends Fragment implements InformationContract
             }
         });
         setHasOptionsMenu(true);
-        unbinder = ButterKnife.bind(this, info);
         return info;
     }
 
