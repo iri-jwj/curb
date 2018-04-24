@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +52,8 @@ public class ScholatAdapter extends AutoFitAdapter<ScholatViewHolder> {
     private Map<String, Boolean> itemIsMeasured = new HashMap<>();
 
     private int mHiddenViewMeasuredHeight = 0;
+    private final String TAG = "scholatAdapter";
+
 
     ScholatAdapter(List<ScholatHomework> para_scholatHomeworks, Context para_context,
                    AutoFitRecyclerView para_autoFitRecyclerView) {
@@ -87,6 +90,7 @@ public class ScholatAdapter extends AutoFitAdapter<ScholatViewHolder> {
     @NonNull
     @Override
     public ScholatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.d(TAG, "onCreateViewHolder: ");
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_scholat_homework, parent, false);
         ScholatViewHolder m_holder = new ScholatViewHolder(view);
@@ -96,6 +100,7 @@ public class ScholatAdapter extends AutoFitAdapter<ScholatViewHolder> {
 
     @Override
     public void onViewRecycled(@NonNull ScholatViewHolder holder) {
+        Log.d(TAG, "onViewRecycled: " + holder.getAdapterPosition());
         int position = holder.getAdapterPosition();
         if (m_isExpand.size() > position && position >= 0) {
             m_isExpand.remove(position);
@@ -111,7 +116,40 @@ public class ScholatAdapter extends AutoFitAdapter<ScholatViewHolder> {
     }
 
     @Override
+    public void onViewAttachedToWindow(@NonNull ScholatViewHolder holder) {
+        Log.d(TAG, "onViewAttachedToWindow: " + holder.getAdapterPosition());
+        super.onViewAttachedToWindow(holder);
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        Log.d(TAG, "onAttachedToRecyclerView: ");
+        super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        Log.d(TAG, "onDetachedFromRecyclerView: ");
+        super.onDetachedFromRecyclerView(recyclerView);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull ScholatViewHolder holder) {
+        Log.d(TAG, "onViewDetachedFromWindow: " + holder.getAdapterPosition());
+        super.onViewDetachedFromWindow(holder);
+    }
+
+    @Override
+    public boolean onFailedToRecycleView(@NonNull ScholatViewHolder holder) {
+        Log.d(TAG, "onFailedToRecycleView: " + holder.getAdapterPosition());
+        return super.onFailedToRecycleView(holder);
+    }
+
+
+
+    @Override
     public void onBindViewHolder(@NonNull final ScholatViewHolder holder, int position) {
+        Log.d(TAG, "onBindViewHolder: ");
         final ScholatHomework lc_homework = m_scholatHomeworks.get(position);
         holder.m_ScholatItemTitle.setText(lc_homework.getTitle());
         holder.m_ScholatItemTime.setText(getTimeToShow(lc_homework.getCreateTime()));

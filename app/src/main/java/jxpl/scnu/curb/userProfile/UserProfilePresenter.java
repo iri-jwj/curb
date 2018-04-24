@@ -87,7 +87,7 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
                         m_activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                m_profileView.showMessage("头像上传成功");
+                                m_profileView.showMessage("学者网信息上传成功");
                             }
                         });
                     }
@@ -97,7 +97,7 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
                         m_activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                m_profileView.showMessage("头像上传失败");
+                                m_profileView.showMessage("学者网信息上传成功");
                             }
                         });
                     }

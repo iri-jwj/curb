@@ -167,7 +167,7 @@ public interface ServerInterface {
 
     @Multipart
     @POST("/curb/account/uploadimg")
-    Call<String> postAvatar(@Query("accountId") String id, @Part MultipartBody.Part avatar);
+    Call<String> postAvatar(@Part MultipartBody.Part imgfile, @Query("accountId") String id);
 
     @POST("/curb/scholat/binding")
     Call<String> postScholatInfo(@Query("userid") String userId,

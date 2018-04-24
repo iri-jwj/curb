@@ -314,7 +314,7 @@ public class RetrofitGetData {
         //MultipartBody.Part upload = MultipartBody.Part.createFormData("imgfile",para_avatar.getName(),lc_requestBody);
 
         //RequestBody id  = RequestBody.create(MediaType.parse("multipart/form-data"),userId);
-        Call<String> lc_call = serverInterface.postAvatar(userId, lc_builder.build().part(0));
+        Call<String> lc_call = serverInterface.postAvatar(lc_builder.build().part(0), userId);
         lc_call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
