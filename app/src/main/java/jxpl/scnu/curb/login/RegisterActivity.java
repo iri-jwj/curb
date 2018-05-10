@@ -1,4 +1,4 @@
-package jxpl.scnu.curb.register;
+package jxpl.scnu.curb.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -36,7 +36,7 @@ import java.util.UUID;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jxpl.scnu.curb.R;
-import jxpl.scnu.curb.data.retrofit.RetrofitGetData;
+import jxpl.scnu.curb.data.retrofit.Connect2Server;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -241,7 +241,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
                 //生成一个UUid类型
                 String registerId = UUID.randomUUID().toString();
-                boolean registerResult = RetrofitGetData.postRegister(registerId, account, password);
+                boolean registerResult = Connect2Server.getConnect2Server(RegisterActivity.this).postRegister(registerId, account, password);
                 RegisterActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

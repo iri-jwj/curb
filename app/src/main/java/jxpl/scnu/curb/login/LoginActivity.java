@@ -2,19 +2,8 @@ package jxpl.scnu.curb.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
-import android.app.LoaderManager.LoaderCallbacks;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,7 +11,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,21 +20,14 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jpush.android.api.JPushInterface;
 import jxpl.scnu.curb.R;
-import jxpl.scnu.curb.data.retrofit.RetrofitGetData;
+import jxpl.scnu.curb.data.retrofit.Connect2Server;
 import jxpl.scnu.curb.homePage.HomePageActivity;
-import jxpl.scnu.curb.loading.LoadingActivity;
-import jxpl.scnu.curb.register.RegisterActivity;
 import jxpl.scnu.curb.utils.SharedHelper;
 import jxpl.scnu.curb.utils.XmlDataStorage;
-
-import static android.Manifest.permission.READ_CONTACTS;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -213,7 +194,8 @@ public class LoginActivity extends AppCompatActivity {
                         showProgress(true);
                     }
                 });
-                String id = RetrofitGetData.postLogin(account, password);
+                String id = Connect2Server.getConnect2Server(LoginActivity.this)
+                        .postLogin(account, password);
 
                 LoginActivity.this.runOnUiThread(new Runnable() {
                     @Override

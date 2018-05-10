@@ -1,5 +1,6 @@
 package jxpl.scnu.curb.data.retrofit;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -8,11 +9,18 @@ import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nullable;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509ExtendedTrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
 import jxpl.scnu.curb.scholat.ScholatHomework;
@@ -22,8 +30,12 @@ import jxpl.scnu.curb.smallData.SDResult;
 import jxpl.scnu.curb.smallData.SDSummary;
 import jxpl.scnu.curb.smallData.SDSummaryCreate;
 import jxpl.scnu.curb.userProfile.UserProfileContract;
+import jxpl.scnu.curb.utils.MyHostnameVerifier;
+import jxpl.scnu.curb.utils.MyTrustManage;
+import jxpl.scnu.curb.utils.SSLFactory;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,17 +54,42 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * last update 2018/3/25
  * 更新获取information的代码，添加参数 timestamp:String ,userId:String
  */
-public class RetrofitGetData {
+public class Connect2Server {
     private static ServerInterface serverInterface;
+    private static volatile Connect2Server stc_connect2Server = null;
 
-    static {
+    private Connect2Server(Context para_context) throws Exception {
         Gson lc_gson = new GsonBuilder().setLenient().create();
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://39.108.105.150")
-                .addConverterFactory(GsonConverterFactory.create(lc_gson)).build();
+        Map certificate = SSLFactory.getSSLCertifcation(para_context);
+        OkHttpClient lc_okHttpClient = null;
+        if (certificate.size() != 0) {
+            lc_okHttpClient = new OkHttpClient.Builder()
+                    .sslSocketFactory((SSLSocketFactory) certificate.get("ssl"),
+                            (X509TrustManager) certificate.get("x509"))
+                    .hostnameVerifier(new MyHostnameVerifier()).build();
+        } else {
+            throw new Exception("未成功生成认证信息");
+        }
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://39.108.105.150")
+                .addConverterFactory(GsonConverterFactory.create(lc_gson))
+                .client(lc_okHttpClient)
+                .build();
         serverInterface = retrofit.create(ServerInterface.class);
     }
 
-    public static List<ImmediateInformation> getInformationInRetrofit(@NonNull String userId,
+    public static synchronized Connect2Server getConnect2Server(Context para_context) {
+        if (stc_connect2Server == null)
+            try {
+                stc_connect2Server = new Connect2Server(para_context);
+            } catch (Exception para_e) {
+                para_e.printStackTrace();
+            }
+        return stc_connect2Server;
+    }
+
+    public List<ImmediateInformation> getInformationInRetrofit(@NonNull String userId,
                                                                       @NonNull String timestamp) {
         Call<List<ImmediateInformation>> immediateInformationCall =
                 serverInterface.postInformation(userId, timestamp);
@@ -62,9 +99,6 @@ public class RetrofitGetData {
             response = immediateInformationCall.execute();
             if (response.isSuccessful()) {
                 immediateInformations = response.body();
-                Log.d("RESPONSE", immediateInformations.get(1).getTitle());
-            } else {
-                Log.d("RESPONSE", "FAIL");
             }
         } catch (IOException E) {
             E.printStackTrace();
@@ -72,7 +106,7 @@ public class RetrofitGetData {
         return immediateInformations;
     }
 
-    public static List<ScholatHomework> getHomeworkFromServer(String userId) {
+    public List<ScholatHomework> getHomeworkFromServer(String userId) {
         List<ScholatHomework> lc_homeworks = new LinkedList<>();
 
         Call<List<ScholatHomework>> lc_homeworkCall = serverInterface.getHomework(userId);
@@ -96,7 +130,7 @@ public class RetrofitGetData {
         return null;
     }
 
-    public static String postCreateInformation(@NonNull String userId, @NonNull String information) {
+    public String postCreateInformation(@NonNull String userId, @NonNull String information) {
         RequestBody lc_requestBody = RequestBody
                 .create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), information);
 
@@ -112,7 +146,7 @@ public class RetrofitGetData {
         else return null;
     }
 
-    public static String postLogin(String account, String password) {
+    public String postLogin(String account, String password) {
         String userId = "";
         Call<String> loginCall = serverInterface.postLogin(account, password);
         Response<String> response;
@@ -142,7 +176,7 @@ public class RetrofitGetData {
      * @param password
      * @return 注册后台逻辑的实现
      */
-    public static boolean postRegister(String registerId, String account, String password) {
+    public boolean postRegister(String registerId, String account, String password) {
         boolean isRegisterSucceed = false;
 
         Call<String> registerCall = serverInterface.postRegister(registerId, account, password);
@@ -153,14 +187,8 @@ public class RetrofitGetData {
             String result = response.body();
             if (response.isSuccessful()) {
                 if (result.equals("111")) {
-                    Log.d("Retrofit", "postRegister: " + response.body().toString());
                     isRegisterSucceed = true;
-                } else {
-                    Log.d("Retrofit", "postRegister: " + "resultWrong");
                 }
-
-            } else {
-                Log.d("Retrofit", "postRegister: " + "ResponseWrong" + result);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -170,7 +198,7 @@ public class RetrofitGetData {
     }
 
     @Nullable
-    public static List<SDDetail> postSmallDataDetail(String id) {
+    public List<SDDetail> postSmallDataDetail(String id) {
         Call<List<SDDetail>> sdDetailCall = serverInterface.postSmallDataDetail(id);
         List<SDDetail> SDDetailList = new ArrayList<>();
         Response<List<SDDetail>> response;
@@ -187,7 +215,7 @@ public class RetrofitGetData {
     }
 
 
-    public static List<SDSummary> getSmallDataSummary(String time, int direction) {
+    public List<SDSummary> getSmallDataSummary(String time, int direction) {
         Call<List<SDSummary>> sdSummaryCall = serverInterface.getSmallDataSummary(time, direction);
         List<SDSummary> sdSummaryList = new ArrayList<>();
         Response<List<SDSummary>> response;
@@ -195,7 +223,6 @@ public class RetrofitGetData {
             response = sdSummaryCall.execute();
             if (response.isSuccessful()) {
                 sdSummaryList = response.body();
-                Log.d("sdrds", "loadSummaries: lc_sdSummaries" + response.body().get(0).toString());
             } else
                 return null;
         } catch (IOException e) {
@@ -204,8 +231,7 @@ public class RetrofitGetData {
         return sdSummaryList;
     }
 
-    public static String postAnswer(String strEntity) {
-        Log.d("retrofit", "postAnswer:entity " + strEntity);
+    public String postAnswer(String strEntity) {
         RequestBody description =
                 RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), strEntity);
         Call<String> postAnswerCall = serverInterface.postAnswer(description);
@@ -223,7 +249,7 @@ public class RetrofitGetData {
     }
 
     @android.support.annotation.Nullable
-    public static List<SDAnswer> getAnswers(String summaryId) {
+    public List<SDAnswer> getAnswers(String summaryId) {
         Call<List<SDAnswer>> lc_listCall = serverInterface.getAnswers(summaryId);
         List<SDAnswer> lc_sdAnswers = new ArrayList<>();
         Response<List<SDAnswer>> lc_listResponse;
@@ -238,7 +264,7 @@ public class RetrofitGetData {
         return lc_sdAnswers;
     }
 
-    public static String postCreatedSD(String para_s, final File para_file) {
+    public String postCreatedSD(String para_s, final File para_file) {
         RequestBody description =
                 RequestBody.create(okhttp3.MediaType
                         .parse("application/json;charset=UTF-8"), para_s);
@@ -261,7 +287,7 @@ public class RetrofitGetData {
         return postResult;
     }
 
-    public static List<SDSummaryCreate> getCreatedSummaries() {
+    public List<SDSummaryCreate> getCreatedSummaries() {
         Call<List<SDSummaryCreate>> lc_listCall = serverInterface.getCreatedSummaries();
         List<SDSummaryCreate> lc_sdSummaryCreates = new ArrayList<>();
         Response<List<SDSummaryCreate>> lc_listResponse;
@@ -277,7 +303,7 @@ public class RetrofitGetData {
         return lc_sdSummaryCreates;
     }
 
-    public static List<SDDetail> getCreatedDetails(String id) {
+    public List<SDDetail> getCreatedDetails(String id) {
         Call<List<SDDetail>> lc_listCall = serverInterface.getCreatedDetails(id);
         List<SDDetail> lc_sdDetails = null;
 
@@ -292,7 +318,7 @@ public class RetrofitGetData {
         return lc_sdDetails;
     }
 
-    public static List<SDResult> getSDResult(String summaryId) {
+    public List<SDResult> getSDResult(String summaryId) {
         Call<List<SDResult>> lc_listCall = serverInterface.getSDResult(summaryId);
         List<SDResult> lc_sdResults = new ArrayList<>();
         Response<List<SDResult>> lc_listResponse;
@@ -307,7 +333,7 @@ public class RetrofitGetData {
         return lc_sdResults;
     }
 
-    public static void uploadAvatar(final String userId, final File para_avatar, final UserProfileContract.UploadAvatarCallback para_callback) {
+    public void uploadAvatar(final String userId, final File para_avatar, final UserProfileContract.UploadAvatarCallback para_callback) {
         RequestBody lc_requestBody = RequestBody.create(MediaType.parse("image/jpg"), para_avatar);
         MultipartBody.Builder lc_builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
         lc_builder.addFormDataPart("imgfile", para_avatar.getName(), lc_requestBody);
@@ -333,8 +359,8 @@ public class RetrofitGetData {
         });
     }
 
-    public static void uploadScholatInfo(final String id, final String scholatAccount, final String scholatPsw,
-                                         final UserProfileContract.UploadScholatInfoCallback para_callback) {
+    public void uploadScholatInfo(final String id, final String scholatAccount, final String scholatPsw,
+                                  final UserProfileContract.UploadScholatInfoCallback para_callback) {
         Call<String> lc_call = serverInterface.postScholatInfo(id, scholatAccount, scholatPsw);
 
         lc_call.enqueue(new Callback<String>() {
@@ -354,8 +380,8 @@ public class RetrofitGetData {
         });
     }
 
-    public static void uploadNickname(final String id, final String nickname,
-                                      final UserProfileContract.UploadNicknameCallback para_callback) {
+    public void uploadNickname(final String id, final String nickname,
+                               final UserProfileContract.UploadNicknameCallback para_callback) {
         Call<String> lc_call = serverInterface.postNickname(id, nickname);
         lc_call.enqueue(new Callback<String>() {
             @Override

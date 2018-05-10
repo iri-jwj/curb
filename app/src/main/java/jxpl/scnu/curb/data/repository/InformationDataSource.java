@@ -1,5 +1,6 @@
 package jxpl.scnu.curb.data.repository;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public interface InformationDataSource {
      * @param timestamp 用户执行查询的时间
      */
     void getInformations(@NonNull LoadInformationCallback callback,
-                         String userId, String timestamp);
+                         String userId, String timestamp, Context para_context);
 
     /**
      * 将从网络中获取到的information保存到本地数据库
@@ -64,7 +65,7 @@ public interface InformationDataSource {
      */
     void postInformation(PostInformationCallback para_callback,
                          String information,
-                         String userId);
+                         String userId, Context para_context);
 
     /**
      * 装载information信息的回调接口
@@ -83,6 +84,7 @@ public interface InformationDataSource {
 
         void onDataNotAvailable();
     }
+
 
     interface PostInformationCallback {
         void onInformationPosted();

@@ -53,9 +53,8 @@
             android:name=".login.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".accountManage.AccountManageActivity" />
         <activity
-            android:name=".loading.LoadingActivity"
+            android:name=".login.LoadingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/FullscreenTheme">
             <intent-filter>
@@ -69,7 +68,7 @@
             android:name=".smallData.result.ResultActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".register.RegisterActivity"
+            android:name=".login.RegisterActivity"
             android:label="@string/title_activity_register"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

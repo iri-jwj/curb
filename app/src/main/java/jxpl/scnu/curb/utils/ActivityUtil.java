@@ -32,7 +32,6 @@ public class ActivityUtil {
 
     private static void addFragment(@NonNull Integer id, @NonNull Fragment fragment) {
         fragmentsNotUse.put(id, fragment);
-        Log.d("addFrag", "addFragment: " + fragment.isAdded());
     }
 
     public static void setFragmentManagerNotHome(FragmentManager fragmentManagerNotHome) {
@@ -59,7 +58,6 @@ public class ActivityUtil {
     }
 
     public static void setCurrentFragment(@NonNull Integer id) {
-        Log.d("ActivityUntil", "setCurrentFragment:" + "currentKey" + currentKey);
         if (currentKey != id) {
             if (currentKey > 0 && id > 0) {
                 Fragment fragment = fragments.get(currentKey);
@@ -69,7 +67,6 @@ public class ActivityUtil {
             }
             currentKey = id;
             if (fragmentsNotUse.get(id) == null) {
-                Log.d("ActivityUntil", "setCurrentFragment:Must Init fragmentNotUse before use ");
                 return;
             }
             if (id > 0) {

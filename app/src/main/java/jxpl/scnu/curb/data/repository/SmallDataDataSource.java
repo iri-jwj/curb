@@ -1,6 +1,7 @@
 package jxpl.scnu.curb.data.repository;
 
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.io.File;
@@ -15,19 +16,19 @@ import jxpl.scnu.curb.smallData.SDSummaryCreate;
 public interface SmallDataDataSource {
     void getSummary(@NonNull getSummaryCallback callback, String id);
 
-    void loadSummaries(@NonNull loadSummaryCallback callback, String time, int direction);
+    void loadSummaries(@NonNull loadSummaryCallback callback, String time, int direction, Context para_context);
 
-    void loadDetails(@NonNull loadDetailCallback callback, String summaryId);
+    void loadDetails(@NonNull loadDetailCallback callback, String summaryId, Context para_context);
 
-    void loadAnswers(@NonNull loadAnswersCallback para_loadAnswersCallback, String summaryId);
+    void loadAnswers(@NonNull loadAnswersCallback para_loadAnswersCallback, String summaryId, Context para_context);
 
     void getCreatedSummary(@NonNull getCreatedSummaryCallback para_getCreatedSummaryCallback
             , String id);
 
-    void loadCreatedSummaries(@NonNull loadCreatedSummariesCallback para_loadCreatedSummariesCallback);
+    void loadCreatedSummaries(@NonNull loadCreatedSummariesCallback para_loadCreatedSummariesCallback, Context para_context);
 
     void loadCreatedDetails(@NonNull loadCreatedDetailsCallback para_loadCreatedDetailsCallback,
-                            String para_summaryId);
+                            String para_summaryId, Context para_context);
 
     void refreshSummaries();
 
@@ -40,16 +41,16 @@ public interface SmallDataDataSource {
     void saveCreatedSDToLocal(SDSummaryCreate para_sdSummaryCreate
             , List<SDDetail> para_sdDetails) throws Exception;
 
-    void saveCreatedSDToRemote(String para_s, final File image);
+    void saveCreatedSDToRemote(String para_s, final File image, Context para_context);
 
     void saveAnswersToLocal(List<SDAnswer> para_sdAnswers);
 
     void markAnswered(String summaryId);
 
-    void commitAnswer(String strEntity);
+    void commitAnswer(String strEntity, Context para_context);
 
     void loadResult(loadResultCallback para_loadResultCallback,
-                    String summaryId);
+                    String summaryId, Context para_context);
 
     interface getSummaryCallback {
         void onSummaryGot(SDSummary para_sdSummary);

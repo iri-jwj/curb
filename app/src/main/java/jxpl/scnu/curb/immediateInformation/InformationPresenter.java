@@ -102,7 +102,7 @@ public class InformationPresenter implements InformationContract.Presenter, Seri
                     return;
                 informationView.showLoadingError();
             }
-        }, lc_stringMap.get(XmlDataStorage.USER_ID), timestamp);
+        }, lc_stringMap.get(XmlDataStorage.USER_ID), timestamp, m_activity);
     }
 
 

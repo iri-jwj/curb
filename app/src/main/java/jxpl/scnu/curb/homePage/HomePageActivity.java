@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,14 +27,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jxpl.scnu.curb.R;
-import jxpl.scnu.curb.data.local.InformationLocalDataSource;
 import jxpl.scnu.curb.data.local.SmallDataLocalDataSource;
-import jxpl.scnu.curb.data.remote.InformationRemoteDataSource;
 import jxpl.scnu.curb.data.remote.SDRemoteDataSource;
-import jxpl.scnu.curb.data.repository.InformationRepository;
 import jxpl.scnu.curb.data.repository.ScholatRepository;
 import jxpl.scnu.curb.data.repository.SmallDataRepository;
-import jxpl.scnu.curb.immediateInformation.InformationFragment;
 import jxpl.scnu.curb.immediateInformation.InformationPresenter;
 import jxpl.scnu.curb.river.RiverFragment;
 import jxpl.scnu.curb.scholat.ScholatFragment;
@@ -43,6 +40,7 @@ import jxpl.scnu.curb.smallData.SmallDataPresenter;
 import jxpl.scnu.curb.userProfile.UserProfileActivity;
 import jxpl.scnu.curb.userProfile.setScholat.SetScholatActivity;
 import jxpl.scnu.curb.utils.ActivityUtil;
+import jxpl.scnu.curb.utils.FragmentFactory;
 import jxpl.scnu.curb.utils.SharedHelper;
 import jxpl.scnu.curb.utils.XmlDataStorage;
 
@@ -57,7 +55,7 @@ public class HomePageActivity extends AppCompatActivity
 
     private final static String ITEM_TO_SHOW = "ItemToShow";
     private final String bundleKey = "lastItem";
-    private final String infoFilterKey = "currentFilter";
+    //private final String infoFilterKey = "currentFilter";
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.nav_view)
@@ -66,9 +64,12 @@ public class HomePageActivity extends AppCompatActivity
     DrawerLayout drawerLayout;
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
+    @BindView(R.id.content_frame)
+    FrameLayout m_ContentFrame;
     private InformationPresenter informationPresenter;
 
     private CircleImageView m_avatar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,15 +85,15 @@ public class HomePageActivity extends AppCompatActivity
         }
 
         Intent lc_intent = getIntent();
-        initFragment();//初始化其它fragments
+        //initFragment();//初始化其它fragments
         ActivityUtil.setContainerView(R.id.content_frame);
         ActivityUtil.setFragmentManagerInHome(getSupportFragmentManager());
 
-        InformationFragment informationFragment = InformationFragment.newInstance();
+        /*InformationFragment informationFragment = InformationFragment.newInstance();
         ActivityUtil.addFragmentInHomePage(R.id.nav_info, informationFragment);
         informationPresenter = new InformationPresenter(InformationRepository.
                 getInstance(InformationLocalDataSource.getInstance(HomePageActivity.this),
-                        InformationRemoteDataSource.getInstance(), this), informationFragment, this);
+                        InformationRemoteDataSource.getInstance(), this), informationFragment, this);*/
 
         int itemToShow = R.id.nav_info;
         String title = getString(R.string.information);
@@ -114,7 +115,9 @@ public class HomePageActivity extends AppCompatActivity
         if (itemToShow == R.id.nav_scholat)
             title = getString(R.string.scholat);
         toolbarTitle.setText(title);
-        ActivityUtil.setCurrentFragment(itemToShow);
+        FragmentFactory.getInstance().showFragmentInHomePage(this, m_ContentFrame.getId(), itemToShow);
+
+        //ActivityUtil.setCurrentFragment(itemToShow);
         navView.setNavigationItemSelectedListener(this);
 
         //设置NavigationView中头像的点击事件
@@ -152,6 +155,8 @@ public class HomePageActivity extends AppCompatActivity
 
     /**
      * 初始化Homepage中寄存的3个Fragment
+     *
+     * @deprecated
      */
     private void initFragment() {
 
@@ -210,7 +215,7 @@ public class HomePageActivity extends AppCompatActivity
             Map scholatInfo = XmlDataStorage.getScholat();
             String scholatAccount = (String) scholatInfo.get(XmlDataStorage.SCHOLAT_ACCOUNT);
             if (!scholatAccount.equals("")) {
-                ActivityUtil.setCurrentFragment(item.getItemId());
+                FragmentFactory.getInstance().showFragmentInHomePage(this, m_ContentFrame.getId(), item.getItemId());
                 toolbarTitle.setText(item.getTitle());
                 item.setChecked(true);
                 drawerLayout.closeDrawer(GravityCompat.START);
@@ -236,7 +241,7 @@ public class HomePageActivity extends AppCompatActivity
                 lc_alertDialog.show();
             }
         } else {
-            ActivityUtil.setCurrentFragment(item.getItemId());
+            FragmentFactory.getInstance().showFragmentInHomePage(this, m_ContentFrame.getId(), item.getItemId());
             toolbarTitle.setText(item.getTitle());
             item.setChecked(true);
             drawerLayout.closeDrawer(GravityCompat.START);
@@ -248,15 +253,15 @@ public class HomePageActivity extends AppCompatActivity
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
         bundle.putInt(bundleKey, ActivityUtil.getCurrentKey());
-        bundle.putString(infoFilterKey, informationPresenter.getFiltering());
+        //bundle.putString(infoFilterKey, informationPresenter.getFiltering());
         super.onSaveInstanceState(bundle);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         ActivityUtil.setCurrentFragment(savedInstanceState.getInt(bundleKey));
-        informationPresenter.setFiltering(savedInstanceState.getString(infoFilterKey));
-        informationPresenter.start();
+        //informationPresenter.setFiltering(savedInstanceState.getString(infoFilterKey));
+        //informationPresenter.start();
         super.onRestoreInstanceState(savedInstanceState);
     }
 

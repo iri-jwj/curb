@@ -44,7 +44,7 @@ public class ResultPresenter implements ResultInterface.Presenter {
             public void onDataNotAvailable() {
                 sendErrorToView(R.string.sd_loading_results_error);
             }
-        }, summary_id);
+        }, summary_id, m_context);
     }
 
     private void sendErrorToView(int messageId) {

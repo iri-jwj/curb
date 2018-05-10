@@ -95,7 +95,7 @@ public class InformationLocalDataSource implements InformationDataSource {
 
     @Override
     public void getInformations(@NonNull LoadInformationCallback callback,
-                                String userId, String timestamp) {
+                                String userId, String timestamp, Context para_context) {
         SQLiteDatabase sqLiteDatabase = curbDbHelper.getWritableDatabase();
         String[] projection = {
                 PersistenceContract.informationEntry.COLUMN_NAME_ID,
@@ -177,7 +177,7 @@ public class InformationLocalDataSource implements InformationDataSource {
     }
 
     @Override
-    public void postInformation(PostInformationCallback para_callback, String information, String userId) {
+    public void postInformation(PostInformationCallback para_callback, String information, String userId, Context para_context) {
 
     }
 }

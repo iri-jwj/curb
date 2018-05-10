@@ -87,7 +87,7 @@ public class ScholatPresenter implements ScholatContract.Presenter {
                 });
 
             }
-        }, lc_stringMap.get(XmlDataStorage.USER_ID));
+        }, lc_stringMap.get(XmlDataStorage.USER_ID), m_activity);
 
     }
 

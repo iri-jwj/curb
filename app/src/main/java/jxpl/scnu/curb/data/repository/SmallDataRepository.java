@@ -73,7 +73,7 @@ public class SmallDataRepository implements SmallDataDataSource {
     }
 
     @Override
-    public void loadDetails(@NonNull final loadDetailCallback callback, final String summaryId) {
+    public void loadDetails(@NonNull final loadDetailCallback callback, final String summaryId, final Context para_context) {
         final Thread lc_thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -87,7 +87,7 @@ public class SmallDataRepository implements SmallDataDataSource {
                     public void onDataNotAvailable() {
                         callback.onDataNotAvailable();
                     }
-                }, summaryId);
+                }, summaryId, para_context);
             }
         });
 
@@ -102,7 +102,7 @@ public class SmallDataRepository implements SmallDataDataSource {
                 //todo 判断网络是否可用
                 lc_thread.start();
             }
-        }, summaryId);
+        }, summaryId, para_context);
     }
 
     /**
@@ -112,13 +112,13 @@ public class SmallDataRepository implements SmallDataDataSource {
      */
     @Override
     public void loadSummaries(@NonNull final loadSummaryCallback callback,
-                              final String time, final int direction) {
+                              final String time, final int direction, Context para_context) {
         if (!isSummaryCacheDirty && !m_summaryMap.isEmpty()) {
             callback.onSummaryLoaded(new ArrayList<>(m_summaryMap.values()));
             return;
         }
         if (isSummaryCacheDirty)
-            getSDSummariesFromWeb(callback, time, direction);
+            getSDSummariesFromWeb(callback, time, direction, para_context);
         else {
             m_smallDataLocalDataSource.loadSummaries(new loadSummaryCallback() {
                 @Override
@@ -131,7 +131,7 @@ public class SmallDataRepository implements SmallDataDataSource {
                 public void onDataNotAvailable() {
                     callback.onDataNotAvailable();
                 }
-            }, time, direction);
+            }, time, direction, para_context);
         }
     }
 
@@ -143,7 +143,7 @@ public class SmallDataRepository implements SmallDataDataSource {
      * @param direction                选择参数，由调用方法传入
      */
     private void getSDSummariesFromWeb(@NonNull final loadSummaryCallback para_loadSummaryCallback,
-                                       final String time, final int direction) {
+                                       final String time, final int direction, final Context para_context) {
         final Thread lc_thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -160,7 +160,7 @@ public class SmallDataRepository implements SmallDataDataSource {
                     public void onDataNotAvailable() {
                         para_loadSummaryCallback.onDataNotAvailable();
                     }
-                }, time, direction);
+                }, time, direction, para_context);
             }
         });
         lc_thread.start();
@@ -228,7 +228,7 @@ public class SmallDataRepository implements SmallDataDataSource {
 
     @Override
     public void loadCreatedSummaries(@NonNull final loadCreatedSummariesCallback
-                                             para_loadCreatedSummariesCallback) {
+                                             para_loadCreatedSummariesCallback, final Context para_context) {
         if (!summaryCreateCache && !m_summaryCreateMap.isEmpty()) {
             para_loadCreatedSummariesCallback.onCreatedSummariesLoaded(
                     new ArrayList<>(m_summaryCreateMap.values()));
@@ -252,7 +252,7 @@ public class SmallDataRepository implements SmallDataDataSource {
                         public void onDataNotAvailable() {
                             para_loadCreatedSummariesCallback.onDataNotAvailable();
                         }
-                    });
+                    }, para_context);
                 }
             });
             lc_thread.start();
@@ -268,13 +268,13 @@ public class SmallDataRepository implements SmallDataDataSource {
                 public void onDataNotAvailable() {
                     para_loadCreatedSummariesCallback.onDataNotAvailable();
                 }
-            });
+            }, para_context);
         }
     }
 
     @Override
     public void loadCreatedDetails(@NonNull final loadCreatedDetailsCallback para_loadCreatedDetailsCallback,
-                                   final String para_summaryId) {
+                                   final String para_summaryId, final Context para_context) {
         final Thread lc_thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -289,7 +289,7 @@ public class SmallDataRepository implements SmallDataDataSource {
                         // todo 添加错误显示
                         para_loadCreatedDetailsCallback.onDataNotAvailable();
                     }
-                }, para_summaryId);
+                }, para_summaryId, para_context);
             }
         });
         m_smallDataLocalDataSource.loadDetails(new loadDetailCallback() {
@@ -303,11 +303,11 @@ public class SmallDataRepository implements SmallDataDataSource {
                 //todo 判断网络是否可用
                 lc_thread.start();
             }
-        }, para_summaryId);
+        }, para_summaryId, para_context);
     }
 
     @Override
-    public void loadAnswers(@NonNull final loadAnswersCallback para_loadAnswersCallback, final String summaryId) {
+    public void loadAnswers(@NonNull final loadAnswersCallback para_loadAnswersCallback, final String summaryId, final Context para_context) {
         m_smallDataLocalDataSource.loadAnswers(new loadAnswersCallback() {
             @Override
             public void onAnswerLoaded(List<SDAnswer> para_sdAnswers) {
@@ -329,12 +329,12 @@ public class SmallDataRepository implements SmallDataDataSource {
                             public void onDataNotAvailable() {
                                 para_loadAnswersCallback.onDataNotAvailable();
                             }
-                        }, summaryId);
+                        }, summaryId, para_context);
                     }
                 });
                 lc_thread.start();
             }
-        }, summaryId);
+        }, summaryId, para_context);
     }
 
     @Override
@@ -398,11 +398,11 @@ public class SmallDataRepository implements SmallDataDataSource {
     }
 
     @Override
-    public void saveCreatedSDToRemote(final String para_s, final File image) {
+    public void saveCreatedSDToRemote(final String para_s, final File image, final Context para_context) {
         final Thread lc_thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                m_sdRemoteDataSource.saveCreatedSDToRemote(para_s, image);
+                m_sdRemoteDataSource.saveCreatedSDToRemote(para_s, image, para_context);
             }
         });
         lc_thread.start();
@@ -410,11 +410,11 @@ public class SmallDataRepository implements SmallDataDataSource {
     }
 
     @Override
-    public void commitAnswer(final String strEntity) {
+    public void commitAnswer(final String strEntity, final Context para_context) {
         final Thread lc_thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                m_sdRemoteDataSource.commitAnswer(strEntity);
+                m_sdRemoteDataSource.commitAnswer(strEntity, para_context);
             }
         });
         lc_thread.start();
@@ -422,11 +422,11 @@ public class SmallDataRepository implements SmallDataDataSource {
 
     @Override
     public void loadResult(final loadResultCallback para_loadResultCallback,
-                           final String summaryId) {
+                           final String summaryId, final Context para_context) {
         final Thread lc_thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                m_sdRemoteDataSource.loadResult(para_loadResultCallback, summaryId);
+                m_sdRemoteDataSource.loadResult(para_loadResultCallback, summaryId, para_context);
             }
         });
         lc_thread.start();

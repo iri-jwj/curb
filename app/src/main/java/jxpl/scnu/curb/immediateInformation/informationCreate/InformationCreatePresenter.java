@@ -68,7 +68,7 @@ public class InformationCreatePresenter implements InformationCreateContract.Pre
                 infoDetailView.setLoadingIndicator(false);
                 infoDetailView.showPostResult(false);
             }
-        }, information, lc_stringMap.get(XmlDataStorage.USER_ID));
+        }, information, lc_stringMap.get(XmlDataStorage.USER_ID), m_activity);
     }
 
 }

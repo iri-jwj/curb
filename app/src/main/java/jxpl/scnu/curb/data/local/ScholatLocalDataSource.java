@@ -61,7 +61,7 @@ public class ScholatLocalDataSource implements ScholatDataSource {
     }
 
     @Override
-    public void loadHomeworks(LoadHomeworkCallback para_loadHomeworkCallback, String userId) {
+    public void loadHomeworks(LoadHomeworkCallback para_loadHomeworkCallback, String userId, Context para_context) {
         List<ScholatHomework> lc_homeworks = new LinkedList<>();
         SQLiteDatabase lc_liteDatabase = m_curbDbHelper.getReadableDatabase();
         String[] projection = {
@@ -71,7 +71,7 @@ public class ScholatLocalDataSource implements ScholatDataSource {
                 PersistenceContract.ScholatEntry.COLMN_NAME_ENDTIME,
                 PersistenceContract.ScholatEntry.COLUMN_NAME_CREATETIME
         };
-        String orderby = PersistenceContract.ScholatEntry.COLUMN_NAME_CREATETIME + "DESC";
+        String orderby = PersistenceContract.ScholatEntry.COLUMN_NAME_CREATETIME + " DESC";
         Cursor lc_cursor = lc_liteDatabase.query(PersistenceContract.ScholatEntry.TABLE_NAME,
                 projection, null, null, null, null, orderby);
 
@@ -95,8 +95,8 @@ public class ScholatLocalDataSource implements ScholatDataSource {
                                 .getColumnIndexOrThrow(PersistenceContract
                                         .ScholatEntry.COLMN_NAME_ENDTIME))
                 ));
-                lc_cursor.close();
             }
+            lc_cursor.close();
             para_loadHomeworkCallback.onHomeworkLoaded(lc_homeworks);
         } else {
             para_loadHomeworkCallback.onDataNotAvailable();

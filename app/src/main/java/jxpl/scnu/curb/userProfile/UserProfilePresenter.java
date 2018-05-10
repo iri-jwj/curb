@@ -26,7 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
-import jxpl.scnu.curb.data.retrofit.RetrofitGetData;
+import jxpl.scnu.curb.data.retrofit.Connect2Server;
 import jxpl.scnu.curb.userProfile.setScholat.SetScholatActivity;
 import jxpl.scnu.curb.utils.SharedHelper;
 import jxpl.scnu.curb.utils.XmlDataStorage;
@@ -50,7 +50,7 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
 
     private void updateProfile2Server(File para_avatar) {
         Map userInfo = XmlDataStorage.getUserInfo();
-        RetrofitGetData.uploadAvatar((String) userInfo.get(XmlDataStorage.USER_ID), para_avatar,
+        Connect2Server.getConnect2Server(m_activity).uploadAvatar((String) userInfo.get(XmlDataStorage.USER_ID), para_avatar,
                 new UserProfileContract.UploadAvatarCallback() {
                     @Override
                     public void onAvatarUploaded() {
@@ -78,7 +78,7 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
     private void updateScholatInfo2Server() {
         Map scholatInfo = XmlDataStorage.getScholat();
         Map userInfo = XmlDataStorage.getUserInfo();
-        RetrofitGetData.uploadScholatInfo((String) userInfo.get(XmlDataStorage.USER_ID),
+        Connect2Server.getConnect2Server(m_activity).uploadScholatInfo((String) userInfo.get(XmlDataStorage.USER_ID),
                 (String) scholatInfo.get(XmlDataStorage.SCHOLAT_ACCOUNT),
                 (String) scholatInfo.get(XmlDataStorage.SCHOLAT_PSW),
                 new UserProfileContract.UploadScholatInfoCallback() {
@@ -102,7 +102,6 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
                         });
                     }
                 });
-        Log.d(TAG, "updateScholatInfo2Server: ");
     }
 
     @Override
@@ -113,7 +112,7 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
         if (!originNickname.equals(nickname)) {
             XmlDataStorage.saveNickname(nickname);
             Map userInfo = XmlDataStorage.getUserInfo();
-            RetrofitGetData.uploadNickname((String) userInfo.get(XmlDataStorage.USER_ID), nickname,
+            Connect2Server.getConnect2Server(m_activity).uploadNickname((String) userInfo.get(XmlDataStorage.USER_ID), nickname,
                     new UserProfileContract.UploadNicknameCallback() {
                         @Override
                         public void onNicknameUploaded() {

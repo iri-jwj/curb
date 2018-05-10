@@ -61,7 +61,7 @@ public class SmallDataPresenter implements SmallDataInterface.Presenter {
                     answers);
             String strEntry = lc_gson.toJson(lc_createdAnswer);
             Log.d("smallDataPresenter", "postAnswer:entity " + strEntry);
-            m_smallDataRepository.commitAnswer(strEntry);
+            m_smallDataRepository.commitAnswer(strEntry, m_homePageActivity);
             saveAnswersToLocal();
         } else {
             smallDataView.showError("有题目未完成");
@@ -144,7 +144,7 @@ public class SmallDataPresenter implements SmallDataInterface.Presenter {
                         .getResources()
                         .getString(R.string.sd_loading_summaries_error));
             }
-        }, time, direction);
+        }, time, direction, m_homePageActivity);
     }
 
     @Override
@@ -167,7 +167,7 @@ public class SmallDataPresenter implements SmallDataInterface.Presenter {
                         public void onDataNotAvailable() {
                             smallDataView.showError("加载答案错误");
                         }
-                    }, m_sdSummaryAnswering.getId().toString());
+                    }, m_sdSummaryAnswering.getId().toString(), m_homePageActivity);
                 }
                 smallDataView.showDetails(para_sdDetails);
             }
@@ -176,7 +176,7 @@ public class SmallDataPresenter implements SmallDataInterface.Presenter {
             public void onDataNotAvailable() {
                 sendErrorToView(R.string.sd_loading_details_error);
             }
-        }, summaryId);
+        }, summaryId, m_homePageActivity);
     }
 
 

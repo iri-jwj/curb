@@ -1,4 +1,4 @@
-package jxpl.scnu.curb.loading;
+package jxpl.scnu.curb.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +14,6 @@ import butterknife.ButterKnife;
 import cn.jpush.android.api.JPushInterface;
 import jxpl.scnu.curb.R;
 import jxpl.scnu.curb.homePage.HomePageActivity;
-import jxpl.scnu.curb.login.LoginActivity;
 import jxpl.scnu.curb.utils.SharedHelper;
 import jxpl.scnu.curb.utils.XmlDataStorage;
 

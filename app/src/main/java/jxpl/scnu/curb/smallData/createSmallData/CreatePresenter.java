@@ -50,7 +50,7 @@ public class CreatePresenter implements CreateInterface.Presenter {
             public void onDataNotAvailable() {
                 sendErrorToView(R.string.sd_loading_created_summaries_error);
             }
-        });
+        }, m_createContext);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class CreatePresenter implements CreateInterface.Presenter {
             public void onDataNotAvailable() {
                 sendErrorToView(R.string.sd_loading_created_details_error);
             }
-        }, summaryId);
+        }, summaryId, m_createContext);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class CreatePresenter implements CreateInterface.Presenter {
     public void postCreatedSummary() {
         Gson lc_gson = new Gson();
         String lc_s = lc_gson.toJson(new CreatePresenter.CreatedSD(m_sdCreatedSummary, m_sdCreatedDetails));
-        m_smallDataRepository.saveCreatedSDToRemote(lc_s, m_imageFile);
+        m_smallDataRepository.saveCreatedSDToRemote(lc_s, m_imageFile, m_createContext);
     }
 
     private void sendErrorToView(int messageId) {

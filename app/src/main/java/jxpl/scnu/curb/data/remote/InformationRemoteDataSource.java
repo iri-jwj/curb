@@ -1,5 +1,6 @@
 package jxpl.scnu.curb.data.remote;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -7,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 import jxpl.scnu.curb.data.repository.InformationDataSource;
-import jxpl.scnu.curb.data.retrofit.RetrofitGetData;
+import jxpl.scnu.curb.data.retrofit.Connect2Server;
 import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
 
 /**
@@ -44,8 +45,8 @@ public class InformationRemoteDataSource implements InformationDataSource {
 
     @Override
     public void getInformations(@NonNull LoadInformationCallback callback,
-                                String userId, String timestamp) {
-        List<ImmediateInformation> immediateInformations = RetrofitGetData
+                                String userId, String timestamp, Context para_context) {
+        List<ImmediateInformation> immediateInformations = Connect2Server.getConnect2Server(para_context)
                 .getInformationInRetrofit(userId, timestamp);
         Log.d("RemoteDateSource", "getInformations: " +
                 immediateInformations.isEmpty());
@@ -62,8 +63,9 @@ public class InformationRemoteDataSource implements InformationDataSource {
 
     @Override
     public void postInformation(PostInformationCallback para_callback, String information,
-                                String userId) {
-        String result = RetrofitGetData.postCreateInformation(userId, information);
+                                String userId, Context para_context) {
+        String result = Connect2Server.getConnect2Server(para_context)
+                .postCreateInformation(userId, information);
         if (result == null)
             para_callback.onPostFailed();
         else
