@@ -10,9 +10,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.net.ssl.KeyManagerFactory;
@@ -28,8 +26,8 @@ import javax.net.ssl.X509TrustManager;
  * @version 1 init
  */
 public class SSLFactory {
-    private final static String CLIENT_PRI_KEY = "client.bks";
-    private final static String TRUSTSTORE_PUB_KEY = "truststore.bks";
+    private final static String CLIENT_PRI_KEY = "client";
+    private final static String TRUSTSTORE_PUB_KEY = "turststore";
     private final static String CLIENT_BKS_PASSWORD = "c*9cZn$MA";
     private final static String TRUSTSTORE_BKS_PASSWORD = "c*9cZn$MA";
     private final static String KEYSTORE_TYPE = "BKS";

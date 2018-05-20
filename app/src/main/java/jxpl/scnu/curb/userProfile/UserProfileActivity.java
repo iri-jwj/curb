@@ -28,6 +28,7 @@ public class UserProfileActivity extends AppCompatActivity {
     FrameLayout m_ContentFrame;
 
     private UserProfileContract.Presenter m_userProfilePresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

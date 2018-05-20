@@ -1,0 +1,27 @@
+package jxpl.scnu.curb.homePage.smallData.result;
+
+import android.content.Context;
+
+import java.util.List;
+import java.util.UUID;
+
+import jxpl.scnu.curb.BasePresenter;
+import jxpl.scnu.curb.BaseView;
+import jxpl.scnu.curb.homePage.smallData.SDResult;
+
+
+public interface ResultInterface {
+    interface Presenter extends BasePresenter {
+        void loadResult(String summary_id);
+
+        Context getPresenterContext();
+    }
+
+    interface View extends BaseView<Presenter> {
+        void showError(String error);
+
+        void showResults(List<SDResult> para_sdResults);
+
+        UUID getSummaryID();
+    }
+}

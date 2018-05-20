@@ -11,13 +11,13 @@ import jxpl.scnu.curb.data.remote.SDRemoteDataSource;
 import jxpl.scnu.curb.data.repository.InformationRepository;
 import jxpl.scnu.curb.data.repository.ScholatRepository;
 import jxpl.scnu.curb.data.repository.SmallDataRepository;
-import jxpl.scnu.curb.immediateInformation.InformationFragment;
-import jxpl.scnu.curb.immediateInformation.InformationPresenter;
-import jxpl.scnu.curb.river.RiverFragment;
-import jxpl.scnu.curb.scholat.ScholatFragment;
-import jxpl.scnu.curb.scholat.ScholatPresenter;
-import jxpl.scnu.curb.smallData.SmallDataFragment;
-import jxpl.scnu.curb.smallData.SmallDataPresenter;
+import jxpl.scnu.curb.homePage.immediateInformation.InformationFragment;
+import jxpl.scnu.curb.homePage.immediateInformation.InformationPresenter;
+import jxpl.scnu.curb.homePage.river.RiverFragment;
+import jxpl.scnu.curb.homePage.scholat.ScholatFragment;
+import jxpl.scnu.curb.homePage.scholat.ScholatPresenter;
+import jxpl.scnu.curb.homePage.smallData.SmallDataFragment;
+import jxpl.scnu.curb.homePage.smallData.SmallDataPresenter;
 
 /**
  * created on ${date}
@@ -29,11 +29,11 @@ public class FragmentFactory {
     private static final FragmentFactory ourInstance = new FragmentFactory();
     private SparseBooleanArray isFragmentCreated = new SparseBooleanArray();
 
-    public static FragmentFactory getInstance() {
-        return ourInstance;
+    private FragmentFactory() {
     }
 
-    private FragmentFactory() {
+    public static FragmentFactory getInstance() {
+        return ourInstance;
     }
 
     /*    public Fragment getFragment(Context para_context){

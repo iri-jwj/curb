@@ -12,7 +12,7 @@ import java.util.UUID;
 
 import jxpl.scnu.curb.data.local.InformationLocalDataSource;
 import jxpl.scnu.curb.data.remote.InformationRemoteDataSource;
-import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
+import jxpl.scnu.curb.homePage.immediateInformation.ImmediateInformation;
 import jxpl.scnu.curb.utils.SharedHelper;
 import jxpl.scnu.curb.utils.XmlDataStorage;
 

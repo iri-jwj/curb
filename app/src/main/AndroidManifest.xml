@@ -41,7 +41,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".immediateInformation.informationCreate.InformationCreateActivity"
+            android:name=".homePage.immediateInformation.informationCreate.InformationCreateActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.INFO_DETAIL" />
@@ -63,9 +63,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".smallData.createSmallData.SmallDataCreateActivity" />
+        <activity android:name=".homePage.smallData.createSmallData.SmallDataCreateActivity" />
         <activity
-            android:name=".smallData.result.ResultActivity"
+            android:name=".homePage.smallData.result.ResultActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".login.RegisterActivity"

@@ -6,7 +6,7 @@ import java.util.List;
 
 import jxpl.scnu.curb.data.repository.ScholatDataSource;
 import jxpl.scnu.curb.data.retrofit.Connect2Server;
-import jxpl.scnu.curb.scholat.ScholatHomework;
+import jxpl.scnu.curb.homePage.scholat.ScholatHomework;
 
 /**
  * Created by iri-jwj on 2018/3/27.

@@ -8,10 +8,9 @@ import android.support.annotation.NonNull;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
 import jxpl.scnu.curb.data.repository.ScholatDataSource;
-import jxpl.scnu.curb.scholat.ScholatHomework;
+import jxpl.scnu.curb.homePage.scholat.ScholatHomework;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

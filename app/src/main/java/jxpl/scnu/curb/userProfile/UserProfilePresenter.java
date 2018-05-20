@@ -32,14 +32,12 @@ import jxpl.scnu.curb.utils.SharedHelper;
 import jxpl.scnu.curb.utils.XmlDataStorage;
 
 public class UserProfilePresenter implements UserProfileContract.Presenter {
-    private UserProfileContract.View m_profileView;
-    private Activity m_activity;
-
     public static final int CROP_PHOTO = 3;
     public static final int CHOOSE_PHOTO = 2;
     public static final int SET_SCHOLAT = 4;
-
     private final String TAG = "ProfilePresenter";
+    private UserProfileContract.View m_profileView;
+    private Activity m_activity;
     private boolean firstOpen = true;
 
     public UserProfilePresenter(UserProfileContract.View para_profileView, Activity para_activity) {

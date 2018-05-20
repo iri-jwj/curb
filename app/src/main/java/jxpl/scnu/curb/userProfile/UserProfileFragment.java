@@ -7,9 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +26,7 @@ import jxpl.scnu.curb.R;
 
 
 public class UserProfileFragment extends Fragment implements UserProfileContract.View {
+    private final String TAG = "UserProfileFrag";
     @BindView(R.id.avatar)
     CircleImageView m_Avatar;
     @BindView(R.id.nickname)
@@ -52,12 +50,9 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
     @BindView(R.id.logout)
     Button m_Logout;
     Unbinder unbinder;
-
     UserProfileContract.Presenter m_presenter;
     @BindView(R.id.fragment_profile_constrain)
     ConstraintLayout m_FragmentProfileConstrain;
-
-    private final String TAG = "UserProfileFrag";
 
     public UserProfileFragment() {
         // Required empty public constructor

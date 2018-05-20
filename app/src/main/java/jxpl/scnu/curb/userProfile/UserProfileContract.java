@@ -3,8 +3,6 @@ package jxpl.scnu.curb.userProfile;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
-import java.io.File;
-
 import jxpl.scnu.curb.BasePresenter;
 import jxpl.scnu.curb.BaseView;
 

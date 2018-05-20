@@ -13,10 +13,10 @@ import java.util.UUID;
 
 import jxpl.scnu.curb.data.local.SmallDataLocalDataSource;
 import jxpl.scnu.curb.data.remote.SDRemoteDataSource;
-import jxpl.scnu.curb.smallData.SDAnswer;
-import jxpl.scnu.curb.smallData.SDDetail;
-import jxpl.scnu.curb.smallData.SDSummary;
-import jxpl.scnu.curb.smallData.SDSummaryCreate;
+import jxpl.scnu.curb.homePage.smallData.SDAnswer;
+import jxpl.scnu.curb.homePage.smallData.SDDetail;
+import jxpl.scnu.curb.homePage.smallData.SDSummary;
+import jxpl.scnu.curb.homePage.smallData.SDSummaryCreate;
 import jxpl.scnu.curb.utils.SharedHelper;
 import jxpl.scnu.curb.utils.XmlDataStorage;
 

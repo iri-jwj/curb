@@ -9,7 +9,6 @@ import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,21 +16,18 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509ExtendedTrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
-import jxpl.scnu.curb.scholat.ScholatHomework;
-import jxpl.scnu.curb.smallData.SDAnswer;
-import jxpl.scnu.curb.smallData.SDDetail;
-import jxpl.scnu.curb.smallData.SDResult;
-import jxpl.scnu.curb.smallData.SDSummary;
-import jxpl.scnu.curb.smallData.SDSummaryCreate;
+import jxpl.scnu.curb.homePage.immediateInformation.ImmediateInformation;
+import jxpl.scnu.curb.homePage.scholat.ScholatHomework;
+
+import jxpl.scnu.curb.homePage.smallData.SDAnswer;
+import jxpl.scnu.curb.homePage.smallData.SDDetail;
+import jxpl.scnu.curb.homePage.smallData.SDResult;
+import jxpl.scnu.curb.homePage.smallData.SDSummary;
+import jxpl.scnu.curb.homePage.smallData.SDSummaryCreate;
 import jxpl.scnu.curb.userProfile.UserProfileContract;
 import jxpl.scnu.curb.utils.MyHostnameVerifier;
-import jxpl.scnu.curb.utils.MyTrustManage;
 import jxpl.scnu.curb.utils.SSLFactory;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -80,17 +76,18 @@ public class Connect2Server {
     }
 
     public static synchronized Connect2Server getConnect2Server(Context para_context) {
-        if (stc_connect2Server == null)
+        if (stc_connect2Server == null) {
             try {
                 stc_connect2Server = new Connect2Server(para_context);
             } catch (Exception para_e) {
                 para_e.printStackTrace();
             }
+        }
         return stc_connect2Server;
     }
 
     public List<ImmediateInformation> getInformationInRetrofit(@NonNull String userId,
-                                                                      @NonNull String timestamp) {
+                                                               @NonNull String timestamp) {
         Call<List<ImmediateInformation>> immediateInformationCall =
                 serverInterface.postInformation(userId, timestamp);
         Response<List<ImmediateInformation>> response;

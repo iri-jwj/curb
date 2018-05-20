@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import java.util.List;
 import java.util.UUID;
 
-import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
+import jxpl.scnu.curb.homePage.immediateInformation.ImmediateInformation;
 
 /**
  * @author iri-jwj

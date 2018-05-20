@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.UUID;
 
 import jxpl.scnu.curb.data.repository.SmallDataDataSource;
-import jxpl.scnu.curb.smallData.SDAnswer;
-import jxpl.scnu.curb.smallData.SDDetail;
-import jxpl.scnu.curb.smallData.SDSummary;
-import jxpl.scnu.curb.smallData.SDSummaryCreate;
+import jxpl.scnu.curb.homePage.smallData.SDAnswer;
+import jxpl.scnu.curb.homePage.smallData.SDDetail;
+import jxpl.scnu.curb.homePage.smallData.SDSummary;
+import jxpl.scnu.curb.homePage.smallData.SDSummaryCreate;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

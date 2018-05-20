@@ -7,11 +7,12 @@ import android.support.annotation.NonNull;
 import java.io.File;
 import java.util.List;
 
-import jxpl.scnu.curb.smallData.SDAnswer;
-import jxpl.scnu.curb.smallData.SDDetail;
-import jxpl.scnu.curb.smallData.SDResult;
-import jxpl.scnu.curb.smallData.SDSummary;
-import jxpl.scnu.curb.smallData.SDSummaryCreate;
+import jxpl.scnu.curb.homePage.smallData.SDAnswer;
+import jxpl.scnu.curb.homePage.smallData.SDDetail;
+import jxpl.scnu.curb.homePage.smallData.SDResult;
+import jxpl.scnu.curb.homePage.smallData.SDSummary;
+import jxpl.scnu.curb.homePage.smallData.SDSummaryCreate;
+
 
 public interface SmallDataDataSource {
     void getSummary(@NonNull getSummaryCallback callback, String id);

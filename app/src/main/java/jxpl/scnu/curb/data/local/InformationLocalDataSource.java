@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 import jxpl.scnu.curb.data.repository.InformationDataSource;
-import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
+import jxpl.scnu.curb.homePage.immediateInformation.ImmediateInformation;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static jxpl.scnu.curb.data.local.PersistenceContract.informationEntry.COLUMN_NAME_ADDRESS;

@@ -2,19 +2,18 @@ package jxpl.scnu.curb.data.retrofit;
 
 import java.util.List;
 
-import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
-import jxpl.scnu.curb.scholat.ScholatHomework;
-import jxpl.scnu.curb.smallData.SDAnswer;
-import jxpl.scnu.curb.smallData.SDDetail;
-import jxpl.scnu.curb.smallData.SDResult;
-import jxpl.scnu.curb.smallData.SDSummary;
-import jxpl.scnu.curb.smallData.SDSummaryCreate;
+import jxpl.scnu.curb.homePage.immediateInformation.ImmediateInformation;
+import jxpl.scnu.curb.homePage.scholat.ScholatHomework;
+
+import jxpl.scnu.curb.homePage.smallData.SDAnswer;
+import jxpl.scnu.curb.homePage.smallData.SDDetail;
+import jxpl.scnu.curb.homePage.smallData.SDResult;
+import jxpl.scnu.curb.homePage.smallData.SDSummary;
+import jxpl.scnu.curb.homePage.smallData.SDSummaryCreate;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
@@ -33,6 +32,7 @@ import retrofit2.http.Query;
 
 public interface ServerInterface {
     //获取information
+
     /**
      * 获取学者网的作业信息
      *

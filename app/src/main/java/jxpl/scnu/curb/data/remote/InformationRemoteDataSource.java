@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import jxpl.scnu.curb.data.repository.InformationDataSource;
 import jxpl.scnu.curb.data.retrofit.Connect2Server;
-import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
+import jxpl.scnu.curb.homePage.immediateInformation.ImmediateInformation;
 
 /**
  * @author iri-jwj

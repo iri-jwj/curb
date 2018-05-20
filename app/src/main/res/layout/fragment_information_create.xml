@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="jxpl.scnu.curb.immediateInformation.informationCreate.InformationCreateFragment">
+    tools:context=".homePage.immediateInformation.informationCreate.InformationCreateFragment">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/info_detail_constraintLayout"

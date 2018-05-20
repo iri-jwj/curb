@@ -8,11 +8,11 @@ import java.util.List;
 
 import jxpl.scnu.curb.data.repository.SmallDataDataSource;
 import jxpl.scnu.curb.data.retrofit.Connect2Server;
-import jxpl.scnu.curb.smallData.SDAnswer;
-import jxpl.scnu.curb.smallData.SDDetail;
-import jxpl.scnu.curb.smallData.SDResult;
-import jxpl.scnu.curb.smallData.SDSummary;
-import jxpl.scnu.curb.smallData.SDSummaryCreate;
+import jxpl.scnu.curb.homePage.smallData.SDAnswer;
+import jxpl.scnu.curb.homePage.smallData.SDDetail;
+import jxpl.scnu.curb.homePage.smallData.SDResult;
+import jxpl.scnu.curb.homePage.smallData.SDSummary;
+import jxpl.scnu.curb.homePage.smallData.SDSummaryCreate;
 
 
 public class SDRemoteDataSource implements SmallDataDataSource {

@@ -7,11 +7,10 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import jxpl.scnu.curb.data.local.ScholatLocalDataSource;
 import jxpl.scnu.curb.data.remote.ScholatRemoteDataSource;
-import jxpl.scnu.curb.scholat.ScholatHomework;
+import jxpl.scnu.curb.homePage.scholat.ScholatHomework;
 import jxpl.scnu.curb.utils.SharedHelper;
 import jxpl.scnu.curb.utils.XmlDataStorage;
 
@@ -47,6 +46,7 @@ public class ScholatRepository implements ScholatDataSource {
             instance = new ScholatRepository(new ScholatLocalDataSource(para_context), new ScholatRemoteDataSource(), para_context);
         return instance;
     }
+
     @Override
     public void saveHomeworkToLocal(final List<ScholatHomework> para_homeworkList) {
         final Thread lc_thread = new Thread(new Runnable() {

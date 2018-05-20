@@ -4,7 +4,7 @@ import android.content.Context;
 
 import java.util.List;
 
-import jxpl.scnu.curb.scholat.ScholatHomework;
+import jxpl.scnu.curb.homePage.scholat.ScholatHomework;
 
 /**
  * Created by iri-jwj on 2018/3/27.
