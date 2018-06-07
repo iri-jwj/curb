@@ -18,6 +18,8 @@ import butterknife.ButterKnife;
 import jxpl.scnu.curb.R;
 import jxpl.scnu.curb.utils.ActivityUtil;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class UserProfileActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar_title)
@@ -28,6 +30,7 @@ public class UserProfileActivity extends AppCompatActivity {
     FrameLayout m_ContentFrame;
 
     private UserProfileContract.Presenter m_userProfilePresenter;
+    private UserProfileFragment m_userProfileFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +45,12 @@ public class UserProfileActivity extends AppCompatActivity {
         }
         m_ToolbarTitle.setText("个人信息");
 
-        UserProfileFragment lc_userProfileFragment = UserProfileFragment.newInstance();
-        m_userProfilePresenter = new UserProfilePresenter(lc_userProfileFragment, this);
+        m_userProfileFragment = UserProfileFragment.newInstance();
+        m_userProfilePresenter = new UserProfilePresenter(m_userProfileFragment, this);
 
         ActivityUtil.setContainerViewNotHome(m_ContentFrame.getId());
         ActivityUtil.setFragmentManagerNotHome(getSupportFragmentManager());
-        ActivityUtil.addFragmentNotInHomePage(lc_userProfileFragment);
+        ActivityUtil.addFragmentNotInHomePage(m_userProfileFragment);
         ActivityUtil.setCurrentFragmentNotInHome();
 
     }
@@ -85,16 +88,18 @@ public class UserProfileActivity extends AppCompatActivity {
                     break;
                 case UserProfilePresenter.CROP_PHOTO:
                     Bundle lc_bundle = data.getExtras();
-                    Bitmap lc_bitmap = lc_bundle.getParcelable("data");
+                    Bitmap lc_bitmap = checkNotNull(lc_bundle).getParcelable("data");
                     m_userProfilePresenter.updateAvatar(lc_bitmap);
                     break;
                 case UserProfilePresenter.SET_SCHOLAT:
                     String scholatAccount = data.getStringExtra("result");
                     m_userProfilePresenter.updateScholatAccount(scholatAccount);
                     break;
-
+                case UserProfilePresenter.USER_LOGIN:
+                    String account = data.getStringExtra("result");
+                    if (account != null && !account.equals(""))
+                        m_userProfileFragment.refreshAccount(account);
             }
         }
     }
-
 }

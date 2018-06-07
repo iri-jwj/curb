@@ -25,16 +25,12 @@ import butterknife.ButterKnife;
 import cn.jpush.android.api.JPushInterface;
 import jxpl.scnu.curb.R;
 import jxpl.scnu.curb.data.retrofit.Connect2Server;
-import jxpl.scnu.curb.homePage.HomePageActivity;
+import jxpl.scnu.curb.userProfile.UserProfilePresenter;
 import jxpl.scnu.curb.utils.SharedHelper;
 import jxpl.scnu.curb.utils.XmlDataStorage;
 
 public class LoginActivity extends AppCompatActivity {
 
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
-    private static final int REQUEST_READ_CONTACTS = 0;
 
     @BindView(R.id.login_progress)
     ProgressBar loginProgress;
@@ -86,13 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
-//        SignInButton.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                attemptLogin();
-//            }
-//        });
-        /**
+        /*
          * 2018-03-24
          * lifumin
          * 用logo代替了上面的登录按钮
@@ -104,9 +94,9 @@ public class LoginActivity extends AppCompatActivity {
                 attemptLogin();
             }
         });
-        /**
+        /*
          * 2018-03-24
-         * lifumin
+         * @author lifumin
          * 给注册的textview添加按钮事件，跳转到注册页面
          * 从注册页面回到此页面时，会回调onActivityResult(int requestCode, int resultCode, Intent data)函数
          */
@@ -123,8 +113,8 @@ public class LoginActivity extends AppCompatActivity {
      * 2018-03-24
      * lifumin
      *
-     * @param requestCode
-     * @param resultCode
+     * @param requestCode *
+     * @param resultCode  *
      * @param data        从注册页面返回的时候，获取注册页面传过来的值并填充在账号和密码的edittext上面
      */
     @Override
@@ -167,10 +157,6 @@ public class LoginActivity extends AppCompatActivity {
             loginAccount.setError(getString(R.string.error_field_required));
             focusView = loginAccount;
             cancel = true;
-        } else if (!isEmailValid(accountText)) {
-            loginAccount.setError(getString(R.string.error_invalid_email));
-            focusView = loginAccount;
-            cancel = true;
         }
 
         if (cancel) {
@@ -203,7 +189,7 @@ public class LoginActivity extends AppCompatActivity {
                         showProgress(false);
                     }
                 });
-                if (!id.equals("failed")) {
+                if (!id.equals("failed") && !id.equals("")) {
                     if (!XmlDataStorage.isSharedHelperSet()) {
                         XmlDataStorage.setM_sharedHelper(SharedHelper.getInstance(LoginActivity.this));
                     }
@@ -211,15 +197,11 @@ public class LoginActivity extends AppCompatActivity {
                     XmlDataStorage.saveUserInfo(userId, password, account);
                     JPushInterface.init(LoginActivity.this);
                     JPushInterface.setDebugMode(true);
+                    JPushInterface.deleteAlias(LoginActivity.this, 3);
                     JPushInterface.setAlias(LoginActivity.this, 2, userId);
-                    XmlDataStorage.setInfoFirstRun(true);
-                    XmlDataStorage.setRiverFirstRun(true);
-                    XmlDataStorage.setScholatFirstRun(true);
-                    XmlDataStorage.setSDFirstRun(true);
-
-                    Intent intent = new Intent(LoginActivity.this,
-                            HomePageActivity.class);
-                    startActivity(intent);
+                    Intent intent = new Intent();
+                    intent.putExtra("result", account);
+                    LoginActivity.this.setResult(UserProfilePresenter.USER_LOGIN, intent);
                     LoginActivity.this.finish();
                 } else {
                     LoginActivity.this.runOnUiThread(new Runnable() {
@@ -236,10 +218,6 @@ public class LoginActivity extends AppCompatActivity {
                 HomePageActivity.class);
         startActivity(intent);
         LoginActivity.this.finish();*/
-    }
-
-    private boolean isEmailValid(String email) {
-        return true;
     }
 
     private boolean isPasswordValid(String password) {

@@ -28,16 +28,13 @@ public abstract class AutoFitAdapter<T extends AutoFitViewHolder> extends Recycl
         implements ExpandReplicateListener, ViewHolderClickListener {
 
     private final static String TAG = "AutoFitAdapter";
-
-    private LinkedList<Boolean> m_isExpand = new LinkedList<>();
     private final AutoFitRecyclerView m_autoFitRecyclerView;
-
+    protected List<BaseData> dataList = new LinkedList<>();
+    private LinkedList<Boolean> m_isExpand = new LinkedList<>();
     private Map<String, Integer> m_expandedHeight = new HashMap<>();
     private Map<String, Integer> m_skeletonHeight = new HashMap<>();
     private Map<String, Boolean> itemIsMeasured = new HashMap<>();
     private int mHiddenViewMeasuredHeight = 0;
-
-    protected List<BaseData> dataList = new LinkedList<>();
 
     public AutoFitAdapter(AutoFitRecyclerView para_autoFitRecyclerView) {
         m_autoFitRecyclerView = para_autoFitRecyclerView;
@@ -85,8 +82,8 @@ public abstract class AutoFitAdapter<T extends AutoFitViewHolder> extends Recycl
                         Log.d(TAG, "OnPreDrawListener: position:" + holder.getAdapterPosition());
                         Log.d(TAG, "onPreDraw: id:" + i.getStr_id());
                         Log.d(TAG, "onPreDraw: skeletonHeight:" + height + holder.getSkeleton().getHeight());
-                        View child = holder.itemView;
-                        m_autoFitRecyclerView.changeHeight(child, m_skeletonHeight.get(i.getStr_id()));
+                        //View child = holder.itemView;
+                        //m_autoFitRecyclerView.changeHeight(child, m_skeletonHeight.get(i.getStr_id()));
                     }
                     holder.getSkeleton().getViewTreeObserver().removeOnPreDrawListener(this);
 
@@ -146,7 +143,7 @@ public abstract class AutoFitAdapter<T extends AutoFitViewHolder> extends Recycl
                 public boolean onPreDraw() {
                     BaseData i = dataList.get(holder.getAdapterPosition());
                     if (!itemIsMeasured.get(i.getStr_id())) {
-                        m_expandedHeight.put(i.getStr_id(), getChildHeight(holder.getDetails()));
+                        m_expandedHeight.put(i.getStr_id(), getChildHeight(holder.getDetails()) + 12);
                         Log.d(TAG, "OnPreDrawListener: position:" + holder.getAdapterPosition());
                         Log.d(TAG, "onPreDraw: id:" + i.getStr_id());
                         Log.d(TAG, "onPreDraw: detailsHeight:" + holder.getDetails().getHeight());

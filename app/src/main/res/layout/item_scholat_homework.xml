@@ -4,6 +4,7 @@
     android:id="@+id/item_scholat"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/recycler_item_touch"
     android:orientation="vertical">
 
     <LinearLayout
@@ -47,6 +48,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/scholat_item_title"
                 android:paddingTop="11dp"
+                android:paddingStart="3dp"
+                android:paddingEnd="2dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textSize="@dimen/text_body2" />
 

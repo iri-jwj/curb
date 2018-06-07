@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import jxpl.scnu.curb.data.retrofit.Connect2Server;
+import jxpl.scnu.curb.login.LoginActivity;
 import jxpl.scnu.curb.userProfile.setScholat.SetScholatActivity;
 import jxpl.scnu.curb.utils.SharedHelper;
 import jxpl.scnu.curb.utils.XmlDataStorage;
@@ -35,12 +36,13 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
     public static final int CROP_PHOTO = 3;
     public static final int CHOOSE_PHOTO = 2;
     public static final int SET_SCHOLAT = 4;
+    public static final int USER_LOGIN = 101;
     private final String TAG = "ProfilePresenter";
     private UserProfileContract.View m_profileView;
     private Activity m_activity;
     private boolean firstOpen = true;
 
-    public UserProfilePresenter(UserProfileContract.View para_profileView, Activity para_activity) {
+    UserProfilePresenter(UserProfileContract.View para_profileView, Activity para_activity) {
         m_profileView = para_profileView;
         m_activity = para_activity;
         m_profileView.setPresenter(this);
@@ -162,6 +164,12 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
     }
 
     @Override
+    public void login() {
+        Intent lc_intent = new Intent(m_activity, LoginActivity.class);
+        m_activity.startActivityForResult(lc_intent, USER_LOGIN);
+    }
+
+    @Override
     public void start() {
         loadProfile();
     }
@@ -186,8 +194,11 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
 
     @Override
     public void cropImage(Uri para_uri) {
-        para_uri = Uri.parse(getPath(m_activity, para_uri));
-
+        if (Build.VERSION.SDK_INT > 23) {
+            para_uri = FileProvider.getUriForFile(m_activity.getApplicationContext(), "jxpl.scnu.curb.getimage", new File(para_uri.getEncodedPath()));
+            m_activity.grantUriPermission(m_activity.getPackageName(), para_uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        } else
+            para_uri = Uri.parse(getPath(m_activity, para_uri));
         File lc_fileDir = new File(m_activity.getFilesDir(), "avatar");
         lc_fileDir.mkdirs();
         File avatar = new File(lc_fileDir, "avatar_temp.jpg");
@@ -202,8 +213,7 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
             m_imageUri = FileProvider.getUriForFile(m_activity, "jxpl.scnu.curb.getimage", avatar);
             m_activity.grantUriPermission(m_activity.getPackageName(), m_imageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             m_activity.grantUriPermission(m_activity.getPackageName(), m_imageUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            lc_intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            lc_intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            lc_intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         } else {
             m_imageUri = Uri.fromFile(avatar);
         }
@@ -220,7 +230,7 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
         lc_intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         //lc_intent.putExtra(MediaStore.EXTRA_OUTPUT, m_imageUri);
         lc_intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-        lc_intent.putExtra("noFaceDetection", false);
+        lc_intent.putExtra("noFaceDetection", true);
 
         m_activity.startActivityForResult(lc_intent, CROP_PHOTO);
     }

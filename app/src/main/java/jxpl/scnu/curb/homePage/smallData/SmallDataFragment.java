@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -175,7 +176,7 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
         final String description = para_sdSummary.getDescription();
         final String creator = para_sdSummary.getCreator();
         if (para_sdSummary.getImg() != null) {
-            getActivity().runOnUiThread(new Runnable() {
+            checkNotNull(getActivity()).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     Glide.with(getActivity()
@@ -187,7 +188,7 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
                 }
             });
         }
-        getActivity().runOnUiThread(new Runnable() {
+        checkNotNull(getActivity()).runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 m_SdContentTextTitle.setText(title);
@@ -407,16 +408,25 @@ public class SmallDataFragment extends Fragment implements SmallDataInterface.Vi
         presenter.saveAnswerToMap(m_sdDetailsCache.get(indexForDetail).getQuestionNum(), 1);
 
         if (indexForDetail != (m_sdDetailsCache.size() - 1)) {
-            onM_SdItemImagebuttonRightClicked();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    onM_SdItemImagebuttonRightClicked();
+                }
+            },500);
         }
-
     }
 
     @OnClick(R.id.sd_item_radiobutton_down)
     public void onM_SdItemRadiobuttonDownClicked() {
         presenter.saveAnswerToMap(m_sdDetailsCache.get(indexForDetail).getQuestionNum(), 2);
         if (indexForDetail != (m_sdDetailsCache.size() - 1)) {
-            onM_SdItemImagebuttonRightClicked();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    onM_SdItemImagebuttonRightClicked();
+                }
+            },500);
         }
     }
 

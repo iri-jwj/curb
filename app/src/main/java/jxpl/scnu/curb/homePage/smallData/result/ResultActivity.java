@@ -1,6 +1,7 @@
 package jxpl.scnu.curb.homePage.smallData.result;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
@@ -37,6 +38,12 @@ public class ResultActivity extends AppCompatActivity {
         m_uuid = (UUID) getIntent().getSerializableExtra(ARG_SD_ID);
 
         setSupportActionBar(m_Toolbar);
+        ActionBar ab = getSupportActionBar();
+
+        if (ab != null) {
+            ab.setDisplayShowTitleEnabled(false);
+            ab.setDisplayHomeAsUpEnabled(false);
+        }
         m_ToolbarTitle.setText("问卷结果");
         ActivityUtil.setContainerViewNotHome(m_ContentFrame.getId());
         ActivityUtil.setFragmentManagerNotHome(getSupportFragmentManager());

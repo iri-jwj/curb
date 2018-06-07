@@ -13,7 +13,8 @@ import jxpl.scnu.curb.data.repository.ScholatRepository;
 import jxpl.scnu.curb.data.repository.SmallDataRepository;
 import jxpl.scnu.curb.homePage.immediateInformation.InformationFragment;
 import jxpl.scnu.curb.homePage.immediateInformation.InformationPresenter;
-import jxpl.scnu.curb.homePage.river.RiverFragment;
+import jxpl.scnu.curb.homePage.reminder.ReminderFragment;
+import jxpl.scnu.curb.homePage.reminder.ReminderPresenter;
 import jxpl.scnu.curb.homePage.scholat.ScholatFragment;
 import jxpl.scnu.curb.homePage.scholat.ScholatPresenter;
 import jxpl.scnu.curb.homePage.smallData.SmallDataFragment;
@@ -78,7 +79,18 @@ public class FragmentFactory {
                 }
                 ActivityUtil.setCurrentFragment(R.id.nav_small_data);
                 break;
-            case R.id.nav_river:
+            case R.id.nav_remind:
+                if (!isFragmentCreated.get(R.id.nav_remind)){
+                    ReminderFragment lc_reminderFragment = ReminderFragment.newInstance();
+                    new ReminderPresenter(lc_reminderFragment,para_activity);
+                    ActivityUtil.addFragmentInHomePage(R.id.nav_remind,lc_reminderFragment);
+                    ActivityUtil.setCurrentFragment(R.id.nav_remind);
+                    isFragmentCreated.put(R.id.nav_remind,true);
+                    break;
+                }
+                ActivityUtil.setCurrentFragment(R.id.nav_remind);
+                break;
+            /*case R.id.nav_river:
                 if (!isFragmentCreated.get(R.id.nav_river)) {
                     RiverFragment lc_riverFragment = RiverFragment.newInstance();
                     //todo 添加river的PRESENTER
@@ -88,7 +100,7 @@ public class FragmentFactory {
                     break;
                 }
                 ActivityUtil.setCurrentFragment(R.id.nav_river);
-                break;
+                break;*/
         }
     }
 

@@ -210,8 +210,14 @@ public class InformationCreateFragment extends Fragment implements InformationCr
      */
     private void setDate(int year, int month, int day) {
         this.year = year + "";
-        this.month = month + "";
-        this.day = day + "";
+        if (month<10)
+            this.month = "0" +month;
+        else
+            this.month = month + "";
+        if (day<10)
+            this.day ="0" + day;
+        else
+            this.day =day + "";
     }
 
     /**
@@ -221,7 +227,12 @@ public class InformationCreateFragment extends Fragment implements InformationCr
      * @param minute 分钟
      */
     private void setTime(int hour, int minute) {
-        hours = hour + "";
+        if (hour<10)
+            hours = "0"+hour;
+        else
+            hours = hour + "";
+        if (minute<10)
+            minutes = "0" + minute;
         minutes = minute + "";
     }
 
@@ -238,7 +249,8 @@ public class InformationCreateFragment extends Fragment implements InformationCr
     @OnClick(R.id.add_info_button_commit)
     public void onM_AddInfoButtonCommitClicked() {
         String title = m_AddInfoEditTitle.getText().toString();
-        String time = m_AddInfoEditDate.getText().toString() + m_AddInfoEditTime.getText().toString();
+        Log.d("infoCreate", "onM_AddInfoButtonCommitClicked: "+m_AddInfoEditDate.getText().toString() + m_AddInfoEditTime.getText().toString());
+        String time = m_AddInfoEditDate.getText().toString() +" "+ m_AddInfoEditTime.getText().toString();
         String content = m_AddInfoEditContent.getText().toString();
         String address = m_AddInfoEditAddress.getText().toString();
         String belong = (String) m_AddInfoSpinnerBelong.getSelectedItem();
@@ -260,7 +272,7 @@ public class InformationCreateFragment extends Fragment implements InformationCr
         lc_builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                m_AddInfoEditTime.setText(hours + ":" + minutes);
+                m_AddInfoEditTime.setText(hours + ":" + minutes + ":00");
             }
         });
         lc_builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -272,7 +284,7 @@ public class InformationCreateFragment extends Fragment implements InformationCr
         AlertDialog lc_alertDialog = lc_builder.create();
 
         Calendar lc_calendar = Calendar.getInstance();
-        int lc_hour = lc_calendar.get(Calendar.HOUR);
+        int lc_hour = lc_calendar.get(Calendar.HOUR_OF_DAY);
         int lc_minutes = lc_calendar.get(Calendar.MINUTE);
 
         TimePicker lc_timePicker = new TimePicker(m_activity);
@@ -309,7 +321,7 @@ public class InformationCreateFragment extends Fragment implements InformationCr
         lc_builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                m_AddInfoEditDate.setText(year + "年" + month + "月" + day + "日");
+                m_AddInfoEditDate.setText(year + "-" + month + "-" + day );
             }
         });
         lc_builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -323,7 +335,7 @@ public class InformationCreateFragment extends Fragment implements InformationCr
         lc_datePicker.setElevation(3);
         Calendar lc_calendar = Calendar.getInstance();
         int lc_currentYear = lc_calendar.get(Calendar.YEAR);
-        int lc_currentMonth = lc_calendar.get(Calendar.MONTH) + 1;
+        int lc_currentMonth = lc_calendar.get(Calendar.MONTH);
         int lc_currentDay = lc_calendar.get(Calendar.DAY_OF_MONTH);
         setDate(lc_currentYear, lc_currentMonth, lc_currentDay);
         lc_datePicker.init(lc_currentYear, lc_currentMonth, lc_currentDay,

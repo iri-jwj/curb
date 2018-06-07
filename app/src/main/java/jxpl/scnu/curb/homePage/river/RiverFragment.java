@@ -10,11 +10,11 @@ import android.view.ViewGroup;
 import jxpl.scnu.curb.R;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link RiverFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * @author iri-jwj
+ * @version 1 init
  */
-public class RiverFragment extends Fragment {
+public class RiverFragment extends Fragment implements RiverContract.View {
+
 
     public RiverFragment() {
         // Required empty public constructor
@@ -26,6 +26,11 @@ public class RiverFragment extends Fragment {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void setPresenter(RiverContract.Presenter presenter) {
+
     }
 
     @Override

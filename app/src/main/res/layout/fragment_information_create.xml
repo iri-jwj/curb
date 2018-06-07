@@ -10,12 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        android:paddingTop="16dp">
 
         <LinearLayout
             android:id="@+id/linear_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -44,6 +46,7 @@
             android:id="@+id/linear_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linear_title">
@@ -53,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="8dp"
                 android:labelFor="@id/add_info_edit_content"
                 android:text="@string/add_info_content"
                 android:textSize="@dimen/text_title" />
@@ -63,7 +66,7 @@
                 android:layout_width="225dp"
                 android:layout_height="250dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/edit_text_border"
                 android:gravity="top"
                 android:inputType="textMultiLine"
@@ -74,6 +77,7 @@
             android:id="@+id/linear_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linear_content">
 
@@ -82,7 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="8dp"
                 android:labelFor="@id/add_info_edit_date"
                 android:text="@string/add_info_time"
                 android:textSize="@dimen/text_title" />
@@ -92,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="8dp"
                 android:ems="7"
                 android:inputType="date" />
 
@@ -101,7 +105,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="8dp"
                 android:ems="5"
                 android:gravity="center"
                 android:inputType="time" />
@@ -112,6 +116,7 @@
             android:id="@+id/linear_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linear_time">
 
@@ -120,7 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="8dp"
                 android:labelFor="@id/add_info_edit_address"
                 android:text="@string/add_info_address"
                 android:textSize="@dimen/text_title" />
@@ -130,7 +135,7 @@
                 android:layout_width="225dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/edit_text_border"
                 android:inputType="text" />
 
@@ -140,6 +145,7 @@
             android:id="@+id/linear_belong"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/linear_address">
 
@@ -148,7 +154,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/add_info_belong"
                 android:textSize="@dimen/text_title" />
 
@@ -157,7 +163,7 @@
                 android:layout_width="225dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="8dp"
                 android:entries="@array/information_belong" />
 
         </LinearLayout>
@@ -166,6 +172,7 @@
             android:id="@+id/linear_unit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/linear_belong">
 
@@ -174,7 +181,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/add_info_unit"
                 android:textSize="@dimen/text_title" />
 
@@ -183,7 +190,7 @@
                 android:layout_width="225dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="8dp"
                 android:entries="@array/information_unit" />
         </LinearLayout>
 
@@ -191,12 +198,16 @@
             android:id="@+id/add_info_button_commit"
             android:layout_width="80dp"
             android:layout_height="36dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
             android:background="#00fad689"
             android:text="@string/add_info_commit"
             android:textSize="@dimen/text_title"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linear_unit" />
 
         <ProgressBar

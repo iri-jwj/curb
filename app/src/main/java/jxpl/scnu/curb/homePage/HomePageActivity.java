@@ -2,6 +2,7 @@ package jxpl.scnu.curb.homePage;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -32,7 +33,6 @@ import jxpl.scnu.curb.data.remote.SDRemoteDataSource;
 import jxpl.scnu.curb.data.repository.ScholatRepository;
 import jxpl.scnu.curb.data.repository.SmallDataRepository;
 import jxpl.scnu.curb.homePage.immediateInformation.InformationPresenter;
-import jxpl.scnu.curb.homePage.river.RiverFragment;
 import jxpl.scnu.curb.homePage.scholat.ScholatFragment;
 import jxpl.scnu.curb.homePage.scholat.ScholatPresenter;
 import jxpl.scnu.curb.homePage.smallData.SmallDataFragment;
@@ -79,7 +79,7 @@ public class HomePageActivity extends AppCompatActivity
         ActionBar ab = getSupportActionBar();
 
         if (ab != null) {
-            ab.setTitle("");
+            ab.setDisplayShowTitleEnabled(false);
             ab.setHomeAsUpIndicator(R.drawable.ic_ab_home);
             ab.setDisplayHomeAsUpEnabled(true);
         }
@@ -163,7 +163,7 @@ public class HomePageActivity extends AppCompatActivity
         SmallDataFragment lc_smallDataFragment = SmallDataFragment.newInstance();
         ScholatFragment lc_scholatFragment = ScholatFragment.newInstance();
 
-        ActivityUtil.addFragmentInHomePage(R.id.nav_river, new RiverFragment());
+        //ActivityUtil.addFragmentInHomePage(R.id.nav_river, new RiverFragment());
         //ActivityUtil.addFragmentInHomePage(R.id.nav_arrange, new ArrangeFragment());
         ActivityUtil.addFragmentInHomePage(R.id.nav_small_data, lc_smallDataFragment);
         ActivityUtil.addFragmentInHomePage(R.id.nav_scholat, lc_scholatFragment);
@@ -285,5 +285,26 @@ public class HomePageActivity extends AppCompatActivity
     protected void onDestroy() {
         ActivityUtil.removeFragment();
         super.onDestroy();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    System.out.print("got PERMISSION\n");
+                } else {
+                    System.out.print("PERMISSION FAILED\n");
+                }
+                break;
+            case 2:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    System.out.print("got PERMISSION\n");
+                } else {
+                    System.out.print("PERMISSION FAILED\n");
+                }
+                break;
+            default:
+        }
     }
 }

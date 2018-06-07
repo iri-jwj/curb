@@ -4,7 +4,6 @@ import java.util.List;
 
 import jxpl.scnu.curb.homePage.immediateInformation.ImmediateInformation;
 import jxpl.scnu.curb.homePage.scholat.ScholatHomework;
-
 import jxpl.scnu.curb.homePage.smallData.SDAnswer;
 import jxpl.scnu.curb.homePage.smallData.SDDetail;
 import jxpl.scnu.curb.homePage.smallData.SDResult;

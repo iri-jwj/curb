@@ -13,18 +13,18 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/nav_header_imageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="112dp"
+        android:layout_height="112dp"
         android:layout_gravity="center_horizontal|center_vertical"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:src="@drawable/ic_nav_no_avatar" />
 
     <TextView
         android:id="@+id/nav_header_account"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="未登录"
+        android:layout_gravity="center_horizontal|center_vertical"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
 </LinearLayout>

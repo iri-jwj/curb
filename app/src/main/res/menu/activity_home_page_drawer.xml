@@ -26,10 +26,10 @@
             android:id="@+id/nav_info"
             android:icon="@drawable/ic_nav_icon_information"
             android:title="@string/information" />
-        <item
-            android:id="@+id/nav_river"
-            android:icon="@drawable/ic_nav_icon_river"
-            android:title="@string/river" />
+        <!--  <item
+              android:id="@+id/nav_river"
+              android:icon="@drawable/ic_nav_icon_river"
+              android:title="@string/river" />-->
         <item
             android:id="@+id/nav_small_data"
             android:icon="@drawable/ic_nav_icon_small_data"
@@ -46,10 +46,10 @@
              android:id="@+id/nav_share"
              android:icon="@drawable/ic_nav_icon_share"
              android:title="@string/share" />-->
-        <item
-            android:id="@+id/nav_setting"
-            android:icon="@drawable/ic_nav_icon_newsetting"
-            android:title="@string/setting" />
+        <!--  <item
+              android:id="@+id/nav_setting"
+              android:icon="@drawable/ic_nav_icon_newsetting"
+              android:title="@string/setting" />-->
     </group>
 
 </menu>

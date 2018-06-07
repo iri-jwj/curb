@@ -32,6 +32,8 @@ public interface UserProfileContract {
          */
         void refreshScholat(String scholatAccount);
 
+        void refreshAccount(String account);
+
         void showMessage(String message);
 
     }
@@ -80,6 +82,7 @@ public interface UserProfileContract {
         /*
         Uri getImageUri();*/
 
+        void login();
 
     }
 

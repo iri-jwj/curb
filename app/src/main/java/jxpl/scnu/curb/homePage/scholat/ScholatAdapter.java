@@ -58,17 +58,33 @@ public class ScholatAdapter extends AutoFitAdapter<ScholatViewHolder> {
         String timeToShow;
         if (lc_createTime != null) {
             long deviation = currentTime - lc_createTime.getTime();
-            double days = deviation / (1000 * 60 * 60 * 24);
-            if (days < 1) {
-                if (deviation / (1000 * 60 * 60) >= 1)
-                    timeToShow = Math.round(deviation / (1000 * 60 * 60)) + "小时前";
-                else
-                    timeToShow = Math.round(deviation / (1000 * 60)) + "分钟前";
-            } else {
-                timeToShow = Math.round(days) + "天前";
+            if (deviation<0){
+                deviation = -1*deviation;
+                double days = deviation / (1000 * 60 * 60 * 24);
+                if (days < 1) {
+                    if (deviation / (1000 * 60 * 60) >= 1)
+                        timeToShow = Math.round(deviation / (1000 * 60 * 60)) + "小时后";
+                    else
+                        timeToShow = Math.round(deviation / (1000 * 60)) + "分钟后";
+                } else {
+                    timeToShow = Math.round(days) + "天后";
+                }
+            }
+            else{
+                double days = deviation / (1000 * 60 * 60 * 24);
+                if (days < 1) {
+                    if (deviation / (1000 * 60 * 60) >= 1)
+                        timeToShow = Math.round(deviation / (1000 * 60 * 60)) + "小时前";
+                    else
+                        timeToShow = Math.round(deviation / (1000 * 60)) + "分钟前";
+                } else {
+                    timeToShow = Math.round(days) + "天前";
+                }
+
             }
             return timeToShow;
-        } else return "";
+        } else
+            return "";
     }
 
     @Override
@@ -76,6 +92,7 @@ public class ScholatAdapter extends AutoFitAdapter<ScholatViewHolder> {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_scholat_homework, parent, false);
         ScholatViewHolder m_holder = new ScholatViewHolder(view);
+        m_holder.setData(getScholatHomeworks());
         m_holder.setListener(this);
         return m_holder;
     }

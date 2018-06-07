@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,9 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jxpl.scnu.curb.R;
+import jxpl.scnu.curb.utils.XmlDataStorage;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 
 public class UserProfileFragment extends Fragment implements UserProfileContract.View {
@@ -58,10 +62,6 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     */
     public static UserProfileFragment newInstance() {
         UserProfileFragment fragment = new UserProfileFragment();
         Bundle args = new Bundle();
@@ -109,6 +109,7 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
             m_Avatar.setImageBitmap(para_avatar);
         else
             m_Avatar.setImageDrawable(getResources().getDrawable(R.drawable.ic_nav_no_avatar, null));
+
         if (!nickname.equals(""))
             m_EditNickname.setText(nickname);
         else
@@ -118,6 +119,12 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
             m_TextScholat.setText(scholatAccount);
         else
             m_TextScholat.setHint("还没有设置学者网账号哦");
+
+        if (!m_TextAccount.getText().toString().equalsIgnoreCase("curb_" + XmlDataStorage.getUserInfo().get(XmlDataStorage.USER_ID).substring(0,8))) {
+            m_Logout.setText(checkNotNull(getContext()).getString(R.string.user_profile_logout));
+        } else {
+            m_Logout.setText(checkNotNull(getContext()).getString(R.string.user_profile_login));
+        }
     }
 
     @Override
@@ -128,6 +135,11 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
     @Override
     public void refreshScholat(String scholatAccount) {
         m_TextScholat.setText(scholatAccount);
+    }
+
+    @Override
+    public void refreshAccount(String account) {
+        m_TextAccount.setText(account);
     }
 
     @Override
@@ -158,6 +170,9 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
 
     @OnClick(R.id.logout)
     public void onM_LogoutClicked() {
-        m_presenter.logout();
+        if (m_Logout.getText().toString().equals(checkNotNull(getContext()).getString(R.string.user_profile_logout)))
+            m_presenter.logout();
+        else
+            m_presenter.login();
     }
 }

@@ -53,6 +53,7 @@ public class InformationAdapter extends AutoFitAdapter<InformationViewHolder> {
                 .inflate(R.layout.item_information, parent, false);
         InformationViewHolder m_holder = new InformationViewHolder(view);
         m_holder.setListener(this);
+        m_holder.setData(getImmediateInformations());
         return m_holder;
     }
 

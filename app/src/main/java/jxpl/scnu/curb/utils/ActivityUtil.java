@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.SparseArray;
 
+import jxpl.scnu.curb.R;
+
 /**
  * @author iri-jwj
  * @version 1
@@ -61,6 +63,7 @@ public class ActivityUtil {
             if (currentKey > 0 && id > 0) {
                 Fragment fragment = fragments.get(currentKey);
                 fragmentManagerInHome.beginTransaction()
+                        .setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out, R.anim.fragment_slide_in, R.anim.fragment_slide_out)
                         .hide(fragment)
                         .commit();
             }
@@ -73,11 +76,13 @@ public class ActivityUtil {
                     Fragment fragment = fragmentsNotUse.get(id);
                     fragments.put(id, fragment);
                     fragmentManagerInHome.beginTransaction()
+                            .setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out, R.anim.fragment_slide_in, R.anim.fragment_slide_out)
                             .add(containerView, fragment)
                             .commit();
                 } else {
                     Fragment fragment = fragments.get(id);
                     fragmentManagerInHome.beginTransaction()
+                            .setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out, R.anim.fragment_slide_in, R.anim.fragment_slide_out)
                             .show(fragment)
                             .commit();
                 }

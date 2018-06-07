@@ -50,7 +50,6 @@ public class InformationFragment extends Fragment implements InformationContract
     Unbinder unbinder;
 
     private InformationContract.Presenter presenter;
-    //private InfoAdapter m_minfoAdapter;
 
     private InformationAdapter m_informationAdapter;
 
@@ -71,9 +70,6 @@ public class InformationFragment extends Fragment implements InformationContract
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //m_minfoAdapter = new InfoAdapter(new ArrayList<ImmediateInformation>(0));
-
-        Log.d("CreateInfoView", "CreateAdapter");
     }
 
     @Override
@@ -85,12 +81,11 @@ public class InformationFragment extends Fragment implements InformationContract
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         infoRecycler.setLayoutManager(layoutManager);
         m_informationAdapter = new InformationAdapter(getContext(), infoRecycler);
-        //infoRecycler.setAdapter(m_minfoAdapter);
         infoRecycler.setAdapter(m_informationAdapter);
 
-        //设置一些动画，但是没有显示出来
+        //设置默认分割线
         infoRecycler.addItemDecoration(new DividerItemDecoration(
-                checkNotNull(getActivity()), DividerItemDecoration.HORIZONTAL));
+                checkNotNull(getActivity()), DividerItemDecoration.VERTICAL));
 
         refreshInfoLayout.setColorSchemeColors(
                 ContextCompat.getColor(checkNotNull(getActivity()), R.color.toolsBar),
@@ -217,7 +212,6 @@ public class InformationFragment extends Fragment implements InformationContract
 
     @Override
     public boolean isListShowing() {
-        //return m_minfoAdapter.getItemCount() == 0;
         return m_informationAdapter.getItemCount() == 0;
     }
 
@@ -234,7 +228,6 @@ public class InformationFragment extends Fragment implements InformationContract
 
     @Override
     public List<ImmediateInformation> getCurrentList() {
-        //return m_minfoAdapter.getInformation();
         return m_informationAdapter.getImmediateInformations();
     }
 }
