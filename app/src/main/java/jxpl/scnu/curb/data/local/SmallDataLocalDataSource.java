@@ -13,18 +13,18 @@ import java.util.List;
 import java.util.UUID;
 
 import jxpl.scnu.curb.data.repository.SmallDataDataSource;
-import jxpl.scnu.curb.smallData.SDAnswer;
-import jxpl.scnu.curb.smallData.SDDetail;
-import jxpl.scnu.curb.smallData.SDSummary;
-import jxpl.scnu.curb.smallData.SDSummaryCreate;
+import jxpl.scnu.curb.homePage.smallData.SDAnswer;
+import jxpl.scnu.curb.homePage.smallData.SDDetail;
+import jxpl.scnu.curb.homePage.smallData.SDSummary;
+import jxpl.scnu.curb.homePage.smallData.SDSummaryCreate;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author iri-jwj
  * @version 2
- *          last update 3/25
- *          更新了数据库的设计
+ * last update 3/25
+ * 更新了数据库的设计
  */
 public class SmallDataLocalDataSource implements SmallDataDataSource {
     private static SmallDataLocalDataSource stc_smallDataLocalDataSource;
@@ -86,7 +86,7 @@ public class SmallDataLocalDataSource implements SmallDataDataSource {
     }
 
     @Override
-    public void loadDetails(@NonNull loadDetailCallback callback, String summaryId) {
+    public void loadDetails(@NonNull loadDetailCallback callback, String summaryId, Context para_context) {
         SQLiteDatabase lc_sqLiteDatabase = m_curbDbHelper.getReadableDatabase();
         List<SDDetail> lc_sdDetails = null;
         String[] projection = {
@@ -161,7 +161,7 @@ public class SmallDataLocalDataSource implements SmallDataDataSource {
     }*/
 
     @Override
-    public void loadSummaries(@NonNull loadSummaryCallback callback, String time, int direction) {
+    public void loadSummaries(@NonNull loadSummaryCallback callback, String time, int direction, Context para_context) {
         SQLiteDatabase lc_sqLiteDatabase = m_curbDbHelper.getReadableDatabase();
         List<SDSummary> lc_sdSummaries = null;
         String[] projection = {
@@ -255,7 +255,7 @@ public class SmallDataLocalDataSource implements SmallDataDataSource {
 
     @Override
     public void loadCreatedSummaries(@NonNull loadCreatedSummariesCallback
-                                             para_loadCreatedSummariesCallback) {
+                                             para_loadCreatedSummariesCallback, Context para_context) {
         SQLiteDatabase lc_sqLiteDatabase = m_curbDbHelper.getReadableDatabase();
         List<SDSummaryCreate> lc_sdSummaryCreates = null;
         String[] projection = {
@@ -295,7 +295,7 @@ public class SmallDataLocalDataSource implements SmallDataDataSource {
 
     @Override
     public void loadCreatedDetails(@NonNull loadCreatedDetailsCallback para_loadCreatedDetailsCallback
-            , String para_summaryId) {
+            , String para_summaryId, Context para_context) {
         SQLiteDatabase lc_sqLiteDatabase = m_curbDbHelper.getReadableDatabase();
         List<SDDetail> lc_sdDetails = null;
         String[] projection = {
@@ -394,7 +394,7 @@ public class SmallDataLocalDataSource implements SmallDataDataSource {
     }
 
     @Override
-    public void loadAnswers(@NonNull loadAnswersCallback para_loadAnswersCallback, String summaryId) {
+    public void loadAnswers(@NonNull loadAnswersCallback para_loadAnswersCallback, String summaryId, Context para_context) {
         SQLiteDatabase lc_sqLiteDatabase = m_curbDbHelper.getReadableDatabase();
         List<SDAnswer> lc_sdAnswers = null;
         String[] projection = {
@@ -506,17 +506,17 @@ public class SmallDataLocalDataSource implements SmallDataDataSource {
     }
 
     @Override
-    public void saveCreatedSDToRemote(String para_s, File image) {
+    public void saveCreatedSDToRemote(String para_s, File image, Context para_context) {
 
     }
 
     @Override
-    public void commitAnswer(String strEntity) {
+    public void commitAnswer(String strEntity, Context para_context) {
 
     }
 
     @Override
-    public void loadResult(loadResultCallback para_loadResultCallback, String summaryId) {
+    public void loadResult(loadResultCallback para_loadResultCallback, String summaryId, Context para_context) {
 
     }
 }

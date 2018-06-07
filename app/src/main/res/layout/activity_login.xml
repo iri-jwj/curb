@@ -15,7 +15,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/login_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="?android:attr/actionBarSize"
             android:background="@color/toolsBar">
 
             <TextView
@@ -91,10 +91,10 @@
                  登录的logo-->
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/signin_image"
-                    android:layout_height="90dp"
                     android:layout_width="90dp"
-                    android:src="@drawable/curblogo"
-                    android:layout_gravity="center"/>
+                    android:layout_height="90dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/curblogo" />
                 <!--<Button-->
                 <!--android:id="@+id/sign_in_button"-->
                 <!--style="?android:textAppearanceSmall"-->
@@ -104,23 +104,23 @@
                 <!--android:text="@string/action_sign_in"-->
                 <!--android:textStyle="bold" />-->
 
+                <!--/**-->
+                <!--* 2018-03-24-->
+                <!--* lifumin-->
+                <!--* 添加一个注册的textview，有点击事件-->
+                <!--*-->
+                <!--*/-->
 
+                <TextView
+                    android:id="@+id/registerTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Register" />
 
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
 
-    <!--/**-->
-    <!--* 2018-03-24-->
-    <!--* lifumin-->
-    <!--* 添加一个注册的textview，有点击事件-->
-    <!--*-->
-    <!--*/-->
-
-    <TextView
-        android:id="@+id/registerTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Register" />
 
 </LinearLayout>

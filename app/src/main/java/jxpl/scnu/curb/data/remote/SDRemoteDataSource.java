@@ -1,18 +1,18 @@
 package jxpl.scnu.curb.data.remote;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.io.File;
 import java.util.List;
 
 import jxpl.scnu.curb.data.repository.SmallDataDataSource;
-import jxpl.scnu.curb.data.retrofit.RetrofitGetData;
-import jxpl.scnu.curb.smallData.SDAnswer;
-import jxpl.scnu.curb.smallData.SDDetail;
-import jxpl.scnu.curb.smallData.SDResult;
-import jxpl.scnu.curb.smallData.SDSummary;
-import jxpl.scnu.curb.smallData.SDSummaryCreate;
+import jxpl.scnu.curb.data.retrofit.Connect2Server;
+import jxpl.scnu.curb.homePage.smallData.SDAnswer;
+import jxpl.scnu.curb.homePage.smallData.SDDetail;
+import jxpl.scnu.curb.homePage.smallData.SDResult;
+import jxpl.scnu.curb.homePage.smallData.SDSummary;
+import jxpl.scnu.curb.homePage.smallData.SDSummaryCreate;
 
 
 public class SDRemoteDataSource implements SmallDataDataSource {
@@ -29,8 +29,8 @@ public class SDRemoteDataSource implements SmallDataDataSource {
     }
 
     @Override
-    public void loadSummaries(@NonNull loadSummaryCallback callback, String time, int direction) {
-        List<SDSummary> lc_sdSummaries = RetrofitGetData.getSmallDataSummary(time, direction);
+    public void loadSummaries(@NonNull loadSummaryCallback callback, String time, int direction, Context para_context) {
+        List<SDSummary> lc_sdSummaries = Connect2Server.getConnect2Server(para_context).getSmallDataSummary(time, direction);
 
         if (lc_sdSummaries == null || lc_sdSummaries.isEmpty())
             callback.onDataNotAvailable();
@@ -49,8 +49,8 @@ public class SDRemoteDataSource implements SmallDataDataSource {
     }
 
     @Override
-    public void loadDetails(@NonNull loadDetailCallback callback, String summaryId) {
-        List<SDDetail> lc_sdDetails = RetrofitGetData.postSmallDataDetail(summaryId);
+    public void loadDetails(@NonNull loadDetailCallback callback, String summaryId, Context para_context) {
+        List<SDDetail> lc_sdDetails = Connect2Server.getConnect2Server(para_context).postSmallDataDetail(summaryId);
         if (lc_sdDetails == null || lc_sdDetails.isEmpty()) {
             callback.onDataNotAvailable();
         } else
@@ -64,8 +64,8 @@ public class SDRemoteDataSource implements SmallDataDataSource {
     }
 
     @Override
-    public void loadCreatedSummaries(@NonNull loadCreatedSummariesCallback para_loadCreatedSummariesCallback) {
-        List<SDSummaryCreate> lc_sdSummaryCreates = RetrofitGetData.getCreatedSummaries();
+    public void loadCreatedSummaries(@NonNull loadCreatedSummariesCallback para_loadCreatedSummariesCallback, Context para_context) {
+        List<SDSummaryCreate> lc_sdSummaryCreates = Connect2Server.getConnect2Server(para_context).getCreatedSummaries();
         if (lc_sdSummaryCreates != null && !lc_sdSummaryCreates.isEmpty())
             para_loadCreatedSummariesCallback.onCreatedSummariesLoaded(lc_sdSummaryCreates);
         else
@@ -74,8 +74,8 @@ public class SDRemoteDataSource implements SmallDataDataSource {
 
     @Override
     public void loadCreatedDetails(@NonNull loadCreatedDetailsCallback para_loadCreatedDetailsCallback,
-                                   String para_summaryId) {
-        List<SDDetail> lc_sdDetails = RetrofitGetData.getCreatedDetails(para_summaryId);
+                                   String para_summaryId, Context para_context) {
+        List<SDDetail> lc_sdDetails = Connect2Server.getConnect2Server(para_context).getCreatedDetails(para_summaryId);
         if (lc_sdDetails != null && !lc_sdDetails.isEmpty())
             para_loadCreatedDetailsCallback.onCreatedDetailsLoaded(lc_sdDetails);
         else
@@ -84,8 +84,8 @@ public class SDRemoteDataSource implements SmallDataDataSource {
 
 
     @Override
-    public void loadAnswers(@NonNull loadAnswersCallback para_loadAnswersCallback, String summaryId) {
-        List<SDAnswer> lc_sdAnswers = RetrofitGetData.getAnswers(summaryId);
+    public void loadAnswers(@NonNull loadAnswersCallback para_loadAnswersCallback, String summaryId, Context para_context) {
+        List<SDAnswer> lc_sdAnswers = Connect2Server.getConnect2Server(para_context).getAnswers(summaryId);
         if (lc_sdAnswers != null && !lc_sdAnswers.isEmpty())
             para_loadAnswersCallback.onAnswerLoaded(lc_sdAnswers);
         else
@@ -93,14 +93,14 @@ public class SDRemoteDataSource implements SmallDataDataSource {
     }
 
     @Override
-    public void saveCreatedSDToRemote(String para_s, File image) {
-        String result = RetrofitGetData.postCreatedSD(para_s, image);
+    public void saveCreatedSDToRemote(String para_s, File image, Context para_context) {
+        String result = Connect2Server.getConnect2Server(para_context).postCreatedSD(para_s, image);
     }
 
     @Override
     public void loadResult(loadResultCallback para_loadResultCallback,
-                           String summaryId) {
-        List<SDResult> lc_resultList = RetrofitGetData.getSDResult(summaryId);
+                           String summaryId, Context para_context) {
+        List<SDResult> lc_resultList = Connect2Server.getConnect2Server(para_context).getSDResult(summaryId);
         if (lc_resultList == null || lc_resultList.isEmpty())
             para_loadResultCallback.onDataNotAvailable();
         else
@@ -108,8 +108,8 @@ public class SDRemoteDataSource implements SmallDataDataSource {
     }
 
     @Override
-    public void commitAnswer(String strEntity) {
-        RetrofitGetData.postAnswer(strEntity);
+    public void commitAnswer(String strEntity, Context para_context) {
+        Connect2Server.getConnect2Server(para_context).postAnswer(strEntity);
     }
 
     @Override

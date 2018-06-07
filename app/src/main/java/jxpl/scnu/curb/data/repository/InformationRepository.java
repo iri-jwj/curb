@@ -3,9 +3,7 @@ package jxpl.scnu.curb.data.repository;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.util.Xml;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,7 +12,7 @@ import java.util.UUID;
 
 import jxpl.scnu.curb.data.local.InformationLocalDataSource;
 import jxpl.scnu.curb.data.remote.InformationRemoteDataSource;
-import jxpl.scnu.curb.immediateInformation.ImmediateInformation;
+import jxpl.scnu.curb.homePage.immediateInformation.ImmediateInformation;
 import jxpl.scnu.curb.utils.SharedHelper;
 import jxpl.scnu.curb.utils.XmlDataStorage;
 
@@ -82,7 +80,7 @@ public class InformationRepository implements InformationDataSource {
 
     @Override
     public void getInformations(@NonNull final LoadInformationCallback callback, final String userId,
-                                final String timestamp) {
+                                final String timestamp, final Context para_context) {
         checkNotNull(callback);
 
         if (!cachedInfo.isEmpty() && !cachedIsDirty) {
@@ -92,7 +90,7 @@ public class InformationRepository implements InformationDataSource {
         final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                getInformationFromRemote(callback, userId, timestamp);
+                getInformationFromRemote(callback, userId, timestamp, para_context);
             }
         });
 
@@ -111,7 +109,7 @@ public class InformationRepository implements InformationDataSource {
                 public void onDataNotAvailable() {
                     thread.start();
                 }
-            }, userId, timestamp);
+            }, userId, timestamp, para_context);
         }
     }
 
@@ -124,7 +122,7 @@ public class InformationRepository implements InformationDataSource {
      * @param timestamp 用户执行获取操作的时间
      */
     private void getInformationFromRemote(@NonNull final LoadInformationCallback callback, String userId,
-                                          String timestamp) {
+                                          String timestamp, Context para_context) {
         informationRemoteDataSource.getInformations(new LoadInformationCallback() {
             @Override
             public void getInformationsLoaded(List<ImmediateInformation> immediateInformations) {
@@ -138,11 +136,12 @@ public class InformationRepository implements InformationDataSource {
                 Log.d("InformationRepository", "onDataNotAvailable: ");
                 callback.onDataNotAvailable();
             }
-        }, userId, timestamp);
+        }, userId, timestamp, para_context);
     }
 
     /**
      * 刷新当前的map缓存 {@link #cachedInfo}
+     *
      * @param immediateInformations 用于刷新的Information List
      */
     private void refreshCached(List<ImmediateInformation> immediateInformations) {
@@ -174,11 +173,11 @@ public class InformationRepository implements InformationDataSource {
 
     @Override
     public void postInformation(final PostInformationCallback para_callback, final String information,
-                                final String userId) {
+                                final String userId, final Context para_context) {
         final Thread lc_thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                informationRemoteDataSource.postInformation(para_callback, information, userId);
+                informationRemoteDataSource.postInformation(para_callback, information, userId, para_context);
             }
         });
         lc_thread.start();

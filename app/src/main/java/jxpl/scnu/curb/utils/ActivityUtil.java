@@ -3,8 +3,9 @@ package jxpl.scnu.curb.utils;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.util.SparseArray;
+
+import jxpl.scnu.curb.R;
 
 /**
  * @author iri-jwj
@@ -32,7 +33,6 @@ public class ActivityUtil {
 
     private static void addFragment(@NonNull Integer id, @NonNull Fragment fragment) {
         fragmentsNotUse.put(id, fragment);
-        Log.d("addFrag", "addFragment: " + fragment.isAdded());
     }
 
     public static void setFragmentManagerNotHome(FragmentManager fragmentManagerNotHome) {
@@ -59,17 +59,16 @@ public class ActivityUtil {
     }
 
     public static void setCurrentFragment(@NonNull Integer id) {
-        Log.d("ActivityUntil", "setCurrentFragment:" + "currentKey" + currentKey);
         if (currentKey != id) {
             if (currentKey > 0 && id > 0) {
                 Fragment fragment = fragments.get(currentKey);
                 fragmentManagerInHome.beginTransaction()
+                        .setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out, R.anim.fragment_slide_in, R.anim.fragment_slide_out)
                         .hide(fragment)
                         .commit();
             }
             currentKey = id;
             if (fragmentsNotUse.get(id) == null) {
-                Log.d("ActivityUntil", "setCurrentFragment:Must Init fragmentNotUse before use ");
                 return;
             }
             if (id > 0) {
@@ -77,11 +76,13 @@ public class ActivityUtil {
                     Fragment fragment = fragmentsNotUse.get(id);
                     fragments.put(id, fragment);
                     fragmentManagerInHome.beginTransaction()
+                            .setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out, R.anim.fragment_slide_in, R.anim.fragment_slide_out)
                             .add(containerView, fragment)
                             .commit();
                 } else {
                     Fragment fragment = fragments.get(id);
                     fragmentManagerInHome.beginTransaction()
+                            .setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out, R.anim.fragment_slide_in, R.anim.fragment_slide_out)
                             .show(fragment)
                             .commit();
                 }

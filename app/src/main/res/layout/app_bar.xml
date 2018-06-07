@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,19 +14,29 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_gravity="start"
-            android:background="@color/toolsBar">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/toolsBar"
+            android:minHeight="?android:attr/actionBarSize"
+            app:contentInsetEnd="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetStart="0dp"
+            app:paddingEnd="0dp"
+            app:paddingStart="0dp"
+            app:titleMarginStart="0dp">
 
             <TextView
                 android:id="@+id/toolbar_title"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="18dp"
+                android:layout_gravity="center"
                 android:gravity="center_horizontal"
+                android:singleLine="true"
                 android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title"
                 android:textColor="@color/app_bar_title" />
         </android.support.v7.widget.Toolbar>
+
 
     </android.support.design.widget.AppBarLayout>
 

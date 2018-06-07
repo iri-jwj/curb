@@ -1,16 +1,18 @@
 package jxpl.scnu.curb.data.repository;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import jxpl.scnu.curb.data.local.ScholatLocalDataSource;
 import jxpl.scnu.curb.data.remote.ScholatRemoteDataSource;
-import jxpl.scnu.curb.scholat.ScholatHomework;
+import jxpl.scnu.curb.homePage.scholat.ScholatHomework;
+import jxpl.scnu.curb.utils.SharedHelper;
+import jxpl.scnu.curb.utils.XmlDataStorage;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -22,16 +24,27 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 
 public class ScholatRepository implements ScholatDataSource {
+    private volatile static ScholatRepository instance = null;
     private final ScholatLocalDataSource m_scholatLocalDataSource;
     private final ScholatRemoteDataSource m_scholatRemoteDataSource;
 
-    private Map<UUID, ScholatHomework> m_homeworkCache = new LinkedHashMap<>();
-    private boolean isCacheDirty = true;
+    private Map<String, ScholatHomework> m_homeworkCache = new LinkedHashMap<>();
+    private boolean isCacheDirty;
 
-    public ScholatRepository(@NonNull ScholatLocalDataSource para_scholatLocalDataSource,
-                             @NonNull ScholatRemoteDataSource para_scholatRemoteDataSource) {
+    private ScholatRepository(@NonNull ScholatLocalDataSource para_scholatLocalDataSource,
+                              @NonNull ScholatRemoteDataSource para_scholatRemoteDataSource,
+                              @NonNull Context para_context) {
         m_scholatLocalDataSource = checkNotNull(para_scholatLocalDataSource);
         m_scholatRemoteDataSource = checkNotNull(para_scholatRemoteDataSource);
+        if (!XmlDataStorage.isSharedHelperSet())
+            XmlDataStorage.setM_sharedHelper(SharedHelper.getInstance(para_context));
+        isCacheDirty = XmlDataStorage.getFirstRunState(XmlDataStorage.IS_SCHOLAT_FIRST_RUN);
+    }
+
+    public static ScholatRepository getInstance(Context para_context) {
+        if (instance == null)
+            instance = new ScholatRepository(new ScholatLocalDataSource(para_context), new ScholatRemoteDataSource(), para_context);
+        return instance;
     }
 
     @Override
@@ -47,7 +60,7 @@ public class ScholatRepository implements ScholatDataSource {
 
     @Override
     public void loadHomeworks(final LoadHomeworkCallback para_loadHomeworkCallback,
-                              final String userId) {
+                              final String userId, final Context para_context) {
         if (!m_homeworkCache.isEmpty() && !isCacheDirty) {
             para_loadHomeworkCallback.onHomeworkLoaded(new LinkedList<>(m_homeworkCache.values()));
             return;
@@ -55,7 +68,7 @@ public class ScholatRepository implements ScholatDataSource {
         final Thread lc_thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                getHomeworkFromServer(para_loadHomeworkCallback, userId);
+                getHomeworkFromServer(para_loadHomeworkCallback, userId, para_context);
             }
         });
 
@@ -73,12 +86,12 @@ public class ScholatRepository implements ScholatDataSource {
                 public void onDataNotAvailable() {
                     lc_thread.start();
                 }
-            }, userId);
+            }, userId, para_context);
         }
     }
 
     private void getHomeworkFromServer(@NonNull final LoadHomeworkCallback para_loadHomeworkCallback,
-                                       final String userId) {
+                                       final String userId, Context para_context) {
         m_scholatRemoteDataSource.loadHomeworks(new LoadHomeworkCallback() {
             @Override
             public void onHomeworkLoaded(List<ScholatHomework> para_homeworkList) {
@@ -91,7 +104,7 @@ public class ScholatRepository implements ScholatDataSource {
             public void onDataNotAvailable() {
                 para_loadHomeworkCallback.onDataNotAvailable();
             }
-        }, userId);
+        }, userId, para_context);
     }
 
     private void refreshMap(List<ScholatHomework> para_homeworks) {

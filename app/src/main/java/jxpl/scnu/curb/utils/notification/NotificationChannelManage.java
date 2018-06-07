@@ -15,9 +15,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 @TargetApi(26)
 public class NotificationChannelManage {
+    private volatile static NotificationChannelManage instance = null;
     private NotificationChannelGroup group;
     private LinkedList<NotificationChannel> m_channels;
-    private volatile static NotificationChannelManage instance = null;
 
     private NotificationChannelManage(Context para_context) {
         CharSequence lc_charSequence = "curbNotification";

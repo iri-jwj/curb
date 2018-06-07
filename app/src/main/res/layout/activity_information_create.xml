@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="jxpl.scnu.curb.immediateInformation.informationCreate.InformationCreateActivity">
+    tools:context=".homePage.immediateInformation.informationCreate.InformationCreateActivity">
 
     <include layout="@layout/app_bar" />
 

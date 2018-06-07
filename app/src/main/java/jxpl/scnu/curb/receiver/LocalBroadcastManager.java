@@ -17,28 +17,16 @@ import java.util.Set;
  */
 
 public final class LocalBroadcastManager {
+    static final int MSG_EXEC_PENDING_BROADCASTS = 1;
     private static final String TAG = "JIGUANG-Example";
     private static final boolean DEBUG = false;
-
+    private static final Object mLock = new Object();
+    private static LocalBroadcastManager mInstance;
     private final Context mAppContext;
     private final HashMap<BroadcastReceiver, ArrayList<IntentFilter>> mReceivers = new HashMap<BroadcastReceiver, ArrayList<IntentFilter>>();
     private final HashMap<String, ArrayList<ReceiverRecord>> mActions = new HashMap<String, ArrayList<ReceiverRecord>>();
     private final ArrayList<BroadcastRecord> mPendingBroadcasts = new ArrayList<BroadcastRecord>();
-    static final int MSG_EXEC_PENDING_BROADCASTS = 1;
     private final Handler mHandler;
-    private static final Object mLock = new Object();
-    private static LocalBroadcastManager mInstance;
-
-    public static LocalBroadcastManager getInstance(Context context) {
-        Object var1 = mLock;
-        synchronized (mLock) {
-            if (mInstance == null) {
-                mInstance = new LocalBroadcastManager(context.getApplicationContext());
-            }
-
-            return mInstance;
-        }
-    }
 
     private LocalBroadcastManager(Context context) {
         this.mAppContext = context;
@@ -54,6 +42,17 @@ public final class LocalBroadcastManager {
 
             }
         };
+    }
+
+    public static LocalBroadcastManager getInstance(Context context) {
+        Object var1 = mLock;
+        synchronized (mLock) {
+            if (mInstance == null) {
+                mInstance = new LocalBroadcastManager(context.getApplicationContext());
+            }
+
+            return mInstance;
+        }
     }
 
     public void registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {

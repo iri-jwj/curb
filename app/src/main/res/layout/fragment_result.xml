@@ -3,10 +3,10 @@
     android:id="@+id/result_constrain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="jxpl.scnu.curb.smallData.result.ResultFragment">
+    tools:context="jxpl.scnu.curb.homePage.smallData.result.ResultFragment">
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/result_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/result_recycler" />
+        android:layout_height="match_parent" />
 </android.support.constraint.ConstraintLayout>

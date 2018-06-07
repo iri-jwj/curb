@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/info_item_out_parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/recycler_item_touch">
+    android:background="@drawable/recycler_item_touch"
+    android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/item_capacity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/item_capacity"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -32,7 +31,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-
                 android:layout_toEndOf="@+id/info_item_image"
                 android:gravity="center_vertical"
                 android:paddingEnd="3dp"
@@ -73,11 +71,11 @@
                 android:id="@+id/item_info_imagebutton_add_reminder"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:layout_gravity="bottom|end"
+                android:layout_marginBottom="3dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="3dp"
-                android:layout_marginBottom="3dp"
-                android:layout_gravity="bottom|end"
                 android:background="#00fad689"
                 app:srcCompat="@drawable/ic_add_reminder" />
         </LinearLayout>
@@ -87,10 +85,10 @@
         android:id="@+id/info_item_image_more_less"
         android:layout_width="24dp"
         android:layout_height="12dp"
-        android:layout_marginTop="3dp"
+        android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="3dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginTop="3dp"
         app:srcCompat="@drawable/ic_info_item_more" />
 </LinearLayout>

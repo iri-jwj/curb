@@ -15,8 +15,11 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
@@ -40,7 +43,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".immediateInformation.informationCreate.InformationCreateActivity"
+            android:name=".homePage.immediateInformation.informationCreate.InformationCreateActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.INFO_DETAIL" />
@@ -52,9 +55,8 @@
             android:name=".login.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".accountManage.AccountManageActivity" />
         <activity
-            android:name=".loading.LoadingActivity"
+            android:name=".login.LoadingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/FullscreenTheme">
             <intent-filter>
@@ -63,12 +65,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".smallData.createSmallData.SmallDataCreateActivity" />
+        <activity android:name=".homePage.smallData.createSmallData.SmallDataCreateActivity" />
         <activity
-            android:name=".smallData.result.ResultActivity"
+            android:name=".homePage.smallData.result.ResultActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".register.RegisterActivity"
+            android:name=".login.RegisterActivity"
             android:label="@string/title_activity_register"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -76,8 +78,23 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
+        <activity
+            android:name=".userProfile.setScholat.SetScholatActivity"
+            android:theme="@style/AppTheme.NoActionBar">
 
-        <!--FirebaseService-->
+        </activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="jxpl.scnu.curb.getimage"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/imagepath" />
+        </provider>
+
+        <!-- FirebaseService -->
         <service
             android:name=".utils.service.MyFirebaseMessageService"
             android:enabled="true"
@@ -115,9 +132,7 @@
         <activity
             android:name="cn.jpush.android.ui.PopWinActivity"
             android:exported="false"
-            android:theme="@style/MyDialogStyle">
-
-        </activity>
+            android:theme="@style/MyDialogStyle"></activity>
 
         <!-- Required SDK核心功能 -->
         <activity
@@ -203,7 +218,8 @@
         <meta-data
             android:name="JPUSH_APPKEY"
             android:value="ddfad7444e3429c8060d8846" />
-        <!--极光推送结束！！！！！-->
+        <!-- 极光推送结束！！！！！ -->
+
 
     </application>
 

@@ -104,4 +104,15 @@
     <string name="user_profile_account">账号</string>
     <string name="user_profile_scholat">学者网账号</string>
     <string name="user_profile_logout">退出登录</string>
+    <string name="user_profile_login">用户登陆</string>
+
+    <!--setScholat-->
+    <string name="user_profile_scholat_account">账号</string>
+    <string name="user_profile_scholat_psw">密码</string>
+    <string name="user_profile_scholat_confirm">确认</string>
+
+    <!--Reminder-->
+    <string name="reminder_no_reminders">没有添加任何提醒</string>
+    <string name="reminder_delete_reminder">删除本条</string>
+
 </resources>

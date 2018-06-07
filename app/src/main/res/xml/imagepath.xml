@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <paths>
+        <root-path
+            name="camera_photos"
+            path="" />
+    </paths>
+    <paths>
+        <files-path
+            name="my_avatar"
+            path="avatar/" />
+    </paths>
+</resources>

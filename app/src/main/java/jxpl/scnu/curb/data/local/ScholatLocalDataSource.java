@@ -8,10 +8,9 @@ import android.support.annotation.NonNull;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
 import jxpl.scnu.curb.data.repository.ScholatDataSource;
-import jxpl.scnu.curb.scholat.ScholatHomework;
+import jxpl.scnu.curb.homePage.scholat.ScholatHomework;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -26,7 +25,7 @@ public class ScholatLocalDataSource implements ScholatDataSource {
     private CurbDbHelper m_curbDbHelper;
     private ScholatLocalDataSource m_scholatLocalDataSource = null;
 
-    private ScholatLocalDataSource(Context para_context) {
+    public ScholatLocalDataSource(Context para_context) {
         m_curbDbHelper = new CurbDbHelper(para_context);
     }
 
@@ -61,7 +60,7 @@ public class ScholatLocalDataSource implements ScholatDataSource {
     }
 
     @Override
-    public void loadHomeworks(LoadHomeworkCallback para_loadHomeworkCallback, String userId) {
+    public void loadHomeworks(LoadHomeworkCallback para_loadHomeworkCallback, String userId, Context para_context) {
         List<ScholatHomework> lc_homeworks = new LinkedList<>();
         SQLiteDatabase lc_liteDatabase = m_curbDbHelper.getReadableDatabase();
         String[] projection = {
@@ -71,17 +70,17 @@ public class ScholatLocalDataSource implements ScholatDataSource {
                 PersistenceContract.ScholatEntry.COLMN_NAME_ENDTIME,
                 PersistenceContract.ScholatEntry.COLUMN_NAME_CREATETIME
         };
-        String orderby = PersistenceContract.ScholatEntry.COLUMN_NAME_CREATETIME + "DESC";
+        String orderby = PersistenceContract.ScholatEntry.COLUMN_NAME_CREATETIME + " DESC";
         Cursor lc_cursor = lc_liteDatabase.query(PersistenceContract.ScholatEntry.TABLE_NAME,
                 projection, null, null, null, null, orderby);
 
         if (lc_cursor != null && lc_cursor.getCount() >= 0) {
             while (lc_cursor.moveToNext()) {
                 lc_homeworks.add(new ScholatHomework(
-                        UUID.fromString(lc_cursor
+                        lc_cursor
                                 .getString(lc_cursor
                                         .getColumnIndexOrThrow(PersistenceContract
-                                                .ScholatEntry.COLUMN_NAME_ID))),
+                                                .ScholatEntry.COLUMN_NAME_ID)),
                         lc_cursor.getString(lc_cursor
                                 .getColumnIndexOrThrow(PersistenceContract
                                         .ScholatEntry.COLUMN_NAME_TITLE)),
@@ -95,8 +94,8 @@ public class ScholatLocalDataSource implements ScholatDataSource {
                                 .getColumnIndexOrThrow(PersistenceContract
                                         .ScholatEntry.COLMN_NAME_ENDTIME))
                 ));
-                lc_cursor.close();
             }
+            lc_cursor.close();
             para_loadHomeworkCallback.onHomeworkLoaded(lc_homeworks);
         } else {
             para_loadHomeworkCallback.onDataNotAvailable();
